@@ -35,7 +35,7 @@ resource "google_compute_address" "puppeteer_ip" {
   region  = var.region
 }
 
-# 4a. Regla de firewall para permitir tráfico en el puerto 8081
+# 4a. Regla de firewall para permitir tráfico en puerto 8081
 resource "google_compute_firewall" "puppeteer_firewall" {
   name    = "allow-puppeteer-8081"
   network = google_compute_network.puppeteer_network.self_link
@@ -45,11 +45,8 @@ resource "google_compute_firewall" "puppeteer_firewall" {
     ports    = ["8081"]
   }
 
-  # Permite desde cualquier dirección (0.0.0.0/0) solo en pruebas
-  source_ranges = ["0.0.0.0/0"]
-
-  # Aplica esta regla a las VMs con el tag "puppeteer"
-  target_tags = ["puppeteer"]
+  source_ranges = ["0.0.0.0/0"]  # SOLO pruebas
+  target_tags   = ["puppeteer"] # Aplica a la VM con este tag
 }
 
 # 4b. Regla de firewall para SSH (puerto 22) a todo el mundo (no recomendado en prod)
@@ -66,14 +63,14 @@ resource "google_compute_firewall" "allow_ssh_public" {
   target_tags   = ["puppeteer"]
 }
 
-# 5. Instancia Compute Engine para tu Puppeteer server
+# 5. Instancia Compute Engine para tu servidor Puppeteer + PM2
 resource "google_compute_instance" "puppeteer_vm" {
   name         = "puppeteer-vm"
   machine_type = "e2-medium"
   zone         = var.zone
   project      = var.project_id
 
-  # Disco de arranque (Ubuntu)
+  # Disco con Ubuntu
   boot_disk {
     initialize_params {
       image = "ubuntu-os-cloud/ubuntu-2004-lts"
@@ -81,7 +78,7 @@ resource "google_compute_instance" "puppeteer_vm" {
     }
   }
 
-  # Conectada a la subred + IP estática
+  # Conexión a la subred y asignando la IP estática
   network_interface {
     subnetwork   = google_compute_subnetwork.puppeteer_subnetwork.self_link
     access_config {
@@ -89,101 +86,48 @@ resource "google_compute_instance" "puppeteer_vm" {
     }
   }
 
-  # Startup script para instalar Node, Puppeteer y arrancar tu index.js
+  # Startup script para clonar tu repo, instalar PM2 y lanzar la app
   metadata_startup_script = <<-EOT
     #!/bin/bash
     apt-get update -y
-    apt-get install -y nodejs npm
+    # Instalar git, node, npm
+    apt-get install -y git nodejs npm
 
-    mkdir -p /opt/puppeteer-server
-    cd /opt/puppeteer-server
+    # Instalar PM2 globalmente
+    npm install -g pm2
 
-    cat <<'EOF' > index.js
-    const express = require('express');
-    const puppeteer = require('puppeteer');
-    const app = express();
+    # Descargar tu repositorio en /opt
+    mkdir -p /opt
+    cd /opt
+    git clone https://github.com/LuisAncelVasquezVillavicencio/server-puppeteer.git
 
-    app.get('/render', async (req, res) => {
-        const url = req.query.url;
-        if (!url) {
-            return res.status(400).send('Falta el parámetro URL.');
-        }
+    # Entrar al repositorio
+    cd server-puppeteer
 
-        let browser;
-        console.time('Tiempo total de renderizado');
-        try {
-            browser = await puppeteer.launch({
-                args: [
-                    '--no-sandbox',
-                    '--disable-setuid-sandbox',
-                    '--disable-dev-shm-usage',
-                    '--disable-gpu',
-                    '--single-process'
-                ],
-                headless: 'new'
-            });
+    # Instalar dependencias
+    npm install
 
-            console.time('Tiempo de inicio del navegador');
-            const page = await browser.newPage();
-            console.timeEnd('Tiempo de inicio del navegador');
+    # Arrancar con PM2, nombrando el proceso "puppeteer-server"
+    pm2 start index.js --name "puppeteer-server"
 
-            await page.setViewport({ width: 1280, height: 720 });
-            await page.setUserAgent('Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko)');
+    # Guardar la lista de procesos para que PM2 los recuerde
+    pm2 save
 
-            await page.setRequestInterception(true);
-            page.on('request', (reqIntercept) => {
-                const blockResources = [];
-                if (blockResources.includes(reqIntercept.resourceType())) {
-                    reqIntercept.abort();
-                } else {
-                    reqIntercept.continue();
-                }
-            });
-
-            console.time('Tiempo de navegación de la página');
-            await page.goto(url, { waitUntil: 'networkidle2', timeout: 60000 });
-            console.timeEnd('Tiempo de navegación de la página');
-
-            console.time('Tiempo de extracción de contenido');
-            const content = await page.content();
-            console.timeEnd('Tiempo de extracción de contenido');
-
-            console.timeEnd('Tiempo total de renderizado');
-            res.status(200).send(content);
-        } catch (error) {
-            console.error('Error durante el renderizado:', error.message);
-            res.status(500).send(\`Error al renderizar la página: \${error.message}\`);
-        } finally {
-            if (browser) {
-                await browser.close();
-            }
-        }
-    });
-
-    const PORT = 8081;
-    app.listen(PORT, () => {
-        console.log(\`Servidor corriendo en http://localhost:\${PORT}\`);
-    });
-    EOF
-
-    npm init -y
-    npm install express puppeteer
-
-    # Ejecutamos en segundo plano
-    nohup node index.js > /var/log/puppeteer.log 2>&1 &
+    # Configurar PM2 para que inicie tras cada reinicio
+    pm2 startup systemd -u root --hp /root
   EOT
 
-  # Cuenta de servicio (opcional)
+  # (Opcional) Cuenta de servicio con permisos
   service_account {
     email  = var.service_account_email
     scopes = ["cloud-platform"]
   }
 
-  # Tag de red para que la regla firewall se aplique
+  # Tag de red para que aplique la regla de firewall
   tags = ["puppeteer"]
 }
 
-# Output de la IP externa
+# Output con la IP externa
 output "puppeteer_external_ip" {
   description = "IP externa del servidor Puppeteer"
   value       = google_compute_address.puppeteer_ip.address
