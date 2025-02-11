@@ -1,0 +1,167 @@
+ssh -i ~/.ssh/rendertron_key millennial@34.56.47.34
+
+Paso 1: Generar tu llave SSH (en tu Mac)
+Abre la Terminal en macOS.
+
+Ejecuta:
+
+bash
+Copiar
+Editar
+ssh-keygen -t rsa -b 2048 -f ~/.ssh/rendertron_key
+Cuando pregunte “Enter passphrase”, puedes dejarlo vacío (solo presiona Enter) o poner contraseña (opcional).
+Este comando creará dos archivos:
+~/.ssh/rendertron_key (tu clave privada)
+~/.ssh/rendertron_key.pub (tu clave pública)
+Al final, verás un comentario como millennial@Millennials-Mac-mini.local en la parte pública; eso no afecta la conexión, solo describe de dónde se generó.
+Paso 2: Subir la clave pública a la metadata de la VM
+Necesitamos que GCE reconozca tu nueva clave pública asociada a un usuario SSH (puede ser millennial, admin, ubuntu, lo que quieras). Supondremos que usarás millennial como nombre de usuario SSH.
+
+Opción A) Usar gcloud CLI
+a) Instalar y autenticar gcloud (si no lo tienes)
+Instala el SDK de Google Cloud (si no lo has hecho):
+
+bash
+Copiar
+Editar
+brew install --cask google-cloud-sdk
+o baja el instalador desde https://cloud.google.com/sdk/docs/install.
+
+Recarga tu terminal o ejecuta:
+
+bash
+Copiar
+Editar
+source ~/.zshrc
+(o el archivo que use tu shell)
+
+Autentícate:
+
+bash
+Copiar
+Editar
+gcloud init
+Sigue los pasos para seleccionar el proyecto y cuenta.
+
+b) Añadir la llave pública a la instancia
+Asumiendo que tu VM se llama rendertron-vm y está en la zona us-central1-a:
+
+bash
+Copiar
+Editar
+gcloud compute instances add-metadata rendertron-vm \
+    --zone us-central1-a \
+    --metadata "ssh-keys=millennial:$(cat ~/.ssh/rendertron_key.pub)"
+Explicación:
+
+ssh-keys=: indica que vas a agregar la(s) llave(s) SSH.
+millennial: es el usuario SSH. Lo que pongas aquí es lo que usarás luego para iniciar sesión.
+$(cat ~/.ssh/rendertron_key.pub) incrusta el contenido de tu clave pública.
+¡Ojo! Si ya había llaves SSH, debes agregar esta sin sobrescribir las anteriores. Para múltiples llaves, se separan por salto de línea, por ejemplo:
+
+makefile
+Copiar
+Editar
+ssh-keys=millennial:AAA...key1
+anotheruser:AAA...key2
+(Si no tienes otras llaves, no te preocupes.)
+
+Opción B) Vía consola de GCP
+Ve a Compute Engine → VM Instances.
+Haz clic en tu VM (rendertron-vm).
+Arriba, haz clic en Editar.
+Desplázate hasta la sección SSH Keys.
+Pulsa Show and edit si está oculto, luego Add item.
+Pega:
+graphql
+Copiar
+Editar
+millennial:ssh-rsa AAAAB3NzaC1yc2E... millennial@Millennials-Mac-mini.local
+donde:
+millennial: es tu usuario SSH deseado,
+seguido de la clave pública (completa) de ~/.ssh/rendertron_key.pub.
+Haz clic en Save.
+Paso 3: Abrir el puerto 22 a todo el mundo (solo pruebas)
+En tu configuración de Terraform, por ejemplo, crea un recurso de firewall así (o agrégalo en la consola si no usas Terraform). Este ejemplo asume que la VM tiene la etiqueta de red "rendertron":
+
+hcl
+Copiar
+Editar
+resource "google_compute_firewall" "allow_ssh_public" {
+  name    = "allow-ssh-public"
+  network = google_compute_network.rendertron_network.self_link
+
+  allow {
+    protocol = "tcp"
+    ports    = ["22"]
+  }
+
+  # Permite desde cualquier IP (no recomendado en producción)
+  source_ranges = ["0.0.0.0/0"]
+  target_tags   = ["rendertron"]
+}
+Y en la VM:
+
+hcl
+Copiar
+Editar
+tags = ["rendertron"]
+Si no usas Terraform, puedes crear la regla en la consola de GCP:
+
+VPC Network > Firewall > Create Firewall Rule.
+Nombre: allow-ssh-public.
+Red: rendertron-network (o la que uses).
+Objetivo: “Specifically tagged” (y pones “rendertron”).
+Filtro de origen: IP ranges.
+Rango de origen: 0.0.0.0/0.
+Protocolos y puertos: TCP: 22.
+Guardar.
+Así, cualquier IP podrá entrar al puerto 22 de tu VM.
+
+Paso 4: Conectarte desde tu Mac
+Ubica la IP externa de la VM (p.ej. 34.56.47.34).
+
+En la terminal de tu Mac:
+
+bash
+Copiar
+Editar
+ssh -i ~/.ssh/rendertron_key millennial@34.56.47.34
+-i ~/.ssh/rendertron_key: Indica que use tu clave privada.
+millennial: El usuario que pusiste en ssh-keys=millennial:....
+34.56.47.34: La IP externa que GCP te asignó.
+Si todo está bien configurado (puerto 22 abierto, metadata con tu clave pública exacta, etc.), te pedirá confirmación para agregar la huella de la VM y luego entrarás a tu consola Linux dentro de la VM.
+
+Paso 5: Verificar Rendertron (opcional)
+Ya dentro de la VM:
+
+Ver si Docker está corriendo:
+bash
+Copiar
+Editar
+sudo docker ps
+Deberías ver un contenedor rendertron.
+Probar localmente:
+bash
+Copiar
+Editar
+curl http://localhost:8080/render/https://www.google.com/
+Si te devuelve HTML, Rendertron funciona a nivel local.
+Para probar desde fuera, en tu Mac:
+
+bash
+Copiar
+Editar
+curl http://34.56.47.34:8080/render/https://www.google.com/
+(o en el navegador). Si has abierto el puerto 8080 con otra regla de firewall y la VM escucha correctamente, deberías ver el HTML.
+
+Resumen Final
+Genera llave SSH en Mac (ssh-keygen -f ~/.ssh/rendertron_key).
+Sube la clave pública a GCP (metadata de instancia o proyecto) asignándola a un usuario (ej. millennial).
+Abre el puerto 22 (puede ser a todo el mundo) y asigna el network tag a la VM.
+SSH con:
+bash
+Copiar
+Editar
+ssh -i ~/.ssh/rendertron_key millennial@<IP_EXTERNA>
+(Opcional) Prueba Rendertron en el puerto 8080 si está abierto
