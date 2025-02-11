@@ -49,6 +49,21 @@ resource "google_compute_firewall" "allow_http" {
   target_tags   = ["puppeteer"]
 }
 
+# 4d. Regla de firewall para permitir tráfico en puerto 8080
+resource "google_compute_firewall" "allow_8080" {
+  name    = "allow-8080"
+  network = google_compute_network.puppeteer_network.self_link
+
+  allow {
+    protocol = "tcp"
+    ports    = ["8080"]
+  }
+
+  source_ranges = ["0.0.0.0/0"]
+  target_tags   = ["puppeteer"]
+}
+
+
 # 4b. Regla de firewall para permitir tráfico HTTPS (puerto 443)
 resource "google_compute_firewall" "allow_https" {
   name    = "allow-https"
