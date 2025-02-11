@@ -35,21 +35,35 @@ resource "google_compute_address" "puppeteer_ip" {
   region  = var.region
 }
 
-# 4a. Regla de firewall para permitir tráfico en puerto 8081
-resource "google_compute_firewall" "puppeteer_firewall" {
-  name    = "allow-puppeteer-8081"
+# 4a. Regla de firewall para permitir tráfico en puerto 80 (HTTP)
+resource "google_compute_firewall" "allow_http" {
+  name    = "allow-http"
   network = google_compute_network.puppeteer_network.self_link
 
   allow {
     protocol = "tcp"
-    ports    = ["8081"]
+    ports    = ["80"]
   }
 
-  source_ranges = ["0.0.0.0/0"]  # SOLO pruebas
-  target_tags   = ["puppeteer"] # Aplica a la VM con este tag
+  source_ranges = ["0.0.0.0/0"]
+  target_tags   = ["puppeteer"]
 }
 
-# 4b. Regla de firewall para SSH (puerto 22) a todo el mundo (no recomendado en prod)
+# 4b. Regla de firewall para permitir tráfico HTTPS (puerto 443)
+resource "google_compute_firewall" "allow_https" {
+  name    = "allow-https"
+  network = google_compute_network.puppeteer_network.self_link
+
+  allow {
+    protocol = "tcp"
+    ports    = ["443"]
+  }
+
+  source_ranges = ["0.0.0.0/0"]
+  target_tags   = ["puppeteer"]
+}
+
+# 4c. Regla de firewall para SSH (puerto 22) (solo en pruebas, restringir en producción)
 resource "google_compute_firewall" "allow_ssh_public" {
   name    = "allow-ssh-public"
   network = google_compute_network.puppeteer_network.self_link
@@ -63,7 +77,7 @@ resource "google_compute_firewall" "allow_ssh_public" {
   target_tags   = ["puppeteer"]
 }
 
-# 5. Instancia Compute Engine para tu servidor Puppeteer + PM2
+# 5. Instancia Compute Engine para Puppeteer + PM2
 resource "google_compute_instance" "puppeteer_vm" {
   name         = "puppeteer-vm"
   machine_type = "e2-medium"
@@ -86,34 +100,44 @@ resource "google_compute_instance" "puppeteer_vm" {
     }
   }
 
-  # Startup script para clonar tu repo, instalar PM2 y lanzar la app
+  # Startup script mejorado para instalar Node.js 18+, PM2 y ejecutar Puppeteer en el puerto 80
   metadata_startup_script = <<-EOT
     #!/bin/bash
     apt-get update -y
-    # Instalar git, node, npm
-    apt-get install -y git nodejs npm
+    apt-get install -y git curl
+
+    # Instalar Node.js 18+ (necesario para Puppeteer)
+    curl -fsSL https://deb.nodesource.com/setup_18.x | sudo -E bash -
+    apt-get install -y nodejs
 
     # Instalar PM2 globalmente
     npm install -g pm2
 
-    # Descargar tu repositorio en /opt
+    # Descargar repositorio
     mkdir -p /opt
     cd /opt
     git clone https://github.com/LuisAncelVasquezVillavicencio/server-puppeteer.git
 
+    # Dar permisos adecuados
+    chown -R root:root /opt/server-puppeteer
+    chmod -R 755 /opt/server-puppeteer
+
     # Entrar al repositorio
-    cd server-puppeteer
+    cd /opt/server-puppeteer/puppeteer-server
 
     # Instalar dependencias
     npm install
 
-    # Arrancar con PM2, nombrando el proceso "puppeteer-server"
+    # Permitir que Node.js use el puerto 80 sin root
+    sudo setcap 'cap_net_bind_service=+ep' $(which node)
+
+    # Arrancar el servidor en el puerto 80
     pm2 start index.js --name "puppeteer-server"
 
-    # Guardar la lista de procesos para que PM2 los recuerde
+    # Guardar procesos de PM2
     pm2 save
 
-    # Configurar PM2 para que inicie tras cada reinicio
+    # Configurar PM2 para iniciar automáticamente al reiniciar la VM
     pm2 startup systemd -u root --hp /root
   EOT
 

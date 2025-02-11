@@ -1,5 +1,12 @@
 ssh -i ~/.ssh/rendertron_key millennial@34.56.47.34
 
+//directo
+gcloud compute ssh puppeteer-vm --zone=us-central1-a --project=probable-scout-446005-v7
+
+
+//diagraam con terraform
+https://app.brainboard.co/a/d1f99386-c9fd-43bd-8c6c-f85971612cd5/design
+
 Paso 1: Generar tu llave SSH (en tu Mac)
 Abre la Terminal en macOS.
 

@@ -62,7 +62,7 @@ app.get('/render', async (req, res) => {
     }
 });
 
-const PORT = 8081;
+const PORT = 80;
 app.listen(PORT, () => {
     console.log(`Servidor corriendo en http://localhost:${PORT}`);
 });
