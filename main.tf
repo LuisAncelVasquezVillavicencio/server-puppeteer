@@ -104,7 +104,7 @@ resource "google_compute_instance" "puppeteer_vm" {
   metadata_startup_script = <<-EOT
     #!/bin/bash
     apt-get update -y
-    apt-get install -y git curl
+    apt-get install -y wget unzip git curl
 
     # Instalar Node.js 18+ (necesario para Puppeteer)
     curl -fsSL https://deb.nodesource.com/setup_18.x | sudo -E bash -
@@ -127,6 +127,13 @@ resource "google_compute_instance" "puppeteer_vm" {
 
     # Instalar dependencias
     npm install
+
+    # Instalar Google Chrome estable
+    wget https://dl.google.com/linux/direct/google-chrome-stable_current_amd64.deb
+    sudo apt install -y ./google-chrome-stable_current_amd64.deb
+
+    # Verificar la instalación de Chrome
+    google-chrome --version
 
     # Permitir que Node.js use el puerto 80 sin root
     sudo setcap 'cap_net_bind_service=+ep' $(which node)

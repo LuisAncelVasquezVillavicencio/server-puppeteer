@@ -13,6 +13,7 @@ app.get('/render', async (req, res) => {
     console.time('Tiempo total de renderizado');
     try {
         browser = await puppeteer.launch({
+            executablePath: '/usr/bin/google-chrome',
             args: [
                 '--no-sandbox',
                 '--disable-setuid-sandbox',
