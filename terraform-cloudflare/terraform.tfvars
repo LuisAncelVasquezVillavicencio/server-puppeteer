@@ -1,0 +1,5 @@
+cloudflare_api_token = "tu-token-seguro"
+cloudflare_zone_id   = "1234567890abcdef"
+subdominio           = "mi-subdominio"
+dominio              = "midominio.com"
+destino_ip           = "192.168.1.1"

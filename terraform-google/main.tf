@@ -49,21 +49,6 @@ resource "google_compute_firewall" "allow_http" {
   target_tags   = ["puppeteer"]
 }
 
-# 4d. Regla de firewall para permitir tráfico en puerto 8080
-resource "google_compute_firewall" "allow_8080" {
-  name    = "allow-8080"
-  network = google_compute_network.puppeteer_network.self_link
-
-  allow {
-    protocol = "tcp"
-    ports    = ["8080"]
-  }
-
-  source_ranges = ["0.0.0.0/0"]
-  target_tags   = ["puppeteer"]
-}
-
-
 # 4b. Regla de firewall para permitir tráfico HTTPS (puerto 443)
 resource "google_compute_firewall" "allow_https" {
   name    = "allow-https"
@@ -92,7 +77,7 @@ resource "google_compute_firewall" "allow_ssh_public" {
   target_tags   = ["puppeteer"]
 }
 
-# 5. Instancia Compute Engine para Puppeteer + PM2
+# 5. Instancia Compute Engine para Puppeteer + NGINX
 resource "google_compute_instance" "puppeteer_vm" {
   name         = "puppeteer-vm"
   machine_type = "e2-medium"
@@ -115,11 +100,11 @@ resource "google_compute_instance" "puppeteer_vm" {
     }
   }
 
-  # Startup script mejorado para instalar Node.js 18+, PM2 y ejecutar Puppeteer en el puerto 80
+  # Startup script mejorado con NGINX + Node.js + Puppeteer
   metadata_startup_script = <<-EOT
     #!/bin/bash
     apt-get update -y
-    apt-get install -y wget unzip git curl
+    apt-get install -y wget unzip git curl nginx
 
     # Instalar Node.js 18+ (necesario para Puppeteer)
     curl -fsSL https://deb.nodesource.com/setup_18.x | sudo -E bash -
@@ -150,10 +135,10 @@ resource "google_compute_instance" "puppeteer_vm" {
     # Verificar la instalación de Chrome
     google-chrome --version
 
-    # Permitir que Node.js use el puerto 80 sin root
+    # Permitir que Node.js use el puerto 8080 sin root
     sudo setcap 'cap_net_bind_service=+ep' $(which node)
 
-    # Arrancar el servidor en el puerto 80
+    # Arrancar el servidor en el puerto 8080
     pm2 start index.js --name "puppeteer-server"
 
     # Guardar procesos de PM2
@@ -161,6 +146,25 @@ resource "google_compute_instance" "puppeteer_vm" {
 
     # Configurar PM2 para iniciar automáticamente al reiniciar la VM
     pm2 startup systemd -u root --hp /root
+
+    # Configurar NGINX como Proxy Reverso
+    cat <<EOF > /etc/nginx/sites-available/default
+    server {
+        listen 80;
+        server_name _;
+        location / {
+            proxy_pass http://localhost:8080;
+            proxy_set_header Host \$host;
+            proxy_set_header X-Real-IP \$remote_addr;
+            proxy_set_header X-Forwarded-For \$proxy_add_x_forwarded_for;
+            proxy_set_header X-Forwarded-Proto \$scheme;
+        }
+    }
+    EOF
+
+    # Reiniciar NGINX
+    systemctl restart nginx
+    systemctl enable nginx
   EOT
 
   # (Opcional) Cuenta de servicio con permisos
