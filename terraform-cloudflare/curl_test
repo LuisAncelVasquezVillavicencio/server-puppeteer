@@ -1,0 +1,62 @@
+curl -X GET "https://api.cloudflare.com/client/v4/accounts" \
+     -H "Authorization: Bearer I8_fc4OUm4w3MCA5lLMeUB_vibLAhi5V2wLmPQu9" \
+     -H "Content-Type: application/json"
+
+     {"result":[{"id":"0efcdb2ae1e94ae93ea0155f1e622df2","name":"Anrrar.135@gmail.com's Account",
+     "type":"standard","settings":{"enforce_twofactor":false,"api_access_enabled":null,"access_approval_expiry":null,
+     "use_account_custom_ns_by_default":false,"default_nameservers":"cloudflare.standard","abuse_contact_email":null},
+     "legacy_flags":{"enterprise_zone_quota":{"maximum":0,"current":0,"available":0}},"created_on":"2021-10-29T17:32:34.044204Z"}]
+     ,"result_info":{"page":1,"per_page":20,"total_pages":1,"count":1,"total_count":1},"success":true,"errors":[],"messages":[]}%   
+
+     curl -X GET "https://api.cloudflare.com/client/v4/zones" \
+     -H "Authorization: Bearer I8_fc4OUm4w3MCA5lLMeUB_vibLAhi5V2wLmPQu9" \
+     -H "Content-Type: application/json"
+
+     {"result":[{"id":"0efcdb2ae1e94ae93ea0155f1e622df2","name":"Anrrar.135@gmail.com's Account","type":"standard","settings":{"enforce_twofactor":false,"api_access_enabled":null,"access_approval_expiry":null,"use_account_custom_ns_by_default":false,"default_nameservers":"cloudflare.standard","abuse_contact_email":null},"legacy_flags":{"enterprise_zone_quota":{"maximum":0,"current":0,"available":0}},"created_on":"2021-10-29T17:32:34.044204Z"}],"result_info":{"page":1,"per_page":20,"total_pages":1,"count":1,"total_count":1},"success":true,"errors":[],"messages":[]}%                                  
+millennial@Millennials-Mac-mini terraform-cloudflare %      curl -X GET "https://api.cloudflare.com/client/v4/zones" \
+     -H "Authorization: Bearer I8_fc4OUm4w3MCA5lLMeUB_vibLAhi5V2wLmPQu9" \
+     -H "Content-Type: application/json"
+{"result":[{"id":"c514b658d8657226118a2f1769e3cad2","name":"micanva.com","status":"active","paused":false,"type":"full","development_mode":-3606971,
+"name_servers":["gail.ns.cloudflare.com","kip.ns.cloudflare.com"],"original_name_servers":["ns-cloud-e1.googledomains.com","ns-cloud-e2.googledomains.com","ns-cloud-e
+3.googledomains.com","ns-cloud-e4.googledomains.com"],"original_registrar":"squarespace domains ii llc (id: 895)","original_dnshost":null,"modified_on":"2024-12-28T02:31:07.9
+22433Z","created_on":"2024-12-28T02:25:53.486094Z","activated_on":"2024-12-28T02:31:07.922433Z","meta":{"step":2,"custom_certificate_quota":0,"page_rule_quota":3,"phishing_detecte
+d":false},"owner":{"id":"7fc7ef4acfe9bfd124a17ad6f3851f8f","type":"user","email":"anrrar.135@gmail.com"},"account":{"id":"0efcdb2ae1e94ae93ea0155f1e622df2","name":"anrrar.135@gmail.c
+om"},"tenant":{"id":null,"name":null},"tenant_unit":{"id":null},"permissions":["#dns_records:edit","#dns_records:read","#waf:read","#waf:edit","#worker:read","#worker:edit","#organizat
+ion:read","#analytics:read","#organization:edit","#zone:read","#access:edit","#access:read"],"plan":{"id":"0feeeeeeeeeeeeeeeeeeeeeeeeeeeeee","name":"Free Website","price":0,"currency":
+"USD","frequency":"","is_subscribed":false,"can_subscribe":false,"legacy_id":"free","legacy_discount":false,"externally_managed":false}},{"id":"17986fd7f02b2c855bf927eff2b75e77","nam
+e":"miestudiante.com","status":"active","paused":false,"type":"full","development_mode":-3606990,"name_servers":["gail.ns.cloudflare.com","kip.ns.cloudflare.com"],"original_name_server
+s":["ns19.domaincontrol.com","ns20.domaincontrol.com"],"original_registrar":"godaddy.com, llc (id: 146)","original_dnshost":null,"modified_on":"2024-11-21T00:13:21.418998Z","created_on"
+:"2024-11-21T00:11:31.687083Z","activated_on":"2024-11-21T00:13:21.418998Z","meta":{"step":2,"custom_certificate_quota":0,"page_rule_quota":3,"phishing_detected":false},"owner":{"id":"7
+fc7ef4acfe9bfd124a17ad6f3851f8f","type":"user","email":"anrrar.135@gmail.com"},"account":{"id":"0efcdb2ae1e94ae93ea0155f1e622df2","name":"anrrar.135@gmail.com"},"tenant":{"id":null,"nam
+e":null},"tenant_unit":{"id":null},"permissions":["#dns_records:edit","#dns_records:read","#waf:read","#waf:edit","#worker:read","#worker:edit","#organization:read","#analytics:read","#o
+rganization:edit","#zone:read","#access:edit","#access:read"],"plan":{"id":"0feeeeeeeeeeeeeeeeeeeeeeeeeeeeee","name":"Free Website","price":0,"currency":"USD","frequency":"","is_subscrib
+ed":false,"can_subscribe":false,"legacy_id":"free","legacy_discount":false,"externally_managed":false}},{"id":"0e051c40015968e621ae5b17f89d3542","name":"mivisualization.com","status":"ac
+tive","paused":false,"type":"full","development_mode":-3607007,"name_servers":["gail.ns.cloudflare.com","kip.ns.cloudflare.com"],"original_name_servers":["ns13.domaincontrol.com","ns14.d
+omaincontrol.com"],"original_registrar":"godaddy.com, llc (id: 146)","original_dnshost":null,"modified_on":"2024-11-21T01:18:53.579074Z","created_on":"2024-11-21T00:55:31.444496Z","activa
+ted_on":"2024-11-21T01:18:53.579074Z","meta":{"step":2,"custom_certificate_quota":0,"page_rule_quota":3,"phishing_detected":false},"owner":{"id":"7fc7ef4acfe9bfd124a17ad6f3851f8f","type":"
+user","email":"anrrar.135@gmail.com"},"account":{"id":"0efcdb2ae1e94ae93ea0155f1e622df2","name":"anrrar.135@gmail.com"},"tenant":{"id":null,"name":null},"tenant_unit":{"id":null},"permissi
+ons":["#dns_records:edit","#dns_records:read","#waf:read","#waf:edit","#worker:read","#worker:edit","#organization:read","#analytics:read","#organization:edit","#zone:read","#access:edit",
+"#access:read"],"plan":{"id":"0feeeeeeeeeeeeeeeeeeeeeeeeeeeeee","name":"Free Website","price":0,"currency":"USD","frequency":"","is_subscribed":false,"can_subscribe":false,"legacy_id":"free
+","legacy_discount":false,"externally_managed":false}},{"id":"5c68abc89bda3c35285c884bc97271dc","name":"portalmicanva.com","status":"active","paused":false,"type":"full","development_mode":
+-3607028,"name_servers":["gail.ns.cloudflare.com","kip.ns.cloudflare.com"],"original_name_servers":["ns39.domaincontrol.com","ns40.domaincontrol.com"],"original_registrar":"godaddy.com, llc
+ (id: 146)","original_dnshost":null,"modified_on":"2024-12-28T02:39:53.765664Z","created_on":"2024-12-28T02:34:42.772689Z","activated_on":"2024-12-28T02:39:53.765664Z","meta":{"step":2,"cust
+ om_certificate_quota":0,"page_rule_quota":3,"phishing_detected":false},"owner":{"id":"7fc7ef4acfe9bfd124a17ad6f3851f8f","type":"user","email":"anrrar.135@gmail.com"},"account":{"id":"0efcdb
+ 2ae1e94ae93ea0155f1e622df2","name":"anrrar.135@gmail.com"},"tenant":{"id":null,"name":null},"tenant_unit":{"id":null},"permissions":["#dns_records:edit","#dns_records:read","#waf:read","#wa
+ f:edit","#worker:read","#worker:edit","#organization:read","#analytics:read","#organization:edit","#zone:read","#access:edit","#access:read"],"plan":{"id":"0feeeeeeeeeeeeeeeeeeeeeeeeeeeeee
+ ","name":"Free Website","price":0,"currency":"USD","frequency":"","is_subscribed":false,"can_subscribe":false,"legacy_id":"free","legacy_discount":false,"externally_managed":false}}],"resu
+ lt_info":{"page":1,"per_page":20,"total_pages":1,"count":4,"total_count":4},"success":true,"errors":[],"messages":[]}%   
+
+
+ curl -X GET "https://api.cloudflare.com/client/v4/user/tokens/verify" \
+     -H "Authorization: Bearer I8_fc4OUm4w3MCA5lLMeUB_vibLAhi5V2wLmPQu9" \
+     -H "Content-Type: application/json"
+
+{"result":{"id":"88346be9972a10f7a0c9bc9abc6d39a8","status":"active","not_before":"2025-02-13T00:00:00Z","expires_on":"2025-03-31T23:59:59Z"}
+,"success":true,"errors":[],"messages":[{"code":10000,"message":"This API Token is valid and active","type":null}]}%                                           
+ 
+
+
+//ejecutar
+rm -rf .terraform
+terraform init
+terraform apply -auto-approve
