@@ -1,9 +1,9 @@
-name: Deploy Infraestructura con Terraform
+name: Deploy Infraestructura Google con Terraform
 
 on:
   push:
     branches:
-      - deploy-infra  # Se ejecuta solo en esta rama
+      - deploy-infra-google  # Se ejecuta solo en esta rama
 
 jobs:
   terraform:
