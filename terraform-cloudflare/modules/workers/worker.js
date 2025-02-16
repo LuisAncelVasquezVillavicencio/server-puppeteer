@@ -4,94 +4,88 @@ addEventListener("fetch", event => {
 
 async function handleRequest(event) {
   const { request } = event;
+  const url = new URL(request.url);
 
-  try {
-    // Definir directamente la URL del servidor de renderizado
-    const RENDER_SERVER = "https://render.portalmicanva.com";
+  // 📌 Definir el servidor de renderizado Puppeteer
+  const RENDER_SERVER = "https://render.portalmicanva.com";
+  const domain = url.hostname.replace(/^www\./, ''); // Obtener dominio limpio
 
-    console.log(`Usando RENDER_SERVER: ${RENDER_SERVER}`);
+  console.log(`📌 Petición entrante: ${url.href}`);
+  console.log(`📌 Dominio detectado: ${domain}`);
 
-    const url = new URL(request.url);
-    let userAgent = request.headers.get("user-agent") || "";
+  // 📌 ✅ Redirigir `robots.txt` y `sitemap.xml` a la ruta completa del dominio en el servidor Node.js
+  if (url.pathname === "/robots.txt" || url.pathname === "/sitemap.xml") {
+    const fullPath = `${RENDER_SERVER}/public/${domain}${url.pathname}`;
+    console.log(`📌 Redirigiendo a: ${fullPath}`);
 
-    // Convertir User-Agent a minúsculas
-    const lowerUserAgent = userAgent.toLowerCase();
-
-    // Verificar si el User-Agent es un bot
-    const isBot = BOT_AGENTS.some(bot => lowerUserAgent.includes(bot.toLowerCase()));
-
-    console.log(`Request URL: ${url.href}`);
-    console.log(`User-Agent: ${userAgent}`);
-    console.log(`Is Bot: ${isBot}`);
-
-    // Verificar si la solicitud es para un recurso ignorado basado en la extensión
-    const pathname = url.pathname;
-    const hasIgnoredExtension = IGNORE_EXTENSIONS.some(ext => pathname.toLowerCase().endsWith(ext));
-
-    if (hasIgnoredExtension) {
-      console.log(`La ruta ${pathname} tiene una extensión ignorada. Devolviendo contenido original.`);
-      return fetch(request);
-    }
-
-    // Si esta petición ya viene del Puppeteer server (con ?botRender=true), devolver contenido original
-    const isRenderCall = url.searchParams.get("botRender") === "true";
-    if (isRenderCall) {
-      console.log("Llamada desde Puppeteer (botRender=true). Devolviendo contenido sin cambios.");
-      return fetch(request);
-    }
-
-    // Verificar si la ruta debe ser ignorada
-    const shouldIgnore = ignoredPaths.some(path => url.pathname.startsWith(path));
-    if (shouldIgnore) {
-      console.log(`La ruta ${url.pathname} está en la lista de ignorados. Devolviendo contenido original.`);
-      return fetch(request);
-    }
-
-    if (isBot) {
-      // Si la ruta ya es /producto-share/, devolvemos el contenido sin cambios
-      if (url.pathname.startsWith("/producto-share")) {
-        console.log("Ruta /producto-share/ detectada en modo bot. Devolviendo contenido sin redirecciones.");
-        return fetch(request);
-      }
-
-      // Si es bot y la ruta inicia con /producto/, la cambiamos a /producto-share/
-      if (url.pathname.startsWith("/producto/")) {
-        const oldPath = url.pathname;
-        url.pathname = url.pathname.replace("/producto/", "/producto-share/");
-        console.log(`Ruta modificada para SEO: de ${oldPath} a ${url.pathname}`);
-      } else {
-        console.log("Es bot, pero la ruta no inicia con /producto/. Se devolverá contenido bot render.");
-      }
-
-      // Llamada al Puppeteer server con el parámetro botRender=true para evitar bucles
-      const puppeteerServerUrl = `${RENDER_SERVER}/render?url=${encodeURIComponent(url.toString())}&botRender=true`;
-      console.log(`Llamando a Puppeteer Server: ${puppeteerServerUrl}`);
-
-      try {
-        const response = await fetch(puppeteerServerUrl);
-        if (!response.ok) {
-          console.error(`Error al renderizar la página: ${response.statusText}`);
-          return new Response("Error al renderizar la página.", { status: 500 });
-        }
-
-        const html = await response.text();
-        return new Response(html, { headers: { "Content-Type": "text/html" } });
-      } catch (error) {
-        console.error(`Error en la solicitud al renderizador: ${error}`);
-        return new Response("Error interno.", { status: 500 });
-      }
-    }
-
-    return fetch(request);
-  } catch (error) {
-    console.error(`Error en el Worker: ${error}`);
-    return new Response("Error en el Worker.", { status: 500 });
+    return fetch(fullPath, {
+      headers: { "X-Requested-Domain": domain }
+    });
   }
+
+  // 📌 Extraer User-Agent y verificar si es un bot
+  let userAgent = request.headers.get("user-agent") || "";
+  const lowerUserAgent = userAgent.toLowerCase();
+  const isBot = BOT_AGENTS.some(bot => lowerUserAgent.includes(bot.toLowerCase()));
+
+  console.log(`📌 User-Agent: ${userAgent}`);
+  console.log(`📌 Es bot: ${isBot}`);
+
+  // 📌 Verificar si la solicitud es para un recurso ignorado (ejemplo: imágenes, CSS)
+  const pathname = url.pathname;
+  const hasIgnoredExtension = IGNORE_EXTENSIONS.some(ext => pathname.toLowerCase().endsWith(ext));
+
+  if (hasIgnoredExtension) {
+    console.log(`📌 La ruta ${pathname} es un recurso estático. Devolviendo contenido original.`);
+    return fetch(request);
+  }
+
+  // 📌 Evitar bucles detectando si ya es una llamada de Puppeteer (botRender=true)
+  const isRenderCall = url.searchParams.get("botRender") === "true";
+  if (isRenderCall) {
+    console.log("📌 Llamada desde Puppeteer detectada. Devolviendo contenido sin cambios.");
+    return fetch(request);
+  }
+
+  // 📌 Verificar si la ruta debe ser ignorada
+  const shouldIgnore = ignoredPaths.some(path => url.pathname.startsWith(path));
+  if (shouldIgnore) {
+    console.log(`📌 La ruta ${url.pathname} está en la lista de ignorados. Devolviendo contenido original.`);
+    return fetch(request);
+  }
+
+  // 📌 Si es un bot, modificar la URL para SEO y renderizar con Puppeteer
+  if (isBot) {
+    if (url.pathname.startsWith("/producto/")) {
+      const oldPath = url.pathname;
+      url.pathname = url.pathname.replace("/producto/", "/producto-share/");
+      console.log(`📌 Ruta modificada para SEO: de ${oldPath} a ${url.pathname}`);
+    }
+
+    // 📌 Llamar al servidor Puppeteer con el parámetro botRender=true
+    const puppeteerServerUrl = `${RENDER_SERVER}/render?url=${encodeURIComponent(url.toString())}&botRender=true`;
+    console.log(`📌 Llamando a Puppeteer Server: ${puppeteerServerUrl}`);
+
+    try {
+      const response = await fetch(puppeteerServerUrl);
+      if (!response.ok) {
+        console.error(`❌ Error al renderizar la página: ${response.statusText}`);
+        return new Response("Error al renderizar la página.", { status: 500 });
+      }
+
+      const html = await response.text();
+      return new Response(html, { headers: { "Content-Type": "text/html" } });
+    } catch (error) {
+      console.error(`❌ Error en la solicitud al renderizador: ${error}`);
+      return new Response("Error interno.", { status: 500 });
+    }
+  }
+
+  // 📌 Devolver contenido original para otros casos
+  return fetch(request);
 }
 
-// ✅ Listas de Bots y Extensiones Ignoradas
-const ignoredPaths = [];
-
+// ✅ Lista de Bots para detección
 const BOT_AGENTS = [
   "googlebot", "yahoo! slurp", "bingbot", "yandex", "baiduspider",
   "facebookexternalhit", "twitterbot", "rogerbot", "linkedinbot",
@@ -103,6 +97,7 @@ const BOT_AGENTS = [
   "telegrambot", "integration-test", "google-inspectiontool"
 ];
 
+// ✅ Lista de extensiones ignoradas
 const IGNORE_EXTENSIONS = [
   ".js", ".css", ".xml", ".less", ".png", ".jpg", ".jpeg", ".gif",
   ".pdf", ".doc", ".txt", ".ico", ".rss", ".zip", ".mp3", ".rar",
@@ -110,3 +105,6 @@ const IGNORE_EXTENSIONS = [
   ".mov", ".psd", ".ai", ".xls", ".mp4", ".m4a", ".swf", ".dat",
   ".dmg", ".iso", ".flv", ".m4v", ".torrent", ".woff", ".ttf", ".svg", ".webmanifest"
 ];
+
+// ✅ Lista de rutas ignoradas (ajústala según necesidad)
+const ignoredPaths = [];
