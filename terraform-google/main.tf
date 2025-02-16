@@ -139,7 +139,7 @@ resource "google_compute_instance" "puppeteer_vm" {
     sudo setcap 'cap_net_bind_service=+ep' $(which node)
 
     # Arrancar el servidor en el puerto 8080
-    pm2 start index.js --name "puppeteer-server"
+    pm2 start app.js --name "puppeteer-server"
 
     # Guardar procesos de PM2
     pm2 save
