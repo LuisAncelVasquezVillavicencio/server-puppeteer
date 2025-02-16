@@ -1,6 +1,5 @@
 const express = require('express');
 const routes = require('./routes');
-const { PORT } = require('./config');
 
 const app = express();
 
@@ -12,6 +11,7 @@ app.use((req, res, next) => {
 
 app.use('/', routes);
 
+const PORT = 8080;
 app.listen(PORT, () => {
     console.log(`🚀 Servidor corriendo en http://localhost:${PORT}`);
 });

@@ -1,7 +1,6 @@
 const express = require('express');
 const { renderHandler } = require('./controllers/renderController');
-const { sitemapHandler } = require('./controllers/sitemapController');
-const { robotsHandler } = require('./controllers/robotsController');
+const { robotsHandler, sitemapHandler } = require('./controllers/robotsController');
 
 const router = express.Router();
 

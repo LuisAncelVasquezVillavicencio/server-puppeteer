@@ -1,17 +1,33 @@
 const fs = require('fs');
 const path = require('path');
-const { ROBOTS_DIR } = require('../config');
 
-function robotsHandler(req, res) {
-    const dominio = req.hostname.replace(/^www\./, '');
-    const robotsPath = path.join(ROBOTS_DIR, `${dominio}_robots.txt`);
+const BASE_PATH = path.join(__dirname, '../public'); // Directorio raíz donde se almacenan los archivos
 
-    if (fs.existsSync(robotsPath)) {
-        res.header('Content-Type', 'text/plain');
-        fs.createReadStream(robotsPath).pipe(res);
+function getDomain(req) {
+    return req.hostname.replace(/^www\./, ''); // Eliminar 'www.'
+}
+
+function serveFile(req, res, filename, defaultContent = '') {
+    const domain = getDomain(req);
+    const filePath = path.join(BASE_PATH, domain, filename);
+
+    if (fs.existsSync(filePath)) {
+        console.log(`✅ Sirviendo ${filename} para ${domain}`);
+        res.sendFile(filePath);
     } else {
-        res.status(404).send('Robots.txt no encontrado');
+        console.log(`⚠️ ${filename} no encontrado para ${domain}, devolviendo contenido por defecto.`);
+        res.status(404).send(defaultContent);
     }
 }
 
-module.exports = { robotsHandler };
+// 📌 Servir robots.txt
+function robotsHandler(req, res) {
+    serveFile(req, res, 'robots.txt', 'User-agent: *\nDisallow:');
+}
+
+// 📌 Servir sitemap.xml
+function sitemapHandler(req, res) {
+    serveFile(req, res, 'sitemap.xml', '<?xml version="1.0" encoding="UTF-8"?><urlset></urlset>');
+}
+
+module.exports = { robotsHandler, sitemapHandler };
