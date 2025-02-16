@@ -1,0 +1,37 @@
+name: Deploy Infraestructura con Terraform
+
+on:
+  push:
+    branches:
+      - deploy-infra  # Se ejecuta solo en esta rama
+
+jobs:
+  terraform:
+    runs-on: ubuntu-latest
+
+    defaults:
+      run:
+        working-directory: terraform-google  # 📌 Se asegura de que Terraform se ejecute en la carpeta correcta
+
+    steps:
+      - name: 🛠️ Checkout del código
+        uses: actions/checkout@v3
+
+      - name: 🔑 Configurar Google Cloud Auth
+        uses: google-github-actions/auth@v1
+        with:
+          credentials_json: ${{ secrets.GCP_SA_KEY }}
+
+      - name: 🔨 Instalar Terraform
+        uses: hashicorp/setup-terraform@v2
+        with:
+          terraform_version: 1.4.6
+
+      - name: 🏗️ Inicializar Terraform
+        run: terraform init
+
+      - name: 🔍 Plan de Terraform
+        run: terraform plan
+
+      - name: 🚀 Aplicar Terraform
+        run: terraform apply -auto-approve
