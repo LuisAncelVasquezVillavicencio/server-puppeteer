@@ -83,7 +83,11 @@ resource "google_compute_instance" "puppeteer_vm" {
   machine_type = "e2-medium"
   zone         = var.zone
   project      = var.project_id
-
+  
+  metadata = {
+    google-logging-enabled = "true"
+  }
+  
   # Disco con Ubuntu
   boot_disk {
     initialize_params {
@@ -103,20 +107,30 @@ resource "google_compute_instance" "puppeteer_vm" {
   # Startup script mejorado con NGINX + Node.js + Puppeteer
   metadata_startup_script = <<-EOT
     #!/bin/bash
+    exec > /var/log/startup-script.log 2>&1  # Redirigir stdout y stderr a un log
+    echo "⏳ Iniciando instalación..."
+
     apt-get update -y
     apt-get install -y wget unzip git curl nginx
+
+    echo "✅ Instalación de paquetes básicos completada"
 
     # Instalar Node.js 18+ (necesario para Puppeteer)
     curl -fsSL https://deb.nodesource.com/setup_18.x | sudo -E bash -
     apt-get install -y nodejs
 
+    echo "✅ Node.js instalado"
+
     # Instalar PM2 globalmente
     npm install -g pm2
+    echo "✅ PM2 instalado"
 
     # Descargar repositorio
     mkdir -p /opt
     cd /opt
     git clone https://github.com/LuisAncelVasquezVillavicencio/server-puppeteer.git
+
+    echo "✅ Repositorio clonado"
 
     # Dar permisos adecuados
     chown -R root:root /opt/server-puppeteer
@@ -127,10 +141,13 @@ resource "google_compute_instance" "puppeteer_vm" {
 
     # Instalar dependencias
     npm install
+    echo "✅ Dependencias instaladas"
 
     # Instalar Google Chrome estable
     wget https://dl.google.com/linux/direct/google-chrome-stable_current_amd64.deb
     sudo apt install -y ./google-chrome-stable_current_amd64.deb
+
+    echo "✅ Google Chrome instalado"
 
     # Verificar la instalación de Chrome
     google-chrome --version
@@ -140,11 +157,10 @@ resource "google_compute_instance" "puppeteer_vm" {
 
     # Arrancar el servidor en el puerto 8080
     pm2 start app.js --name "puppeteer-server"
+    echo "✅ Servidor Puppeteer iniciado con PM2"
 
     # Guardar procesos de PM2
     pm2 save
-
-    # Configurar PM2 para iniciar automáticamente al reiniciar la VM
     pm2 startup systemd -u root --hp /root
 
     # Configurar NGINX como Proxy Reverso
@@ -165,7 +181,11 @@ resource "google_compute_instance" "puppeteer_vm" {
     # Reiniciar NGINX
     systemctl restart nginx
     systemctl enable nginx
+    echo "✅ NGINX configurado y reiniciado"
+
+    echo "🚀 Instalación completada"
   EOT
+
 
   # (Opcional) Cuenta de servicio con permisos
   service_account {
