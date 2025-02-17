@@ -139,7 +139,7 @@ resource "google_compute_instance" "puppeteer_vm" {
     # Entrar al repositorio
     cd /opt/server-puppeteer/puppeteer-server
 
-    # Instalar dependencias
+    # Instalar dependencias 
     npm install
     echo "✅ Dependencias instaladas"
 
