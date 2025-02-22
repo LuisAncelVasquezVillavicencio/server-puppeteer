@@ -63,7 +63,7 @@ resource "google_compute_firewall" "allow_https" {
   target_tags   = ["puppeteer"]
 }
 
-# 4c. Regla de firewall para SSH (puerto 22) (solo en pruebas, restringir en producción)
+# 4c. Regla de firewall para SSH (puerto 22) (solo en pruebas, restringir en producción) 
 resource "google_compute_firewall" "allow_ssh_public" {
   name    = "allow-ssh-public"
   network = google_compute_network.puppeteer_network.self_link
