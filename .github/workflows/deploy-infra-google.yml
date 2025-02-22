@@ -17,7 +17,7 @@ jobs:
       - name: 🛠️ Checkout del código
         uses: actions/checkout@v3
 
-      - name: 🔑 Configurar Google Cloud Auth
+      - name: 🔑 Configurar Google Cloud Auth 
         uses: google-github-actions/auth@v1
         with:
           credentials_json: ${{ secrets.GCP_SA_KEY }}
@@ -35,3 +35,6 @@ jobs:
 
       - name: 🚀 Aplicar Terraform
         run: terraform apply -auto-approve
+
+
+
