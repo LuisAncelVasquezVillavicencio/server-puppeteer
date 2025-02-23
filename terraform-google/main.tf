@@ -155,6 +155,7 @@ resource "google_compute_instance" "puppeteer_vm" {
     server {
         listen 80;
         server_name _;
+        
         location /ws {
             proxy_pass http://localhost:8080/ws;
             proxy_http_version 1.1;
@@ -162,12 +163,13 @@ resource "google_compute_instance" "puppeteer_vm" {
             proxy_set_header Connection "upgrade";
             proxy_set_header Host $host;
         }
+        
         location / {
             proxy_pass http://localhost:8080;
-            proxy_set_header Host \$host;
-            proxy_set_header X-Real-IP \$remote_addr;
-            proxy_set_header X-Forwarded-For \$proxy_add_x_forwarded_for;
-            proxy_set_header X-Forwarded-Proto \$scheme;
+            proxy_set_header Host $host;
+            proxy_set_header X-Real-IP $remote_addr;
+            proxy_set_header X-Forwarded-For $proxy_add_x_forwarded_for;
+            proxy_set_header X-Forwarded-Proto $scheme;
         }
     }
     EOF
