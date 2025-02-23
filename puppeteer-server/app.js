@@ -29,7 +29,7 @@ app.prepare().then(() => {
     });
     
     // Configurar WebSocket en el mismo servidor Express
-    const wss = new WebSocketServer({ server: httpServer });
+    const wss = new WebSocketServer({ server: httpServer , path: '/ws' });
     wss.on('connection', (ws, req) => {
         console.log('Cliente conectado para recibir logs');
 
