@@ -1,5 +1,8 @@
-import React from 'react';
-import { Container, Grid, Card, CardContent, Typography, Box } from '@mui/material';
+import React, { useEffect, useState } from 'react';
+import { Container, Grid, Card, CardContent, Typography, Box , Button} from '@mui/material';
+
+
+
 import { PieChart, Pie, Cell, ResponsiveContainer, Legend } from 'recharts';
 import ArrowDownwardIcon from '@mui/icons-material/ArrowDownward';
 import ArrowUpwardIcon from '@mui/icons-material/ArrowUpward';
@@ -24,6 +27,29 @@ const mockData = {
 };
 
 export default function Dashboard() {
+  const [startupLogs, setStartupLogs] = useState('');
+  const [pm2Logs, setPm2Logs] = useState('');
+   
+  useEffect(() => {
+    const ws = new WebSocket('ws://localhost:8080');
+
+    ws.onmessage = (event) => {
+      const message = JSON.parse(event.data);
+      if (message.type === 'startup') {
+        setStartupLogs((prevLogs) => prevLogs + message.log);
+      } else if (message.type === 'pm2') {
+        setPm2Logs((prevLogs) => prevLogs + message.log);
+      }
+    };
+
+    ws.onclose = () => {
+      console.log('WebSocket cerrado');
+    };
+
+    return () => {
+      ws.close();
+    };
+  }, []);
   // Inject the global style once.
 
 
@@ -84,6 +110,36 @@ export default function Dashboard() {
           </Card>
         </Grid>
       </Grid>
+
+
+
+      <Box sx={{ p: 2, background: "#2d2d30" }}>
+      <Typography variant="h5" gutterBottom>
+        Logs del Servidor
+      </Typography>
+      <Card sx={{ mt: 2, borderRadius: 2, boxShadow: 3, p: 2 }}>
+        <CardContent>
+          <Typography variant="h6" gutterBottom>
+            Startup Script Logs
+          </Typography>
+          <Typography variant="body2" component="pre" sx={{ whiteSpace: 'pre-wrap' }}>
+            {startupLogs}
+          </Typography>
+        </CardContent>
+      </Card>
+      <Card sx={{ mt: 2, borderRadius: 2, boxShadow: 3, p: 2 }}>
+        <CardContent>
+          <Typography variant="h6" gutterBottom>
+            PM2 Logs
+          </Typography>
+          <Typography variant="body2" component="pre" sx={{ whiteSpace: 'pre-wrap' }}>
+            {pm2Logs}
+          </Typography>
+        </CardContent>
+      </Card>
+    </Box>
+
+
     </Grid>
   );
 }
