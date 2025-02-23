@@ -115,6 +115,20 @@ resource "google_compute_instance" "puppeteer_vm" {
 
     echo "✅ Instalación de paquetes básicos completada"
 
+    # Instalar PostgreSQL y sus contribuciones
+    apt-get install -y postgresql postgresql-contrib
+    echo "✅ PostgreSQL instalado"
+    
+    # Esperar a que se inicie el servicio de PostgreSQL
+    systemctl enable postgresql
+    systemctl start postgresql
+
+    # Configurar la base de datos: crear usuario y base de datos si no existen.
+    sudo -u postgres psql -c "DO \$\$ BEGIN IF NOT EXISTS (SELECT FROM pg_catalog.pg_roles WHERE rolname = '${var.db_username}') THEN CREATE ROLE ${var.db_username} LOGIN PASSWORD '${var.db_password}'; END IF; END\$\$;"
+    sudo -u postgres psql -c "DO \$\$ BEGIN IF NOT EXISTS (SELECT FROM pg_database WHERE datname = '${var.db_name}') THEN CREATE DATABASE ${var.db_name} OWNER ${var.db_username}; END IF; END\$\$;"
+    echo "✅ Base de datos '${var.db_name}' configurada con el usuario '${var.db_username}'"
+
+
     # Instalar Node.js 18+ (necesario para Puppeteer)
     curl -fsSL https://deb.nodesource.com/setup_18.x | sudo -E bash -
     apt-get install -y nodejs
