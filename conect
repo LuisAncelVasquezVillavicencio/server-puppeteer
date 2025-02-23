@@ -50,3 +50,7 @@ tail -f /var/log/pm2/puppeteer-server.log
 
 
 pm2 logs puppeteer-server
+
+
+// log ejecucion server node
+tail -f /var/log/pm2/puppeteer-server.log
