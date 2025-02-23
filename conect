@@ -42,7 +42,7 @@ cd  /opt/server-puppeteer/puppeteer-server/
 ls /opt/server-puppeteer/puppeteer-server/public/mivisualization.portalmicanva.com
 
 tail -f /var/log/startup-script.log
-
+cat /var/log/startup-script.log
 
 /no se genera el textroot
 
@@ -54,3 +54,13 @@ pm2 logs puppeteer-server
 
 // log ejecucion server node
 tail -f /var/log/pm2/puppeteer-server.log
+
+
+sudo npm install -g wscat
+npx wscat -c ws://localhost:8080/ws
+
+
+cat /var/log/pm2/puppeteer-server-error.log
+
+
+kill -9 $(lsof -t -i:8080)
