@@ -6,6 +6,7 @@ http://35.226.22.221:8080/render?url=https://www.google.com
 
 luis_ bL5OwpFaBvv60n2UFFHkq4332SgH
 
+ cat /opt/server-puppeteer/puppeteer-server/public/mivisualization.com/sitemap.xml
 
 echo "ssh-rsa AAAAB3NzaC1yc2EAAAADAQABAAABAQDaDB8nHsjKno8m7KIsUxIlSkm//3cNufB0Mj2ov06M3vM5YWdaHzoA7lrOSV8eJFzy9mwISBdRIrgK3BmtSpM86mmyKRT/YL99vbfqTW2u8qZNZmAbtqlOR9/6qQkgNBaNO9DV+FXrtWF8Y1LimHERACMHRaiPZOZUKS9VZn/WiE9aSepZwIh9zhWWGBdXOUb9hBdteS+13YVUu17BAPmeU3oIVkoLilAWYRdmA3wsitBhz8l40/cEWiz+rWPqMsOI1YxppxfW6zKCCBMehLfhJQuRBZkvXbXG49s7DOrP6TdC+k4raYhfOR5p3Q+eFZI9Nb2S3egGpvpKXF9WG4PT luis_@DESKTOP-7RRMOKK" >> ~/.ssh/authorized_keys
 
@@ -191,3 +192,14 @@ Copiar
 Editar
 ssh -i ~/.ssh/rendertron_key millennial@<IP_EXTERNA>
 (Opcional) Prueba Rendertron en el puerto 8080 si está abierto
+
+
+
+site:mivisualization.com
+
+
+
+ls /opt/server-puppeteer/puppeteer-server/public/mivisualization.portalmicanva.com
+
+
+/no se genera el textroot

@@ -125,6 +125,12 @@ resource "google_compute_instance" "puppeteer_vm" {
     npm install -g pm2
     echo "✅ PM2 instalado"
 
+    # Instalar Redis
+    apt-get install -y redis-server
+    systemctl enable redis-server
+    systemctl start redis-server
+    echo "✅ Redis instalado y en ejecución"
+
     # Descargar repositorio
     mkdir -p /opt
     cd /opt
