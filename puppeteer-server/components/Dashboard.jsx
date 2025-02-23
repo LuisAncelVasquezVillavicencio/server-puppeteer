@@ -31,7 +31,7 @@ export default function Dashboard() {
   const [pm2Logs, setPm2Logs] = useState('');
    
   useEffect(() => {
-    const ws = new WebSocket('ws://localhost:8080');
+    const ws = new WebSocket(`ws://${window.location.hostname}/ws/`);
 
     ws.onmessage = (event) => {
       const message = JSON.parse(event.data);
