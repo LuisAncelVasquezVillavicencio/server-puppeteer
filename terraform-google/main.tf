@@ -149,7 +149,7 @@ resource "google_compute_instance" "puppeteer_vm" {
     echo "✅ Servidor Puppeteer iniciado con PM2"
 
     pm2 save
-    su - root -c "pm2 startup systemd && pm2 save"
+    su - root -c "pm2 startup systemd && pm2 save "
 
     cat <<EOF > /etc/nginx/sites-available/default
     server {
