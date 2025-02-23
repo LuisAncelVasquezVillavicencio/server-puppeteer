@@ -41,7 +41,11 @@ export default function Dashboard() {
         setPm2Logs((prevLogs) => prevLogs + message.log);
       }
     };
-
+    
+    ws.onerror = (error) => {
+      console.error('WebSocket error:', error);
+    };
+    
     ws.onclose = () => {
       console.log('WebSocket cerrado');
     };
