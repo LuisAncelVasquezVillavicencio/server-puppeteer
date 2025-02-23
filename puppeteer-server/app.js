@@ -32,7 +32,8 @@ app.prepare().then(() => {
     const wss = new WebSocketServer({ server: httpServer , path: '/ws' });
     wss.on('connection', (ws, req) => {
         console.log('Cliente conectado para recibir logs');
-
+        console.log('URL de conexión:', req.url);
+        
         ws.send(JSON.stringify({ type: 'info', message: 'Conexión WebSocket establecida' }));
 
         ws.on('message', (message) => {
