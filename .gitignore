@@ -11,7 +11,7 @@ npm-debug.log*
 yarn-debug.log*
 yarn-error.log*
 
-# Archivos de entorno (si usas variables sensibles)
+# Archivos de entorno (si usas variables sensibles)s
 .env
 .env.local
 .env.*.local
