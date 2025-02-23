@@ -203,3 +203,5 @@ ls /opt/server-puppeteer/puppeteer-server/public/mivisualization.portalmicanva.c
 
 
 /no se genera el textroot
+
+tail -f /var/log/pm2/puppeteer-server.log
