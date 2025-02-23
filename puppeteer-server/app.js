@@ -28,7 +28,7 @@ app.prepare().then(() => {
         console.log(`🚀 Servidor corriendo en http://localhost:8080`);
     });
     
-    // Configurar WebSocket en el mismo servidor Express 
+    // Configurar WebSocket en el mismo servidor Express  
     const wss = new WebSocketServer({ server: httpServer , path: '/ws' });
     wss.on('connection', (ws, req) => {
         console.log('Cliente conectado para recibir logs');
