@@ -201,7 +201,12 @@ site:mivisualization.com
 
 ls /opt/server-puppeteer/puppeteer-server/public/mivisualization.portalmicanva.com
 
+tail -f /var/log/startup-script.log
+
 
 /no se genera el textroot
 
 tail -f /var/log/pm2/puppeteer-server.log
+
+
+pm2 logs puppeteer-server
