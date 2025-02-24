@@ -6,7 +6,7 @@ app.get('/render', async (req, res) => {
     const url = req.query.url;
 
     if (!url) {
-        return res.status(400).send('Falta el parámetro URL.');
+        return res.status(400).send('Falta el parámetro URLs.');
     }
 
     let browser;
