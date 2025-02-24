@@ -1,14 +1,8 @@
 import React, { useEffect, useState } from 'react';
-import { Container, Grid, Card, CardContent, Typography, Box , Button} from '@mui/material';
-
-
-
+import { Container, Grid, Card, CardContent, Typography, Box, Button } from '@mui/material';
 import { PieChart, Pie, Cell, ResponsiveContainer, Legend } from 'recharts';
 import ArrowDownwardIcon from '@mui/icons-material/ArrowDownward';
 import ArrowUpwardIcon from '@mui/icons-material/ArrowUpward';
-
-// Embed remixicon font-face so all is in one file.
-// NOTE: This can be improved, but below is a minimal approach.
 
 const mockData = {
   socialStats: [
@@ -29,10 +23,12 @@ const mockData = {
 export default function Dashboard() {
   const [startupLogs, setStartupLogs] = useState('');
   const [pm2Logs, setPm2Logs] = useState('');
-   
-  useEffect(() => {
-    const ws = new WebSocket(`wss://${window.location.hostname}/ws`);
+  const [expandedStartup, setExpandedStartup] = useState(false);
+  const [expandedPm2, setExpandedPm2] = useState(false);
 
+  useEffect(() => {
+    const protocol = window.location.protocol === 'https:' ? 'wss' : 'ws';
+    const ws = new WebSocket(`${protocol}://${window.location.hostname}/ws`);
 
     ws.onmessage = (event) => {
       const message = JSON.parse(event.data);
@@ -42,11 +38,11 @@ export default function Dashboard() {
         setPm2Logs((prevLogs) => prevLogs + message.log);
       }
     };
-    
+
     ws.onerror = (error) => {
       console.error('WebSocket error:', error);
     };
-    
+
     ws.onclose = () => {
       console.log('WebSocket cerrado');
     };
@@ -55,96 +51,125 @@ export default function Dashboard() {
       ws.close();
     };
   }, []);
-  // Inject the global style once.
-
 
   return (
-    <Grid sx={{ p: 2 ,background:"#2d2d30" }} >
+    <Grid sx={{ p: 2, background: "#2d2d30" }}>
       <Grid container spacing={3}>
         <Grid item xs={12} md={8}>
           <Grid container spacing={2}>
-            {mockData.socialStats.map((stat, index) => {
-              return (
-                <Grid item xs={12} sm={6} md={4} key={index}>
-                  <Card
-                    sx={{
-                      borderRadius: 2,
-                      boxShadow: 3,
-                      p: 0,
-                      position: 'relative',
-                      overflow: 'hidden',
-                      background:"#19191c"
-                    }}
-                  >
-                    <CardContent>
-                      <Typography variant="subtitle1" sx={{ color: stat.color, fontWeight: 500 }}>
-                        {stat.platform}
+            {mockData.socialStats.map((stat, index) => (
+              <Grid item xs={12} sm={6} md={4} key={index}>
+                <Card
+                  sx={{
+                    borderRadius: 2,
+                    boxShadow: 3,
+                    p: 0,
+                    position: 'relative',
+                    overflow: 'hidden',
+                    background: "#19191c"
+                  }}
+                >
+                  <CardContent>
+                    <Typography variant="subtitle1" sx={{ color: stat.color, fontWeight: 500 }}>
+                      {stat.platform}
+                    </Typography>
+                    <Typography variant="h5" sx={{ fontWeight: 600 }}>
+                      {stat.followers}
+                    </Typography>
+                    <Box display="flex" mt={1}>
+                      <Typography variant="body2" color="text.secondary">
+                        Followers
                       </Typography>
-                      <Typography variant="h5" sx={{ fontWeight: 600 }}>
-                        {stat.followers}
-                      </Typography>
-                      <Box display="flex" mt={1}>
-                        <Typography variant="body2" color="text.secondary">
-                          Followers
+                      <Box
+                        display="flex"
+                        alignItems="center"
+                        sx={{ ml: 2, color: stat.trend === 'up' ? 'success.main' : 'error.main' }}
+                      >
+                        {stat.trend === 'up' ? (
+                          <ArrowUpwardIcon sx={{ fontSize: '0.8rem' }} />
+                        ) : (
+                          <ArrowDownwardIcon fontSize="small" />
+                        )}
+                        <Typography variant="body2" ml={0.5}>
+                          {stat.change}
                         </Typography>
-                        <Box
-                          display="flex"
-                          alignItems="center"
-                          sx={{ ml: 2, color: stat.trend === 'up' ? 'success.main' : 'error.main' }}
-                        >
-                          {stat.trend === 'up' ? (
-                            <ArrowUpwardIcon sx={{ fontSize: '0.8rem' }} />
-                          ) : (
-                            <ArrowDownwardIcon fontSize="small" />
-                          )}
-                          <Typography variant="body2" ml={0.5}>
-                            {stat.change}
-                          </Typography>
-                        </Box>
                       </Box>
-                    </CardContent>
-                  </Card>
-                </Grid>
-              );
-            })}
+                    </Box>
+                  </CardContent>
+                </Card>
+              </Grid>
+            ))}
           </Grid>
         </Grid>
         <Grid item xs={12} md={4}>
           <Card sx={{ borderRadius: 2, boxShadow: 3, p: 2 }}>
-           
+            {/* Aquí podrías agregar otro contenido si lo necesitas */}
           </Card>
         </Grid>
       </Grid>
 
-
-
       <Box sx={{ p: 2, background: "#2d2d30" }}>
-      <Typography variant="h5" gutterBottom>
-        Logs del Servidor
-      </Typography>
-      <Card sx={{ mt: 2, borderRadius: 2, boxShadow: 3, p: 2 }}>
-        <CardContent>
-          <Typography variant="h6" gutterBottom>
-            Startup Script Logs
-          </Typography>
-          <Typography variant="body2" component="pre" sx={{ whiteSpace: 'pre-wrap' }}>
-            {startupLogs}
-          </Typography>
-        </CardContent>
-      </Card>
-      <Card sx={{ mt: 2, borderRadius: 2, boxShadow: 3, p: 2 }}>
-        <CardContent>
-          <Typography variant="h6" gutterBottom>
-            PM2 Logs
-          </Typography>
-          <Typography variant="body2" component="pre" sx={{ whiteSpace: 'pre-wrap' }}>
-            {pm2Logs}
-          </Typography>
-        </CardContent>
-      </Card>
-    </Box>
+        <Typography variant="h5" gutterBottom>
+          Logs del Servidor
+        </Typography>
+        {/* Card para Startup Script Logs */}
+        <Card sx={{ mt: 2, borderRadius: 2, boxShadow: 3, p: 2 }}>
+          <CardContent>
+            <Typography variant="h6" gutterBottom>
+              Startup Script Logs
+            </Typography>
+            <Box
+              sx={{
+                maxHeight: expandedStartup ? 'none' : 200,
+                overflowY: 'auto',
+                backgroundColor: '#f5f5f5',
+                p: 1,
+                borderRadius: 1
+              }}
+            >
+              <Typography variant="body2" component="pre" sx={{ whiteSpace: 'pre-wrap' }}>
+                {startupLogs}
+              </Typography>
+            </Box>
+            <Button
+              sx={{ mt: 1 }}
+              variant="contained"
+              onClick={() => setExpandedStartup(!expandedStartup)}
+            >
+              {expandedStartup ? 'Contraer' : 'Ampliar'}
+            </Button>
+          </CardContent>
+        </Card>
 
-
+        {/* Card para PM2 Logs */}
+        <Card sx={{ mt: 2, borderRadius: 2, boxShadow: 3, p: 2 }}>
+          <CardContent>
+            <Typography variant="h6" gutterBottom>
+              PM2 Logs
+            </Typography>
+            <Box
+              sx={{
+                maxHeight: expandedPm2 ? 'none' : 200,
+                overflowY: 'auto',
+                backgroundColor: '#f5f5f5',
+                p: 1,
+                borderRadius: 1
+              }}
+            >
+              <Typography variant="body2" component="pre" sx={{ whiteSpace: 'pre-wrap' }}>
+                {pm2Logs}
+              </Typography>
+            </Box>
+            <Button
+              sx={{ mt: 1 }}
+              variant="contained"
+              onClick={() => setExpandedPm2(!expandedPm2)}
+            >
+              {expandedPm2 ? 'Contraer' : 'Ampliar'}
+            </Button>
+          </CardContent>
+        </Card>
+      </Box>
     </Grid>
   );
 }

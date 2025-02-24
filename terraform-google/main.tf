@@ -145,7 +145,9 @@ resource "google_compute_instance" "puppeteer_vm" {
     google-chrome --version
 
     sudo setcap 'cap_net_bind_service=+ep' $(which node)
-    pm2 start app.js --name "puppeteer-server" --output "/var/log/pm2/puppeteer-server.log" --error "/var/log/pm2/puppeteer-server-error.log"
+
+    pm2 start app.js --name "puppeteer-server" --env NODE_ENV=production --output "/var/log/pm2/puppeteer-server.log" --error "/var/log/pm2/puppeteer-server-error.log"
+
     echo "✅ Servidor Puppeteer iniciado con PM2"
 
     pm2 save
