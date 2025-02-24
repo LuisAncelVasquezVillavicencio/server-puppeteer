@@ -133,13 +133,6 @@ export default function Dashboard() {
                 {startupLogs}
               </Typography>
             </Box>
-            <Button
-              sx={{ mt: 1 }}
-              variant="contained"
-              onClick={() => setExpandedStartup(!expandedStartup)}
-            >
-              {expandedStartup ? 'Contraer' : 'Ampliar'}
-            </Button>
           </CardContent>
         </Card>
 
@@ -164,13 +157,6 @@ export default function Dashboard() {
                 {pm2Logs}
               </Typography>
             </Box>
-            <Button
-              sx={{ mt: 1 }}
-              variant="contained"
-              onClick={() => setExpandedPm2(!expandedPm2)}
-            >
-              {expandedPm2 ? 'Contraer' : 'Ampliar'}
-            </Button>
           </CardContent>
         </Card>
       </Box>
