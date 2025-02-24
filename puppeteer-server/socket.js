@@ -68,7 +68,7 @@ function initializeSocket(httpServer) {
   });
 
   // Envía los logs acumulados cada minuto (60000 ms)
-  setInterval(sendLogs, 60000);
+  setInterval(sendLogs, 10000);
 
   return wss;
 }
