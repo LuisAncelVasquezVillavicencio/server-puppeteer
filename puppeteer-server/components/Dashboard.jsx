@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react';
-import { Container, Grid, Card, CardContent, Typography, Box } from '@mui/material';
+import { Container, Grid, Card, CardContent, Typography, Box, Button } from '@mui/material';
 import { PieChart, Pie, Cell, ResponsiveContainer, Legend } from 'recharts';
 import ArrowDownwardIcon from '@mui/icons-material/ArrowDownward';
 import ArrowUpwardIcon from '@mui/icons-material/ArrowUpward';
@@ -23,6 +23,8 @@ const mockData = {
 export default function Dashboard() {
   const [startupLogs, setStartupLogs] = useState('');
   const [pm2Logs, setPm2Logs] = useState('');
+  const [expandedStartup, setExpandedStartup] = useState(false);
+  const [expandedPm2, setExpandedPm2] = useState(false);
 
   useEffect(() => {
     const protocol = window.location.protocol === 'https:' ? 'wss' : 'ws';
@@ -33,7 +35,7 @@ export default function Dashboard() {
       if (message.type === 'startup') {
         setStartupLogs((prevLogs) => prevLogs + message.log);
       } else if (message.type === 'pm2') {
-        setPm2Logs((prevLogs) => prevLogs + "\n" + message.log);
+        setPm2Logs((prevLogs) => prevLogs + message.log);
       }
     };
 
@@ -118,10 +120,9 @@ export default function Dashboard() {
             </Typography>
             <Box
               sx={{
-                maxHeight: 'none',
+                maxHeight: expandedStartup ? 'none' : 200,
                 overflowY: 'auto',
-                backgroundColor: '#000', // Fondo negro
-                color: '#fff',         // Texto blanco
+                backgroundColor: '#f5f5f5',
                 p: 1,
                 borderRadius: 1
               }}
@@ -130,6 +131,13 @@ export default function Dashboard() {
                 {startupLogs}
               </Typography>
             </Box>
+            <Button
+              sx={{ mt: 1 }}
+              variant="contained"
+              onClick={() => setExpandedStartup(!expandedStartup)}
+            >
+              {expandedStartup ? 'Contraer' : 'Ampliar'}
+            </Button>
           </CardContent>
         </Card>
 
@@ -141,10 +149,9 @@ export default function Dashboard() {
             </Typography>
             <Box
               sx={{
-                maxHeight: 'none',
+                maxHeight: expandedPm2 ? 'none' : 200,
                 overflowY: 'auto',
-                backgroundColor: '#000', // Fondo negro
-                color: '#fff',         // Texto blanco
+                backgroundColor: '#f5f5f5',
                 p: 1,
                 borderRadius: 1
               }}
@@ -153,10 +160,15 @@ export default function Dashboard() {
                 {pm2Logs}
               </Typography>
             </Box>
+            <Button
+              sx={{ mt: 1 }}
+              variant="contained"
+              onClick={() => setExpandedPm2(!expandedPm2)}
+            >
+              {expandedPm2 ? 'Contraer' : 'Ampliar'}
+            </Button>
           </CardContent>
         </Card>
-
-
       </Box>
     </Grid>
   );
