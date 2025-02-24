@@ -178,7 +178,7 @@ resource "google_compute_instance" "puppeteer_vm" {
     systemctl enable nginx
     echo "✅ NGINX configurado y reiniciado"
 
-    echo "🚀 Instalación completada"
+    echo "🚀 Instalación completada "
   EOT
 
   service_account {
