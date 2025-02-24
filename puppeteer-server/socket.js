@@ -38,7 +38,7 @@ function initializeSocket(httpServer) {
     console.error('Error leyendo startup log:', error);
   });
 
-  // Tail para el log de PM2
+  // Tail para el log de PM2 
   const tailPm2 = new Tail(pm2LogPath);
   tailPm2.on('line', (data) => {
     console.log('PM2 log:', data);
