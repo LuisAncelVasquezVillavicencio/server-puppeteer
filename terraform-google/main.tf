@@ -144,11 +144,17 @@ resource "google_compute_instance" "puppeteer_vm" {
     echo "✅ Google Chrome instalado"
     google-chrome --version
 
-    sudo setcap 'cap_net_bind_service=+ep' $(which node)
+    echo "⏳ Ejecutando build de Next.js..."
+    npm run build
+    echo "✅ Build completado"
 
-    pm2 start app.js --name "puppeteer-server" --env NODE_ENV=production --output "/var/log/pm2/puppeteer-server.log" --error "/var/log/pm2/puppeteer-server-error.log"
+    # Asegurar permisos para la carpeta .next
+    chmod -R 755 /opt/server-puppeteer/puppeteer-server/.next
+    chown -R root:root /opt/server-puppeteer/puppeteer-server/.next
 
-    echo "✅ Servidor Puppeteer iniciado con PM2"
+    echo "⏳ Iniciando servidor en producción..."
+    pm2 start npm --name "puppeteer-server" -- run start --output "/var/log/pm2/puppeteer-server.log" --error "/var/log/pm2/puppeteer-server-error.log"
+    echo "✅ Servidor iniciado con PM2"
 
     pm2 save
     su - root -c "pm2 startup systemd && pm2 save "
