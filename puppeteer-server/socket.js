@@ -2,7 +2,7 @@ const { WebSocketServer } = require('ws');
 const { Tail } = require('tail');
 
 function initializeSocket(httpServer) {
-  // Crea el WebSocketServer en el mismo servidor HTTP con la ruta /ws
+  // Crea el WebSocketServer en el mismo servidor HTTP en la ruta /ws
   const wss = new WebSocketServer({ server: httpServer, path: '/ws' });
   
   wss.on('connection', (ws, req) => {
@@ -20,37 +20,55 @@ function initializeSocket(httpServer) {
     });
   });
 
-  // Configurar la lectura de logs usando Tail
+  // Rutas de logs
   const startupLogPath = '/var/log/startup-script.log';
-  const pm2LogPath = '/var/log/pm2/puppeteer-server.log';
+  const pm2LogPath = '/var/log/pm2/puppeteer-server.log'; 
 
-  // Tail para el log del script de inicio
+  // Buffers para acumular las líneas de log
+  let startupBuffer = "";
+  let pm2Buffer = "";
+
+  // Función para enviar los logs acumulados a todos los clientes
+  const sendLogs = () => {
+    if (startupBuffer) {
+      wss.clients.forEach(client => {
+        if (client.readyState === client.OPEN) {
+          client.send(JSON.stringify({ type: 'startup', log: startupBuffer }));
+        }
+      });
+      startupBuffer = ""; // Limpiar el buffer una vez enviado
+    }
+    if (pm2Buffer) {
+      wss.clients.forEach(client => {
+        if (client.readyState === client.OPEN) {
+          client.send(JSON.stringify({ type: 'pm2', log: pm2Buffer }));
+        }
+      });
+      pm2Buffer = "";
+    }
+  };
+
+  // Configurar la lectura de logs usando Tail
   const tailStartup = new Tail(startupLogPath);
   tailStartup.on('line', (data) => {
     console.log('Startup log:', data);
-    wss.clients.forEach(client => {
-      if (client.readyState === client.OPEN) {
-        client.send(JSON.stringify({ type: 'startup', log: data + "\n" }));
-      }
-    });
+    startupBuffer += data + "\n"; // Acumula cada nueva línea
   });
   tailStartup.on('error', (error) => {
     console.error('Error leyendo startup log:', error);
   });
 
-  // Tail para el log de PM2 
   const tailPm2 = new Tail(pm2LogPath);
   tailPm2.on('line', (data) => {
     console.log('PM2 log:', data);
-    wss.clients.forEach(client => {
-      if (client.readyState === client.OPEN) {
-        client.send(JSON.stringify({ type: 'pm2', log: data + "\n" }));
-      }
-    });
+    pm2Buffer += data + "\n";
   });
   tailPm2.on('error', (error) => {
     console.error('Error leyendo PM2 log:', error);
   });
+
+  // Envía los logs acumulados cada minuto (60000 ms)
+  setInterval(sendLogs, 60000);
 
   return wss;
 }
