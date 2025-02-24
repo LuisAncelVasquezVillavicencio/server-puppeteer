@@ -153,7 +153,7 @@ resource "google_compute_instance" "puppeteer_vm" {
     chown -R root:root /opt/server-puppeteer/puppeteer-server/.next
 
     echo "⏳ Iniciando servidor en producción..."
-    pm2 start npm --name "puppeteer-server" -- run start --output "/var/log/pm2/puppeteer-server.log" --error "/var/log/pm2/puppeteer-server-error.log"
+    cd /opt/server-puppeteer/puppeteer-server && pm2 start npm --name "puppeteer-server" -- run start --output "/var/log/pm2/puppeteer-server.log" --error "/var/log/pm2/puppeteer-server-error.log"
     echo "✅ Servidor iniciado con PM2"
 
     pm2 save
