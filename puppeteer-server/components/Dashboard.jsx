@@ -23,8 +23,7 @@ const mockData = {
 export default function Dashboard() {
   const [startupLogs, setStartupLogs] = useState('');
   const [pm2Logs, setPm2Logs] = useState('');
-  const [expandedStartup, setExpandedStartup] = useState(false);
-  const [expandedPm2, setExpandedPm2] = useState(false);
+
 
   useEffect(() => {
     const protocol = window.location.protocol === 'https:' ? 'wss' : 'ws';
@@ -120,7 +119,7 @@ export default function Dashboard() {
             </Typography>
             <Box
               sx={{
-                maxHeight: expandedStartup ? 'none' : 200,
+                maxHeight:  200,
                 overflowY: 'auto',
                 backgroundColor: '#f5f5f5',
                 p: 1,
@@ -144,7 +143,7 @@ export default function Dashboard() {
             </Typography>
             <Box
               sx={{
-                maxHeight: expandedPm2 ? 'none' : 200,
+                maxHeight: 200,
                 overflowY: 'auto',
                 backgroundColor: '#f5f5f5',
                 p: 1,
