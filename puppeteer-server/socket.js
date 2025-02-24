@@ -24,35 +24,15 @@ function initializeSocket(httpServer) {
   const startupLogPath = '/var/log/startup-script.log';
   const pm2LogPath = '/var/log/pm2/puppeteer-server.log'; 
 
-  // Buffers para acumular las líneas de log
-  let startupBuffer = "";
-  let pm2Buffer = "";
-
-  // Función para enviar los logs acumulados a todos los clientes
-  const sendLogs = () => {
-    if (startupBuffer) {
-      wss.clients.forEach(client => {
-        if (client.readyState === client.OPEN) {
-          client.send(JSON.stringify({ type: 'startup', log: startupBuffer }));
-        }
-      });
-      startupBuffer = ""; // Limpiar el buffer una vez enviado
-    }
-    if (pm2Buffer) {
-      wss.clients.forEach(client => {
-        if (client.readyState === client.OPEN) {
-          client.send(JSON.stringify({ type: 'pm2', log: pm2Buffer }));
-        }
-      });
-      pm2Buffer = "";
-    }
-  };
-
-  // Configurar la lectura de logs usando Tail
+  // Configurar la lectura de logs usando Tail sin buffering ni envío diferido
   const tailStartup = new Tail(startupLogPath);
   tailStartup.on('line', (data) => {
     console.log('Startup log:', data);
-    startupBuffer += data + "\n"; // Acumula cada nueva línea
+    wss.clients.forEach(client => {
+      if (client.readyState === client.OPEN) {
+        client.send(JSON.stringify({ type: 'startup', log: data }));
+      }
+    });
   });
   tailStartup.on('error', (error) => {
     console.error('Error leyendo startup log:', error);
@@ -61,14 +41,15 @@ function initializeSocket(httpServer) {
   const tailPm2 = new Tail(pm2LogPath);
   tailPm2.on('line', (data) => {
     console.log('PM2 log:', data);
-    pm2Buffer += data + "\n";
+    wss.clients.forEach(client => {
+      if (client.readyState === client.OPEN) {
+        client.send(JSON.stringify({ type: 'pm2', log: data }));
+      }
+    });
   });
   tailPm2.on('error', (error) => {
     console.error('Error leyendo PM2 log:', error);
   });
-
-  // Envía los logs acumulados cada minuto (60000 ms)
-  setInterval(sendLogs, 10000);
 
   return wss;
 }
