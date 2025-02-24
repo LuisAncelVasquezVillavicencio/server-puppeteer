@@ -151,7 +151,7 @@ resource "google_compute_instance" "puppeteer_vm" {
     pm2 save
     su - root -c "pm2 startup systemd && pm2 save "
 
-    cat <<EOF > /etc/nginx/sites-available/default
+    cat <<'EOF' > /etc/nginx/sites-available/default
     server {
       listen 80;
       server_name _;
@@ -173,6 +173,7 @@ resource "google_compute_instance" "puppeteer_vm" {
           }
     }
     EOF
+
 
     systemctl restart nginx
     systemctl enable nginx
