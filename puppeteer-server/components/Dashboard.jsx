@@ -35,7 +35,7 @@ export default function Dashboard() {
       if (message.type === 'startup') {
         setStartupLogs((prevLogs) => prevLogs + message.log);
       } else if (message.type === 'pm2') {
-        setPm2Logs((prevLogs) => prevLogs + message.log);
+        setPm2Logs((prevLogs) => prevLogs + "\n" + message.log);
       }
     };
 
@@ -124,7 +124,9 @@ export default function Dashboard() {
                 overflowY: 'auto',
                 backgroundColor: '#f5f5f5',
                 p: 1,
-                borderRadius: 1
+                borderRadius: 1,
+                backgroundColor: '#000', // Fondo negro
+                color: '#fff',         // Texto blanco
               }}
             >
               <Typography variant="body2" component="pre" sx={{ whiteSpace: 'pre-wrap' }}>
@@ -153,7 +155,9 @@ export default function Dashboard() {
                 overflowY: 'auto',
                 backgroundColor: '#f5f5f5',
                 p: 1,
-                borderRadius: 1
+                borderRadius: 1,
+                backgroundColor: '#000', // Fondo negro
+                color: '#fff',         // Texto blanco
               }}
             >
               <Typography variant="body2" component="pre" sx={{ whiteSpace: 'pre-wrap' }}>
