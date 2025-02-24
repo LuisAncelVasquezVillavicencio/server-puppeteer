@@ -3,6 +3,9 @@ import { Container, Grid, Card, CardContent, Typography, Box, Button } from '@mu
 import { PieChart, Pie, Cell, ResponsiveContainer, Legend } from 'recharts';
 import ArrowDownwardIcon from '@mui/icons-material/ArrowDownward';
 import ArrowUpwardIcon from '@mui/icons-material/ArrowUpward';
+import RotatingText from './RotatingText.jsx';
+
+
 
 const mockData = {
   socialStats: [
@@ -53,6 +56,27 @@ export default function Dashboard() {
 
   return (
     <Grid sx={{ p: 2, background: "#2d2d30" }}>
+      <Box sx={{ textAlign: 'left', my: 3, display: 'flex', justifyContent: 'left', alignItems: 'center', gap: 2 }}>
+        <Typography variant="h4" sx={{ fontWeight: 'bold', color: '#FFF' }}>
+          Cloud Renderer
+        </Typography>
+        <Typography variant="h5" sx={{ fontWeight: 'bold', color: '#FFF' }}>
+        <Box sx={{ overflow: 'hidden', display: 'flex', alignItems: 'center', background: 'linear-gradient(90deg, #b20ca0, #8c26b9)', borderRadius: 2, px: 2, py: 1 }}>
+          <RotatingText
+            texts={['Renderizado Web', 'Indexación', 'Optimización', 'SEO Avanzado']}  
+            mainClassName="px-2 sm:px-2 md:px-3 text-black overflow-hidden py-0.5 sm:py-1 md:py-2 justify-center rounded-lg"
+            staggerFrom={"last"}
+            initial={{ y: "100%" }}
+            animate={{ y: 0 }}
+            exit={{ y: "-120%" }}
+            staggerDuration={0.025}
+            splitLevelClassName="overflow-hidden pb-0.5 sm:pb-1 md:pb-1"
+            transition={{ type: "spring", damping: 30, stiffness: 400 }}
+            rotationInterval={2000}
+          />
+        </Box>
+        </Typography>
+      </Box>
       <Grid container spacing={3}>
         <Grid item xs={12} md={8}>
           <Grid container spacing={2}>
