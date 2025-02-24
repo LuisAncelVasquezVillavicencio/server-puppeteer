@@ -66,4 +66,4 @@ cat /var/log/pm2/puppeteer-server-error.log
 kill -9 $(lsof -t -i:8080)
 
 
-a
+netstat -ano | findstr :8080

@@ -18,6 +18,6 @@
     "scripts": {
         "dev": "node app.js",
         "build": "next build",
-        "start": "NODE_ENV=production node app.js >> /var/log/pm2/puppeteer-server.log 2>> /var/log/pm2/puppeteer-server-error.log"
+        "start": "NODE_ENV=production node app.js >> /var/log/pm2/puppeteer-server.log"
     }
 }
