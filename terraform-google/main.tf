@@ -100,16 +100,24 @@ resource "google_compute_instance" "puppeteer_vm" {
     exec > /var/log/startup-script.log 2>&1
     echo "⏳ Iniciando instalación..."
 
-    # Variables de entorno
-    export HOME=/root
-    export PM2_HOME=/root/.pm2
+    ##############################################################################
+    # 1. Crear usuario "puppeteer" y preparar directorio para logs
+    ##############################################################################
+    id -u puppeteer &>/dev/null || adduser --disabled-password --gecos "" puppeteer
+    mkdir -p /var/log/puppeteer
+    chown -R puppeteer:puppeteer /var/log/puppeteer
+    chmod 755 /var/log/puppeteer
 
+    ##############################################################################
+    # 2. Instalar paquetes básicos como root
+    ##############################################################################
     apt-get update -y
     apt-get install -y wget unzip git curl nginx gdebi-core
-
     echo "✅ Instalación de paquetes básicos completada"
 
-    # PostgreSQL
+    ##############################################################################
+    # 3. Instalar PostgreSQL y configurar base de datos
+    ##############################################################################
     apt-get install -y postgresql postgresql-contrib
     echo "✅ PostgreSQL instalado"
     systemctl enable postgresql
@@ -119,13 +127,17 @@ resource "google_compute_instance" "puppeteer_vm" {
     sudo -u postgres psql -c "CREATE DATABASE ${var.db_name} OWNER ${var.db_username}" || true
     echo "✅ Base de datos '${var.db_name}' configurada"
 
-    # Node.js y PM2
+    ##############################################################################
+    # 4. Instalar Node.js y PM2
+    ##############################################################################
     curl -fsSL https://deb.nodesource.com/setup_18.x | sudo -E bash -
     apt-get install -y nodejs
     npm install -g pm2
     echo "✅ Node.js y PM2 instalados"
 
-    # Redis
+    ##############################################################################
+    # 5. Instalar y configurar Redis
+    ##############################################################################
     apt-get install -y redis-server
     systemctl enable redis-server
     systemctl start redis-server
@@ -133,42 +145,58 @@ resource "google_compute_instance" "puppeteer_vm" {
     chmod 770 /var/lib/redis
     echo "✅ Redis instalado y en ejecución"
 
-    # Clonar y configurar Puppeteer Server
-    mkdir -p /opt
-    cd /opt
-    git clone https://github.com/LuisAncelVasquezVillavicencio/server-puppeteer.git
-    echo "✅ Repositorio clonado"
-    chown -R root:root /opt/server-puppeteer
-    chmod -R 755 /opt/server-puppeteer
+    ##############################################################################
+    # 6. Clonar repositorio y arrancar la app con usuario "puppeteer"
+    ##############################################################################
+    sudo -u puppeteer bash <<'EOF_USER'
+      set -e
 
-    cd /opt/server-puppeteer/puppeteer-server
-    npm install
-    echo "✅ Dependencias instaladas"
+      # Definir variables de entorno para PM2
+      export HOME=/home/puppeteer
+      export PM2_HOME=/home/puppeteer/.pm2
 
-    # Google Chrome para Puppeteer
-    wget https://dl.google.com/linux/direct/google-chrome-stable_current_amd64.deb
-    sudo gdebi -n google-chrome-stable_current_amd64.deb
-    echo "✅ Google Chrome instalado"
-    google-chrome --version
+      # Clonar repositorio en /opt y dar permisos al usuario puppeteer
+      mkdir -p /opt
+      cd /opt
+      git clone https://github.com/LuisAncelVasquezVillavicencio/server-puppeteer.git
+      echo "✅ Repositorio clonado"
 
-    # Construcción de Next.js
-    echo "⏳ Ejecutando build de Next.js..."
-    npm run build
-    echo "✅ Build completado"
+      # Ajustar permisos del repositorio
+      chown -R puppeteer:puppeteer /opt/server-puppeteer
+      chmod -R 755 /opt/server-puppeteer
 
-    # Asegurar permisos para la carpeta .next
-    chmod -R 755 /opt/server-puppeteer/puppeteer-server/.next
-    chown -R root:root /opt/server-puppeteer/puppeteer-server/.next
+      cd /opt/server-puppeteer/puppeteer-server
+      npm install
+      echo "✅ Dependencias instaladas"
 
-    # Iniciar PM2
-    echo "⏳ Iniciando servidor en producción..."
-    cd /opt/server-puppeteer/puppeteer-server
-    pm2 start npm --name "puppeteer-server" -- run start --output "/var/log/pm2/puppeteer-server.log" --error "/var/log/pm2/puppeteer-server-error.log"
-    pm2 save
-    pm2 startup systemd -u root --hp /root
-    echo "✅ Servidor iniciado con PM2"
+      # Instalar Google Chrome para Puppeteer
+      wget https://dl.google.com/linux/direct/google-chrome-stable_current_amd64.deb
+      sudo gdebi -n google-chrome-stable_current_amd64.deb
+      echo "✅ Google Chrome instalado"
+      google-chrome --version
 
-    # Configuración de Nginx
+      # Construir la aplicación Next.js
+      echo '⏳ Ejecutando build de Next.js...'
+      npm run build
+      echo '✅ Build completado'
+
+      # Ajustar permisos en .next
+      chmod -R 755 /opt/server-puppeteer/puppeteer-server/.next
+      chown -R puppeteer:puppeteer /opt/server-puppeteer/puppeteer-server/.next
+
+      # Iniciar la app con PM2, logs en /var/log/puppeteer
+      pm2 start npm --name "puppeteer-server" -- run start \
+        --output "/var/log/puppeteer/puppeteer-server.log" \
+        --error "/var/log/puppeteer/puppeteer-server-error.log"
+
+      pm2 save
+      pm2 startup systemd -u puppeteer --hp /home/puppeteer
+      echo "✅ Servidor iniciado con PM2 bajo el usuario puppeteer"
+    EOF_USER
+
+    ##############################################################################
+    # 7. Configurar Nginx (como root)
+    ##############################################################################
     cat <<'EOF' > /etc/nginx/sites-available/default
     server {
       listen 80;
@@ -195,9 +223,9 @@ resource "google_compute_instance" "puppeteer_vm" {
     systemctl restart nginx
     systemctl enable nginx
     echo "✅ NGINX configurado y reiniciado"
-
     echo "🚀 Instalación completada "
   EOT
+
 
   service_account {
     email  = var.service_account_email
