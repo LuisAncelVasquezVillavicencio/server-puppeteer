@@ -95,29 +95,30 @@ resource "google_compute_instance" "puppeteer_vm" {
     }
   }
 
-  metadata_startup_script = <<-EOT
+   metadata_startup_script = <<-EOT
     #!/bin/bash
     exec > /var/log/startup-script.log 2>&1
     echo "⏳ Iniciando instalación..."
 
-    ##############################################################################
-    # 1. Crear usuario "puppeteer" y preparar directorio para logs
-    ##############################################################################
-    id -u puppeteer &>/dev/null || adduser --disabled-password --gecos "" puppeteer
-    mkdir -p /var/log/puppeteer
-    chown -R puppeteer:puppeteer /var/log/puppeteer
-    chmod 755 /var/log/puppeteer
+    # 1) Crear usuario 'puppeteer' si no existe, y preparar carpeta para logs
+    if ! id puppeteer &>/dev/null; then
+      adduser --disabled-password --gecos "" puppeteer
+    fi
 
-    ##############################################################################
-    # 2. Instalar paquetes básicos como root
-    ##############################################################################
+    mkdir -p /var/log/pm2
+    chown -R puppeteer:puppeteer /var/log/pm2
+    chmod -R 755 /var/log/pm2
+
+    # 2) Variables de entorno para que PM2 use la carpeta de 'puppeteer'
+    export HOME=/home/puppeteer
+    export PM2_HOME=/home/puppeteer/.pm2
+
     apt-get update -y
     apt-get install -y wget unzip git curl nginx gdebi-core
+
     echo "✅ Instalación de paquetes básicos completada"
 
-    ##############################################################################
-    # 3. Instalar PostgreSQL y configurar base de datos
-    ##############################################################################
+    # PostgreSQL
     apt-get install -y postgresql postgresql-contrib
     echo "✅ PostgreSQL instalado"
     systemctl enable postgresql
@@ -127,17 +128,13 @@ resource "google_compute_instance" "puppeteer_vm" {
     sudo -u postgres psql -c "CREATE DATABASE ${var.db_name} OWNER ${var.db_username}" || true
     echo "✅ Base de datos '${var.db_name}' configurada"
 
-    ##############################################################################
-    # 4. Instalar Node.js y PM2
-    ##############################################################################
+    # Node.js y PM2
     curl -fsSL https://deb.nodesource.com/setup_18.x | sudo -E bash -
     apt-get install -y nodejs
     npm install -g pm2
     echo "✅ Node.js y PM2 instalados"
 
-    ##############################################################################
-    # 5. Instalar y configurar Redis
-    ##############################################################################
+    # Redis
     apt-get install -y redis-server
     systemctl enable redis-server
     systemctl start redis-server
@@ -145,58 +142,43 @@ resource "google_compute_instance" "puppeteer_vm" {
     chmod 770 /var/lib/redis
     echo "✅ Redis instalado y en ejecución"
 
-    ##############################################################################
-    # 6. Clonar repositorio y arrancar la app con usuario "puppeteer"
-    ##############################################################################
-    sudo -u puppeteer bash <<'EOF_USER'
-      set -e
+    # Clonar y configurar Puppeteer Server
+    mkdir -p /opt
+    cd /opt
+    git clone https://github.com/LuisAncelVasquezVillavicencio/server-puppeteer.git
+    echo "✅ Repositorio clonado"
 
-      # Definir variables de entorno para PM2
-      export HOME=/home/puppeteer
-      export PM2_HOME=/home/puppeteer/.pm2
+    # IMPORTANTE: Otorgar permisos al usuario 'puppeteer'
+    chown -R puppeteer:puppeteer /opt/server-puppeteer
+    chmod -R 755 /opt/server-puppeteer
 
-      # Clonar repositorio en /opt y dar permisos al usuario puppeteer
-      mkdir -p /opt
-      cd /opt
-      git clone https://github.com/LuisAncelVasquezVillavicencio/server-puppeteer.git
-      echo "✅ Repositorio clonado"
+    cd /opt/server-puppeteer/puppeteer-server
+    sudo -u puppeteer npm install
+    echo "✅ Dependencias instaladas"
 
-      # Ajustar permisos del repositorio
-      chown -R puppeteer:puppeteer /opt/server-puppeteer
-      chmod -R 755 /opt/server-puppeteer
+    # Google Chrome para Puppeteer
+    wget https://dl.google.com/linux/direct/google-chrome-stable_current_amd64.deb
+    sudo gdebi -n google-chrome-stable_current_amd64.deb
+    echo "✅ Google Chrome instalado"
+    google-chrome --version
 
-      cd /opt/server-puppeteer/puppeteer-server
-      npm install
-      echo "✅ Dependencias instaladas"
+    # Construcción de Next.js
+    echo "⏳ Ejecutando build de Next.js..."
+    sudo -u puppeteer npm run build
+    echo "✅ Build completado"
 
-      # Instalar Google Chrome para Puppeteer
-      wget https://dl.google.com/linux/direct/google-chrome-stable_current_amd64.deb
-      sudo gdebi -n google-chrome-stable_current_amd64.deb
-      echo "✅ Google Chrome instalado"
-      google-chrome --version
+    # Asegurar permisos para la carpeta .next
+    chmod -R 755 /opt/server-puppeteer/puppeteer-server/.next
+    chown -R puppeteer:puppeteer /opt/server-puppeteer/puppeteer-server/.next
 
-      # Construir la aplicación Next.js
-      echo '⏳ Ejecutando build de Next.js...'
-      npm run build
-      echo '✅ Build completado'
+    # Iniciar PM2 bajo usuario 'puppeteer'
+    echo "⏳ Iniciando servidor en producción..."
+    sudo -u puppeteer pm2 start npm --name "puppeteer-server" -- run start --output "/var/log/pm2/puppeteer-server.log" --error "/var/log/pm2/puppeteer-server-error.log"
+    sudo -u puppeteer pm2 save
+    sudo -u puppeteer pm2 startup systemd -u puppeteer --hp /home/puppeteer
+    echo "✅ Servidor iniciado con PM2"
 
-      # Ajustar permisos en .next
-      chmod -R 755 /opt/server-puppeteer/puppeteer-server/.next
-      chown -R puppeteer:puppeteer /opt/server-puppeteer/puppeteer-server/.next
-
-      # Iniciar la app con PM2, logs en /var/log/puppeteer
-      pm2 start npm --name "puppeteer-server" -- run start \
-        --output "/var/log/puppeteer/puppeteer-server.log" \
-        --error "/var/log/puppeteer/puppeteer-server-error.log"
-
-      pm2 save
-      pm2 startup systemd -u puppeteer --hp /home/puppeteer
-      echo "✅ Servidor iniciado con PM2 bajo el usuario puppeteer"
-    EOF_USER
-
-    ##############################################################################
-    # 7. Configurar Nginx (como root)
-    ##############################################################################
+    # Configuración de Nginx
     cat <<'EOF' > /etc/nginx/sites-available/default
     server {
       listen 80;
@@ -224,7 +206,7 @@ resource "google_compute_instance" "puppeteer_vm" {
     systemctl enable nginx
     echo "✅ NGINX configurado y reiniciado"
     echo "🚀 Instalación completada "
-  EOT
+   EOT
 
 
   service_account {
