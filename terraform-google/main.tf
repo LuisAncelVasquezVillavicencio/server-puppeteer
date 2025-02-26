@@ -100,11 +100,16 @@ resource "google_compute_instance" "puppeteer_vm" {
     exec > /var/log/startup-script.log 2>&1
     echo "⏳ Iniciando instalación..."
 
+    # Variables de entorno
+    export HOME=/root
+    export PM2_HOME=/root/.pm2
+
     apt-get update -y
     apt-get install -y wget unzip git curl nginx gdebi-core
 
     echo "✅ Instalación de paquetes básicos completada"
 
+    # PostgreSQL
     apt-get install -y postgresql postgresql-contrib
     echo "✅ PostgreSQL instalado"
     systemctl enable postgresql
@@ -112,15 +117,15 @@ resource "google_compute_instance" "puppeteer_vm" {
     sleep 5
     sudo -u postgres psql -c "CREATE ROLE ${var.db_username} LOGIN PASSWORD '${var.db_password}'" || true
     sudo -u postgres psql -c "CREATE DATABASE ${var.db_name} OWNER ${var.db_username}" || true
-    echo "✅ Base de datos '${var.db_name}' configurada con el usuario '${var.db_username}'"
+    echo "✅ Base de datos '${var.db_name}' configurada"
 
+    # Node.js y PM2
     curl -fsSL https://deb.nodesource.com/setup_18.x | sudo -E bash -
     apt-get install -y nodejs
-    echo "✅ Node.js instalado"
-
     npm install -g pm2
-    echo "✅ PM2 instalado"
+    echo "✅ Node.js y PM2 instalados"
 
+    # Redis
     apt-get install -y redis-server
     systemctl enable redis-server
     systemctl start redis-server
@@ -128,6 +133,7 @@ resource "google_compute_instance" "puppeteer_vm" {
     chmod 770 /var/lib/redis
     echo "✅ Redis instalado y en ejecución"
 
+    # Clonar y configurar Puppeteer Server
     mkdir -p /opt
     cd /opt
     git clone https://github.com/LuisAncelVasquezVillavicencio/server-puppeteer.git
@@ -139,11 +145,13 @@ resource "google_compute_instance" "puppeteer_vm" {
     npm install
     echo "✅ Dependencias instaladas"
 
+    # Google Chrome para Puppeteer
     wget https://dl.google.com/linux/direct/google-chrome-stable_current_amd64.deb
     sudo gdebi -n google-chrome-stable_current_amd64.deb
     echo "✅ Google Chrome instalado"
     google-chrome --version
 
+    # Construcción de Next.js
     echo "⏳ Ejecutando build de Next.js..."
     npm run build
     echo "✅ Build completado"
@@ -152,36 +160,37 @@ resource "google_compute_instance" "puppeteer_vm" {
     chmod -R 755 /opt/server-puppeteer/puppeteer-server/.next
     chown -R root:root /opt/server-puppeteer/puppeteer-server/.next
 
+    # Iniciar PM2
     echo "⏳ Iniciando servidor en producción..."
-    cd /opt/server-puppeteer/puppeteer-server && pm2 start npm --name "puppeteer-server" -- run start --output "/var/log/pm2/puppeteer-server.log" --error "/var/log/pm2/puppeteer-server-error.log"
+    cd /opt/server-puppeteer/puppeteer-server
+    pm2 start npm --name "puppeteer-server" -- run start --output "/var/log/pm2/puppeteer-server.log" --error "/var/log/pm2/puppeteer-server-error.log"
+    pm2 save
+    pm2 startup systemd -u root --hp /root
     echo "✅ Servidor iniciado con PM2"
 
-    pm2 save
-    su - root -c "pm2 startup systemd && pm2 save "
-
+    # Configuración de Nginx
     cat <<'EOF' > /etc/nginx/sites-available/default
     server {
       listen 80;
       server_name _;
 
-          location /ws {
-              proxy_pass http://localhost:8080/ws;
-              proxy_http_version 1.1;
-              proxy_set_header Upgrade $http_upgrade;
-              proxy_set_header Connection "upgrade";
-              proxy_set_header Host $host;
-          }
+      location /ws {
+        proxy_pass http://localhost:8080/ws;
+        proxy_http_version 1.1;
+        proxy_set_header Upgrade $http_upgrade;
+        proxy_set_header Connection "upgrade";
+        proxy_set_header Host $host;
+      }
 
-          location / {
-              proxy_pass http://localhost:8080;
-              proxy_set_header Host $host;
-              proxy_set_header X-Real-IP $remote_addr;
-              proxy_set_header X-Forwarded-For $proxy_add_x_forwarded_for;
-              proxy_set_header X-Forwarded-Proto $scheme;
-          }
+      location / {
+        proxy_pass http://localhost:8080;
+        proxy_set_header Host $host;
+        proxy_set_header X-Real-IP $remote_addr;
+        proxy_set_header X-Forwarded-For $proxy_add_x_forwarded_for;
+        proxy_set_header X-Forwarded-Proto $scheme;
+      }
     }
     EOF
-
 
     systemctl restart nginx
     systemctl enable nginx
