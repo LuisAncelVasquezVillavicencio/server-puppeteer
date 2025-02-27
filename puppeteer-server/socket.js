@@ -8,7 +8,7 @@ function initializeSocket(httpServer) {
   
   // Rutas de logs
   const startupLogPath = '/var/log/startup-script.log';
-  const pm2LogPath = '/var/log/pm2/puppeteer-server.log'; 
+  const pm2LogPath = '/home/deployer/.pm2/logs/puppeteer-server-out.log'; 
 
   wss.on('connection', (ws, req) => {
     console.log('Cliente conectado para recibir logs');
