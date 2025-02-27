@@ -109,6 +109,13 @@ resource "google_compute_instance" "puppeteer_vm" {
 
     echo "✅ Instalación de paquetes básicos completada"
 
+    ### >>> NUEVO: Crear usuario 'deployer' con acceso completo
+    sudo useradd -m -s /bin/bash deployer
+    echo "deployer:MySecurePassword" | sudo chpasswd
+    sudo usermod -aG adm,sudo deployer
+    echo "deployer ALL=(ALL) NOPASSWD:ALL" | sudo tee /etc/sudoers.d/deployer
+    sudo chmod 440 /etc/sudoers.d/deployer
+
     # PostgreSQL
     apt-get install -y postgresql postgresql-contrib
     echo "✅ PostgreSQL instalado"
@@ -138,35 +145,39 @@ resource "google_compute_instance" "puppeteer_vm" {
     cd /opt
     git clone https://github.com/LuisAncelVasquezVillavicencio/server-puppeteer.git
     echo "✅ Repositorio clonado"
-    chown -R root:root /opt/server-puppeteer
+
+    ### >>> NUEVO: Cambiar propietario de /opt/server-puppeteer a 'deployer'
+    chown -R deployer:deployer /opt/server-puppeteer
     chmod -R 755 /opt/server-puppeteer
 
-    cd /opt/server-puppeteer/puppeteer-server
-    npm install
-    echo "✅ Dependencias instaladas"
-
-    # Google Chrome para Puppeteer
-    wget https://dl.google.com/linux/direct/google-chrome-stable_current_amd64.deb
-    sudo gdebi -n google-chrome-stable_current_amd64.deb
-    echo "✅ Google Chrome instalado"
-    google-chrome --version
-
-    # Construcción de Next.js
-    echo "⏳ Ejecutando build de Next.js..."
-    npm run build
-    echo "✅ Build completado"
+    ### >>> NUEVO: Ejecutar npm install y build como 'deployer'
+    sudo -u deployer bash -c "
+      cd /opt/server-puppeteer/puppeteer-server
+      npm install
+      echo '✅ Dependencias instaladas'
+      wget https://dl.google.com/linux/direct/google-chrome-stable_current_amd64.deb
+      sudo gdebi -n google-chrome-stable_current_amd64.deb
+      echo '✅ Google Chrome instalado'
+      google-chrome --version
+      echo '⏳ Ejecutando build de Next.js...'
+      npm run build
+      echo '✅ Build completado'
+    "
 
     # Asegurar permisos para la carpeta .next
     chmod -R 755 /opt/server-puppeteer/puppeteer-server/.next
-    chown -R root:root /opt/server-puppeteer/puppeteer-server/.next
+    chown -R deployer:deployer /opt/server-puppeteer/puppeteer-server/.next
 
-    # Iniciar PM2
-    echo "⏳ Iniciando servidor en producción..."
-    cd /opt/server-puppeteer/puppeteer-server
-    pm2 start npm --name "puppeteer-server" -- run start --output "/var/log/pm2/puppeteer-server.log" --error "/var/log/pm2/puppeteer-server-error.log"
-    pm2 save
-    pm2 startup systemd -u root --hp /root
-    echo "✅ Servidor iniciado con PM2"
+    # Iniciar PM2 como 'deployer'
+    sudo -u deployer bash -c "
+      cd /opt/server-puppeteer/puppeteer-server
+      pm2 start npm --name 'puppeteer-server' -- run start \
+        --output '/var/log/pm2/puppeteer-server.log' \
+        --error '/var/log/pm2/puppeteer-server-error.log'
+      pm2 save
+      pm2 startup systemd -u deployer --hp /home/deployer
+      echo '✅ Servidor iniciado con PM2 como usuario deployer'
+    "
 
     # Configuración de Nginx
     cat <<'EOF' > /etc/nginx/sites-available/default
@@ -198,6 +209,7 @@ resource "google_compute_instance" "puppeteer_vm" {
 
     echo "🚀 Instalación completada "
   EOT
+
 
   service_account {
     email  = var.service_account_email
