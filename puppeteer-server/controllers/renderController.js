@@ -1,7 +1,7 @@
 const { renderizarPagina } = require('../services/puppeteerService');
 const { actualizarSitemap } = require('../services/sitemapService');
 const { getCache, setCache } = require('../services/cacheService');
-const { saveRequestData } = require('../services/dbService'); // Nuevo servicio para PostgreSQL
+const { saveRequestData } = require('../queries/dbService'); 
 
 async function renderHandler(req, res) {
     if (req.method !== 'POST') {
