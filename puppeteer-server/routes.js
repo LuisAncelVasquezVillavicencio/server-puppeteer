@@ -4,7 +4,7 @@ const { robotsHandler, sitemapHandler } = require('./controllers/robotsControlle
 
 const router = express.Router();
 
-router.get('/render', renderHandler);
+router.post('/render', renderHandler);
 router.get('/sitemap.xml', sitemapHandler);
 router.get('/robots.txt', robotsHandler);
 

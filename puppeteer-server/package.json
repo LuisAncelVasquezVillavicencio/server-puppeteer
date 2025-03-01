@@ -19,5 +19,11 @@
         "dev": "node app.js",
         "build": "next build",
         "start": "NODE_ENV=production node app.js"
+    },
+    "devDependencies": {
+        "@babel/core": "^7.26.9",
+        "@babel/preset-env": "^7.26.9",
+        "@babel/preset-react": "^7.26.3",
+        "babel-loader": "^10.0.0"
     }
 }
