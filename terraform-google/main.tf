@@ -99,10 +99,19 @@ resource "google_compute_instance" "puppeteer_vm" {
     #!/bin/bash
     exec > /var/log/startup-script.log 2>&1
     echo "⏳ Iniciando instalación..."
-
+   
     # Variables de entorno
     export HOME=/root
     export PM2_HOME=/root/.pm2
+
+    # Variables de entorno para PostgreSQL
+    echo "Exportando variables de entorno..."
+    echo "export DB_USER=${var.db_username}" >> /etc/profile
+    echo "export DB_HOST=localhost" >> /etc/profile
+    echo "export DB_NAME=${var.db_name}" >> /etc/profile
+    echo "export DB_PASS=${var.db_password}" >> /etc/profile
+    echo "export DB_PORT=5432" >> /etc/profile
+
 
     apt-get update -y
     apt-get install -y wget unzip git curl nginx gdebi-core
