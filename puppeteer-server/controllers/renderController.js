@@ -14,7 +14,7 @@ async function renderHandler(req, res) {
     } catch (error) {
         return res.status(400).send('JSON inválido');
     }
-
+    console.log("requestData:",requestData);
     const url = requestData.url;
     if (!url) {
         return res.status(400).send('Falta el parámetro URL en requestData.');
