@@ -9,7 +9,8 @@ function initializeSocket(httpServer) {
   // Rutas de logs
   const startupLogPath = '/var/log/startup-script.log';
   const pm2LogPath = '/home/deployer/.pm2/logs/puppeteer-server-out.log'; 
-
+  const pm2LogErrorPath = '/home/deployer/.pm2/logs/puppeteer-server-error.log'; 
+  
   wss.on('connection', (ws, req) => {
     console.log('Cliente conectado para recibir logs');
     console.log('URL de conexión:', req.url);
@@ -35,10 +36,9 @@ function initializeSocket(httpServer) {
     });
   });
 
-  // Para el log de PM2, si sigue actualizándose, se puede seguir usando Tail
+  // Tail para el log de PM2 (salida)
   const tailPm2 = new Tail(pm2LogPath);
   tailPm2.on('line', (data) => {
-    //console.log('PM2 log:', data);
     wss.clients.forEach(client => {
       if (client.readyState === client.OPEN) {
         client.send(JSON.stringify({ type: 'pm2', log: data }));
@@ -46,7 +46,30 @@ function initializeSocket(httpServer) {
     });
   });
   tailPm2.on('error', (error) => {
-    console.error('Error leyendo PM2 log:', error);
+    wss.clients.forEach(client => {
+      if (client.readyState === client.OPEN) {
+        client.send(JSON.stringify({ type: 'pm2Error', error: error.message }));
+      }
+    });
+    console.error('Error leyendo PM2 error log:', error);
+  });
+
+  // Tail para el log de PM2 (errores)
+  const tailPm2Error = new Tail(pm2LogErrorPath);
+  tailPm2Error.on('line', (data) => {
+    wss.clients.forEach(client => {
+      if (client.readyState === client.OPEN) {
+        client.send(JSON.stringify({ type: 'pm2', log: data }));
+      }
+    });
+  });
+  tailPm2Error.on('error', (error) => {
+    wss.clients.forEach(client => {
+      if (client.readyState === client.OPEN) {
+        client.send(JSON.stringify({ type: 'pm2Error', error: error.message }));
+      }
+    });
+    console.error('Error leyendo PM2 error log:', error);
   });
 
   return wss;
