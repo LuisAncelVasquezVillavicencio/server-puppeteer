@@ -105,12 +105,12 @@ resource "google_compute_instance" "puppeteer_vm" {
     export PM2_HOME=/root/.pm2
 
     # Variables de entorno para PostgreSQL
-    echo "Exportando variables de entorno..."
-    echo "export DB_USER=${var.db_username}" >> /etc/profile
-    echo "export DB_HOST=localhost" >> /etc/profile
-    echo "export DB_NAME=${var.db_name}" >> /etc/profile
-    echo "export DB_PASS=${var.db_password}" >> /etc/profile
-    echo "export DB_PORT=5432" >> /etc/profile
+    echo "✅ Exportando variables de entorno..."
+    echo "DB_USER=${var.db_username}" >> /etc/environment
+    echo "DB_HOST=localhost" >> /etc/environment
+    echo "DB_NAME=${var.db_name}" >> /etc/environment
+    echo "DB_PASS=${var.db_password}" >> /etc/environment
+    echo "DB_PORT=5432" >> /etc/environment
 
 
     apt-get update -y
