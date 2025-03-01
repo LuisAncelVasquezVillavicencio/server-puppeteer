@@ -22,7 +22,38 @@ import {
 import RotatingText from './RotatingText.jsx';
 import ArrowUpwardIcon from '@mui/icons-material/ArrowUpward';
 
+
+const {
+  getTotalBotRequests,
+  getUniqueURLs,
+  getPercentageErrors,
+  getMostActiveBot,
+} = require('../queries/botIndicatorsQueries');
+
 export default function Dashboard() {
+
+  const now = new Date();
+  const oneMonthAgo = new Date();
+  oneMonthAgo.setMonth(oneMonthAgo.getMonth() - 1);
+  const [startDate, setStartDate] = useState(oneMonthAgo.toISOString());
+  const [endDate, setEndDate] = useState(now.toISOString());
+  const [totalRequests, setTotalRequests] = useState(null);
+  // Función para obtener los datos
+  const fetchTotalRequests = async () => {
+    try {
+      // Puedes pasar null para prevStart y prevEnd si no necesitas comparación
+      const result = await getTotalBotRequests(startDate, endDate, null, null);
+      setTotalRequests(result.current);
+    } catch (error) {
+      console.error('Error al obtener total de solicitudes:', error);
+    }
+  };
+
+  // Llamar a la función cuando se modifiquen las fechas
+  useEffect(() => {
+    fetchTotalRequests();
+  }, [startDate, endDate]);
+
   // Estados para los filtros y modales
   const [selectedDomain, setSelectedDomain] = useState('tudominio.com');
   const [openLogModal, setOpenLogModal] = useState(false);
@@ -135,20 +166,37 @@ export default function Dashboard() {
                   <Grid container spacing={2} >
 
                     <Grid item xs={12} container spacing={1}>
-                    <FormControl sx={{ m: 1, minWidth: 120 }} size="small">
-                        <InputLabel id="demo-select-small-label">Dominio</InputLabel>
-                        <Select
-                          value={selectedDomain}
-                          labelId="demo-select-small-label"
-                          label="Age"
-                          onChange={handleDomainChange}
-                        >
-                          <MenuItem value="tudominio.com">tudominio.com</MenuItem>
-                          <MenuItem value="otrodominio.com">otrodominio.com</MenuItem>
-                          <MenuItem value="tudominio.com">tudominio.com</MenuItem>
-                          <MenuItem value="otrodominio.com">otrodominio.com</MenuItem>
-                        </Select>
+                      <FormControl sx={{ m: 1, minWidth: 120 }} size="small">
+                          <InputLabel id="demo-select-small-label">Dominio</InputLabel>
+                          <Select
+                            value={selectedDomain}
+                            labelId="demo-select-small-label"
+                            label="Age"
+                            onChange={handleDomainChange}
+                          >
+                            <MenuItem value="tudominio.com">tudominio.com</MenuItem>
+                            <MenuItem value="otrodominio.com">otrodominio.com</MenuItem>
+                            <MenuItem value="tudominio.com">tudominio.com</MenuItem>
+                            <MenuItem value="otrodominio.com">otrodominio.com</MenuItem>
+                          </Select>
                       </FormControl>
+                      {/* Controles para seleccionar fecha */}
+                      <Grid item xs={12} sm={6}>
+                        <TextField
+                          label="Fecha de Inicio"
+                          type="date"
+                          InputLabelProps={{ shrink: true }}
+                          onChange={(e) => setStartDate(new Date(e.target.value).toISOString())}
+                        />
+                      </Grid>
+                      <Grid item xs={12} sm={6}>
+                        <TextField
+                          label="Fecha de Fin"
+                          type="date"
+                          InputLabelProps={{ shrink: true }}
+                          onChange={(e) => setEndDate(new Date(e.target.value).toISOString())}
+                        />
+                      </Grid>
                      
                     </Grid>
                     {/* Botones para conectar a logs */}
@@ -171,7 +219,7 @@ export default function Dashboard() {
                       Total Bot Requests
                       </Typography>
                       <Typography variant="h5" sx={{ fontWeight: 600 }}>
-                      12,345
+                      {totalRequests !== null ? totalRequests : 'Cargando...'}
                       </Typography>
                       <Box display="flex" mt={1}>
                         <Typography variant="body2" color="text.secondary">
