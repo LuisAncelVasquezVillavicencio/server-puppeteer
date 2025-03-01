@@ -3,13 +3,18 @@ const next = require('next');
 const path = require('path');
 const routes = require('./routes');
 const initializeSocket = require('./socket'); // Importa el módulo del socket
-
+const apiRoutes = require('./api');
 const dev = process.env.NODE_ENV !== 'production';
 const app = next({ dev });
 const handle = app.getRequestHandler();
 
+
+
 app.prepare().then(() => {
   const server = express();
+  
+  app.use(express.json());
+  app.use('/api', apiRoutes);
 
   server.use((req, res, next) => {
     req.domain = req.hostname.replace(/^www\./, '');

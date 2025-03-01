@@ -23,12 +23,12 @@ import RotatingText from './RotatingText.jsx';
 import ArrowUpwardIcon from '@mui/icons-material/ArrowUpward';
 
 
-const {
+import {
   getTotalBotRequests,
   getUniqueURLs,
   getPercentageErrors,
   getMostActiveBot,
-} = require('../queries/botIndicatorsQueries');
+} from '../services/apiService';
 
 export default function Dashboard() {
 
@@ -38,10 +38,13 @@ export default function Dashboard() {
   const [startDate, setStartDate] = useState(oneMonthAgo.toISOString());
   const [endDate, setEndDate] = useState(now.toISOString());
   const [totalRequests, setTotalRequests] = useState(null);
+  const [uniqueURLs, setUniqueURLs] = useState(null);
+  const [percentageErrors, setPercentageErrors] = useState(null);
+  const [mostActiveBot, setMostActiveBot] = useState(null);
+
   // Función para obtener los datos
   const fetchTotalRequests = async () => {
     try {
-      // Puedes pasar null para prevStart y prevEnd si no necesitas comparación
       const result = await getTotalBotRequests(startDate, endDate, null, null);
       setTotalRequests(result.current);
     } catch (error) {
@@ -49,9 +52,39 @@ export default function Dashboard() {
     }
   };
 
+  const fetchUniqueURLs = async () => {
+    try {
+      const result = await getUniqueURLs(startDate, endDate);
+      setUniqueURLs(result);
+    } catch (error) {
+      console.error('Error al obtener URLs únicas:', error);
+    }
+  };
+
+  const fetchPercentageErrors = async () => {
+    try {
+      const result = await getPercentageErrors(startDate, endDate);
+      setPercentageErrors(result);
+    } catch (error) {
+      console.error('Error al obtener porcentaje de errores:', error);
+    }
+  };
+
+  const fetchMostActiveBot = async () => {
+    try {
+      const result = await getMostActiveBot(startDate, endDate);
+      setMostActiveBot(result);
+    } catch (error) {
+      console.error('Error al obtener el bot más activo:', error);
+    }
+  };
+
   // Llamar a la función cuando se modifiquen las fechas
   useEffect(() => {
     fetchTotalRequests();
+    fetchUniqueURLs();
+    fetchPercentageErrors();
+    fetchMostActiveBot();
   }, [startDate, endDate]);
 
   // Estados para los filtros y modales
