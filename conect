@@ -206,3 +206,11 @@ Conclusión: ¿Por qué deberías implementarlo?
 ✔ Mejora la seguridad contra scrapers y bots maliciosos.
 ✔ Asegura una mejor experiencia de usuario.
 ✔ Permite tomar mejores decisiones estratégicas con analítica avanzada de bots.
+
+
+
+sudo su - deployer
+nano ~/update_code.sh
+chmod +x ~/update_code.sh
+ejecutar
+~/update_code.sh

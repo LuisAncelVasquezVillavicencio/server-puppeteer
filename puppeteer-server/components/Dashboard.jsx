@@ -23,11 +23,16 @@ import RotatingText from './RotatingText.jsx';
 import ArrowUpwardIcon from '@mui/icons-material/ArrowUpward';
 
 
+// 1. Importa TODAS las funciones del servicio
 import {
   getTotalBotRequests,
+  getBotDistributionByType,
+  getBotDistributionByCategory,
+  getBotConnectionTypeDistribution,
+  getBotGeoDistribution,
   getUniqueURLs,
   getPercentageErrors,
-  getMostActiveBot,
+  getMostActiveBot
 } from '../services/apiService';
 
 export default function Dashboard() {
@@ -41,6 +46,10 @@ export default function Dashboard() {
   const [uniqueURLs, setUniqueURLs] = useState(null);
   const [percentageErrors, setPercentageErrors] = useState(null);
   const [mostActiveBot, setMostActiveBot] = useState(null);
+  const [botDistributionType, setBotDistributionType] = useState([]);
+  const [botDistributionCategory, setBotDistributionCategory] = useState([]);
+  const [botConnectionTypeDist, setBotConnectionTypeDist] = useState([]);
+  const [botGeoDistribution, setBotGeoDistribution] = useState([]);
 
   // Función para obtener los datos
   const fetchTotalRequests = async () => {
@@ -79,12 +88,55 @@ export default function Dashboard() {
     }
   };
 
-  // Llamar a la función cuando se modifiquen las fechas
+  // 🔹 Nuevas funciones:
+  const fetchBotDistributionByType = async () => {
+    try {
+      const result = await getBotDistributionByType(startDate, endDate);
+      setBotDistributionType(result); // Guardamos en estado
+    } catch (error) {
+      console.error('Error al obtener distribución por tipo:', error);
+    }
+  };
+
+  const fetchBotDistributionByCategory = async () => {
+    try {
+      const result = await getBotDistributionByCategory(startDate, endDate);
+      setBotDistributionCategory(result); 
+    } catch (error) {
+      console.error('Error al obtener distribución por categoría:', error);
+    }
+  };
+
+  const fetchBotConnectionTypeDistribution = async () => {
+    try {
+      const result = await getBotConnectionTypeDistribution(startDate, endDate);
+      setBotConnectionTypeDist(result);
+    } catch (error) {
+      console.error('Error al obtener distribución de tipos de conexión:', error);
+    }
+  };
+
+  const fetchBotGeoDistribution = async () => {
+    try {
+      const result = await getBotGeoDistribution(startDate, endDate);
+      setBotGeoDistribution(result);
+    } catch (error) {
+      console.error('Error al obtener distribución geográfica:', error);
+    }
+  };
+
+  // 5. Llamar a todas las funciones cuando cambien las fechas
   useEffect(() => {
     fetchTotalRequests();
     fetchUniqueURLs();
     fetchPercentageErrors();
     fetchMostActiveBot();
+
+    // Llamadas a las nuevas funciones:
+    fetchBotDistributionByType();
+    fetchBotDistributionByCategory();
+    fetchBotConnectionTypeDistribution();
+    fetchBotGeoDistribution();
   }, [startDate, endDate]);
 
   // Estados para los filtros y modales
@@ -220,6 +272,7 @@ export default function Dashboard() {
                           type="date"
                           InputLabelProps={{ shrink: true }}
                           onChange={(e) => setStartDate(new Date(e.target.value).toISOString())}
+                          size="small"
                         />
                     </Grid>
                     <Grid item >
@@ -228,6 +281,7 @@ export default function Dashboard() {
                           type="date"
                           InputLabelProps={{ shrink: true }}
                           onChange={(e) => setEndDate(new Date(e.target.value).toISOString())}
+                          size="small"
                         />
                     </Grid>
                   </Grid>
@@ -284,7 +338,7 @@ export default function Dashboard() {
                       URLs Únicas
                       </Typography>
                       <Typography variant="h5" sx={{ fontWeight: 600 }}>
-                      1,234
+                      {uniqueURLs !== null ? uniqueURLs.total : 'Cargando...'}
                       </Typography>
                       <Box display="flex" mt={1}>
                         <Typography variant="body2" color="text.secondary">
@@ -320,7 +374,7 @@ export default function Dashboard() {
                       % Errores
                       </Typography>
                       <Typography variant="h5" sx={{ fontWeight: 600 }}>
-                      3%
+                      {percentageErrors !== null ? `${percentageErrors.percentage}%` : 'Cargando...'}
                       </Typography>
                       <Box display="flex" mt={1}>
                         <Typography variant="body2" color="text.secondary">
@@ -356,7 +410,7 @@ export default function Dashboard() {
                             Bot Más Activo
                             </Typography>
                             <Typography variant="h5" sx={{ fontWeight: 600 }}>
-                            Googlebot
+                            {mostActiveBot !== null ? mostActiveBot.botName : 'Cargando...'}
                             </Typography>
                             <Box display="flex" mt={1}>
                               <Typography variant="body2" color="text.secondary">
