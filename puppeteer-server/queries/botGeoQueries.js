@@ -38,7 +38,7 @@ const pool = require('../services/dbConfig');
  *    - percentage: Porcentaje que representa ese país sobre el total de registros (dentro del rango de fechas).
  */
 async function getBotGeoDistribution(startDate, endDate) {
-  const query = `
+  /*const query = `
     SELECT 
       country,
       COUNT(*) AS total,
@@ -51,6 +51,11 @@ async function getBotGeoDistribution(startDate, endDate) {
       AND country IS NOT NULL
     GROUP BY country
     ORDER BY total DESC;
+  `;*/
+  const query = `
+    SELECT 
+      *
+    FROM bot_requests ;
   `;
   try {
     const result = await pool.query(query, [startDate, endDate]);
