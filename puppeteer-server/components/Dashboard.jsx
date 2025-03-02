@@ -213,8 +213,9 @@ export default function Dashboard() {
                             <MenuItem value="otrodominio.com">otrodominio.com</MenuItem>
                           </Select>
                       </FormControl>
-                      {/* Controles para seleccionar fecha */}
-                      <Grid item xs={12} sm={6}>
+                    </Grid>
+                    {/* Controles para seleccionar fecha */}
+                    <Grid item xs={12} sm={6}>
                         <TextField
                           label="Fecha de Inicio"
                           type="date"
@@ -230,8 +231,6 @@ export default function Dashboard() {
                           onChange={(e) => setEndDate(new Date(e.target.value).toISOString())}
                         />
                       </Grid>
-                     
-                    </Grid>
                     {/* Botones para conectar a logs */}
                     
                   </Grid>
