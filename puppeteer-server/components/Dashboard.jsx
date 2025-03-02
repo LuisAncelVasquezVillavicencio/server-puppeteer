@@ -198,7 +198,7 @@ export default function Dashboard() {
                 <Grid item xs={12}>
                   <Grid container spacing={2} >
 
-                    <Grid item xs={12} container spacing={1}>
+                    <Grid item >
                       <FormControl sx={{ m: 1, minWidth: 120 }} size="small">
                           <InputLabel id="demo-select-small-label">Dominio</InputLabel>
                           <Select
@@ -215,23 +215,22 @@ export default function Dashboard() {
                       </FormControl>
                     </Grid>
                     {/* Controles para seleccionar fecha */}
-                    <Grid item xs={12} sm={6}>
+                    <Grid item >
                         <TextField
                           label="Fecha de Inicio"
                           type="date"
                           InputLabelProps={{ shrink: true }}
                           onChange={(e) => setStartDate(new Date(e.target.value).toISOString())}
                         />
-                      </Grid>
-                      <Grid item xs={12} sm={6}>
+                    </Grid>
+                    <Grid item >
                         <TextField
                           label="Fecha de Fin"
                           type="date"
                           InputLabelProps={{ shrink: true }}
                           onChange={(e) => setEndDate(new Date(e.target.value).toISOString())}
                         />
-                      </Grid>
-                    {/* Botones para conectar a logs */}
+                    </Grid>
                     
                   </Grid>
                 </Grid>
