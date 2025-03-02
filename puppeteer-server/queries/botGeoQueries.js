@@ -61,7 +61,7 @@ async function getBotGeoDistribution(startDate, endDate) {
     const result = await pool.query(query);
     return result.rows;
   } catch (error) {
-    console.error("❌ Error en getBotGeoDistribution:", error);
+    console.error("❌ Error en getBotGeoDistribution :", error);
     throw error;
   }
 }
