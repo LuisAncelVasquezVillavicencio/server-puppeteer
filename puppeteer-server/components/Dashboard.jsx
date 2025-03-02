@@ -197,7 +197,6 @@ export default function Dashboard() {
               {/* Combo de dominio */}
                 <Grid item xs={12}>
                   <Grid container spacing={2} >
-
                     <Grid item >
                       <FormControl sx={{ m: 1, minWidth: 120 }} size="small">
                           <InputLabel id="demo-select-small-label">Dominio</InputLabel>
@@ -231,7 +230,6 @@ export default function Dashboard() {
                           onChange={(e) => setEndDate(new Date(e.target.value).toISOString())}
                         />
                     </Grid>
-                    
                   </Grid>
                 </Grid>
                 <Grid item xs={12} sm={3}>
