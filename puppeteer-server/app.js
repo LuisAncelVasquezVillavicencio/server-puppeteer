@@ -13,8 +13,8 @@ const handle = app.getRequestHandler();
 app.prepare().then(() => {
   const server = express();
   
-  app.use(express.json());
-  app.use('/api', apiRoutes);
+  server.use(express.json());
+  server.use('/api', apiRoutes);
 
   server.use((req, res, next) => {
     req.domain = req.hostname.replace(/^www\./, '');
