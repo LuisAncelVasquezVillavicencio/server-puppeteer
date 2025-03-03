@@ -34,19 +34,19 @@ async function saveRequestData(data) {
         INSERT INTO bot_requests (url, method, headers, query_params, body, timestamp, render_time, error, ip, user_agent, referrer, network)
         VALUES ($1, $2, $3, $4, $5, to_timestamp($6 / 1000.0), $7, $8, $9, $10, $11, $12)
     `;
-    
+
     const values = [
         data.url,
         data.method,
         JSON.stringify(data.headers),
-        JSON.stringify(data.queryParams),
-        data.body,
-        data.timestamp,
-        data.renderTime || null,
+        JSON.stringify(data.query_params || {}),  // Manejo seguro
+        data.body || null,
+        new Date(data.timestamp),  // PostgreSQL acepta objetos Date directamente
+        data.render_time || null,
         data.error || null,
-        data.ip || null,
-        data.userAgent || null,
-        data.referrer || null,
+        data.headers?.['x-real-ip'] || data.headers?.['cf-connecting-ip'] || null, // Extraer IP
+        data.headers?.['user-agent'] || null,  // Extraer User-Agent
+        data.headers?.['referer'] || null,  // Extraer Referrer
         JSON.stringify(data.network) || null
     ];
     
