@@ -32,7 +32,7 @@ async function saveRequestData(data) {
     
     const query = `
         INSERT INTO bot_requests (url, method, headers, query_params, body, timestamp, render_time, error, ip, user_agent, referrer, network)
-        VALUES ($1, $2, $3, $4, $5, to_timestamp($6 / 1000.0), $7, $8, $9, $10, $11, $12)
+        VALUES ($1, $2, $3, $4, $5, $6, $7, $8, $9, $10, $11, $12)
     `;
 
     const values = [
