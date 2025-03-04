@@ -41,7 +41,7 @@ async function saveRequestData(data) {
         JSON.stringify(data.headers),
         JSON.stringify(data.query_params || {}),  // Manejo seguro
         data.body || null,
-        new Date(data.timestamp),  // PostgreSQL acepta objetos Date directamente
+        data.timestamp,  // PostgreSQL acepta objetos Date directamente
         data.render_time || null,
         data.error || null,
         data.headers?.['x-real-ip'] || data.headers?.['cf-connecting-ip'] || null, // Extraer IP
