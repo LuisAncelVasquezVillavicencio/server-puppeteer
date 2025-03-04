@@ -39,7 +39,7 @@ async function saveRequestData(data) {
         data.url,
         data.method,
         JSON.stringify(data.headers),
-        JSON.stringify(data.query_params || {}),  // Manejo seguro
+        JSON.stringify(data.query_params || {}),  // Manejos seguro
         data.body || null,
         data.timestamp,  // PostgreSQL acepta objetos Date directamente
         data.render_time || null,
