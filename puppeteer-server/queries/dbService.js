@@ -202,7 +202,7 @@ async function ensureTableExists() {
             headers JSONB NOT NULL,
             query_params JSONB NOT NULL,
             body TEXT,
-            timestamp TEXT,
+            timestamp TIMESTAMP,
             render_time INTEGER,
             error TEXT,
             ip TEXT,
@@ -277,7 +277,7 @@ async function saveRequestData(data) {
         JSON.stringify(data.headers),
         JSON.stringify(data.query_params || {}),  // Manejos seguro
         data.body || null,
-        data.timestamp,  // PostgreSQL acepta objetos Date directamente
+        new Date(parseInt(data.timestamp)).toISOString(),   // PostgreSQL acepta objetos Date directamente
         data.render_time || null,
         data.error || null,
         data.headers?.['x-real-ip'] || data.headers?.['cf-connecting-ip'] || null, // Extraer IP
