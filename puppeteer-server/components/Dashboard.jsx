@@ -421,7 +421,6 @@ export default function Dashboard() {
                                 alignItems="center"
                                 sx={{ ml: 2, color:  'success.main'  }}
                               >
-                                  <ArrowUpwardIcon sx={{ fontSize: '0.8rem' }} />
                                 <Typography variant="body2" ml={0.5}>
                                   {mostActiveBot !== null ? mostActiveBot.total_requests : '-'} Peticiones
                                 </Typography>
