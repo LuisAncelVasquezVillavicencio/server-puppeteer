@@ -414,7 +414,7 @@ export default function Dashboard() {
                             </Typography>
                             <Box display="flex" mt={1}>
                               <Typography variant="body2" color="text.secondary">
-                                {mostActiveBot !== null ? mostActiveBot.total_requests : '-'} Peticiones
+                                {mostActiveBot !== null ? mostActiveBot.ip  : 'Cargando...'}
                               </Typography>
                               <Box
                                 display="flex"
@@ -423,7 +423,7 @@ export default function Dashboard() {
                               >
                                   <ArrowUpwardIcon sx={{ fontSize: '0.8rem' }} />
                                 <Typography variant="body2" ml={0.5}>
-                                  {mostActiveBot !== null ? mostActiveBot.ip  : 'Cargando...'}
+                                  {mostActiveBot !== null ? mostActiveBot.total_requests : '-'} Peticiones
                                 </Typography>
                               </Box>
                             </Box>
