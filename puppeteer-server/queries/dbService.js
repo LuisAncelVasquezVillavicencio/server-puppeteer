@@ -202,7 +202,7 @@ async function ensureTableExists() {
             headers JSONB NOT NULL,
             query_params JSONB NOT NULL,
             body TEXT,
-            timestamp TIMESTAMP NOT NULL,
+            timestamp TEXT,
             render_time INTEGER,
             error TEXT,
             ip TEXT,
