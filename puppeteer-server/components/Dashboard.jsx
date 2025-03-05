@@ -64,7 +64,7 @@ export default function Dashboard() {
   const fetchUniqueURLs = async () => {
     try {
       const result = await getUniqueURLs(startDate, endDate);
-      setUniqueURLs(result);
+      setUniqueURLs(result.current);
     } catch (error) {
       console.error('Error al obtener URLs únicas:', error);
     }
@@ -73,7 +73,7 @@ export default function Dashboard() {
   const fetchPercentageErrors = async () => {
     try {
       const result = await getPercentageErrors(startDate, endDate);
-      setPercentageErrors(result);
+      setPercentageErrors(result.current);
     } catch (error) {
       console.error('Error al obtener porcentaje de errores:', error);
     }
@@ -212,7 +212,7 @@ export default function Dashboard() {
           <Grid item xs={12} sm={4}>
             <Box sx={{ textAlign: 'left', my: 3, display: 'flex', justifyContent: 'left', alignItems: 'center', gap: 2 }}>
                     <Typography variant="h4" sx={{ fontWeight: 'bold', color: '#FFF' }}>
-                      Cloud Renderer -1
+                      Cloud Renderer
                     </Typography>
                     <Typography variant="h5" sx={{ fontWeight: 'bold', color: '#FFF' }}>
                     <Box sx={{ overflow: 'hidden', display: 'flex', alignItems: 'center', background: 'linear-gradient(90deg, #b20ca0, #8c26b9)', borderRadius: 2, px: 2, py: 1 }}>
@@ -410,11 +410,11 @@ export default function Dashboard() {
                             Bot Más Activo
                             </Typography>
                             <Typography variant="h5" sx={{ fontWeight: 600 }}>
-                            {mostActiveBot !== null ? mostActiveBot.botName : 'Cargando...'}
+                            {mostActiveBot !== null ? mostActiveBot.total_requests : 'Cargando...'}
                             </Typography>
                             <Box display="flex" mt={1}>
                               <Typography variant="body2" color="text.secondary">
-                                Followers
+                                {mostActiveBot !== null ? mostActiveBot.bot_type : 'Cargando...'}
                               </Typography>
                               <Box
                                 display="flex"
@@ -423,7 +423,7 @@ export default function Dashboard() {
                               >
                                   <ArrowUpwardIcon sx={{ fontSize: '0.8rem' }} />
                                 <Typography variant="body2" ml={0.5}>
-                                  -1.5%
+                                  {mostActiveBot !== null ? mostActiveBot.ip  : 'Cargando...'}
                                 </Typography>
                               </Box>
                             </Box>

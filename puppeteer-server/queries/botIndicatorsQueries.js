@@ -165,30 +165,38 @@ async function getPercentageErrors(currentStart, currentEnd, prevStart, prevEnd)
  *
  * @param {string|null} currentStart - Fecha de inicio del período actual (ISO) o null para total.
  * @param {string|null} currentEnd - Fecha de fin del período actual (ISO).
- * @returns {Promise<Object>} Objeto con { ip, total_requests } del bot más activo.
+ * @returns {Promise<Object>} Objeto con { ip, bot_type, total_requests } del bot más activo.
  */
 async function getMostActiveBot(currentStart, currentEnd) {
   let query = '';
   let params = [];
+
   if (currentStart && currentEnd) {
-    query = `SELECT ip, COUNT(*) AS total_requests 
-             FROM bot_requests 
-             WHERE ip IS NOT NULL AND timestamp BETWEEN $1 AND $2 
-             GROUP BY ip 
-             ORDER BY total_requests DESC 
-             LIMIT 1;`;
+    query = `
+      SELECT ip, bot_type, COUNT(*) AS total_requests
+      FROM bot_requests
+      WHERE ip IS NOT NULL
+        AND timestamp BETWEEN $1 AND $2
+      GROUP BY ip, bot_type
+      ORDER BY total_requests DESC
+      LIMIT 1;
+    `;
     params = [currentStart, currentEnd];
   } else {
-    query = `SELECT ip, COUNT(*) AS total_requests 
-             FROM bot_requests 
-             WHERE ip IS NOT NULL 
-             GROUP BY ip 
-             ORDER BY total_requests DESC 
-             LIMIT 1;`;
+    query = `
+      SELECT ip, bot_type, COUNT(*) AS total_requests
+      FROM bot_requests
+      WHERE ip IS NOT NULL
+      GROUP BY ip, bot_type
+      ORDER BY total_requests DESC
+      LIMIT 1;
+    `;
   }
+
   const result = await pool.query(query, params);
   return result.rows[0] || null;
 }
+
 
 module.exports = {
   getTotalBotRequests,
