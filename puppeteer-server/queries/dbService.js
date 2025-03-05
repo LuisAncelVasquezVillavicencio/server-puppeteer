@@ -211,7 +211,7 @@ async function ensureTableExists() {
             network JSONB,
             bot_type TEXT,
             bot_category TEXT,
-            bot_logo TEXT,  
+            bot_logo TEXT 
         );
     `;
     try {
