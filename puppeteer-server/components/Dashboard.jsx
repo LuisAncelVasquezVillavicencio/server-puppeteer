@@ -410,11 +410,11 @@ export default function Dashboard() {
                             Bot Más Activo
                             </Typography>
                             <Typography variant="h5" sx={{ fontWeight: 600 }}>
-                            {mostActiveBot !== null ? mostActiveBot.total_requests : 'Cargando...'}
+                            {mostActiveBot !== null ? mostActiveBot.bot_type : 'Cargando...'} 
                             </Typography>
                             <Box display="flex" mt={1}>
                               <Typography variant="body2" color="text.secondary">
-                                {mostActiveBot !== null ? mostActiveBot.bot_type : 'Cargando...'}
+                                {mostActiveBot !== null ? mostActiveBot.total_requests : '-'} Peticiones
                               </Typography>
                               <Box
                                 display="flex"
