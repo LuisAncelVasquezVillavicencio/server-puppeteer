@@ -22,7 +22,7 @@ import {
 import RotatingText from './RotatingText.jsx';
 import ArrowUpwardIcon from '@mui/icons-material/ArrowUpward';
 
-
+import CardIndicador from '.ui/CardIndicador';
 // 1. Importa TODAS las funciones del servicio
 import {
   getTotalBotRequests,
@@ -210,7 +210,7 @@ export default function Dashboard() {
           <Grid item xs={12} sm={4}>
             <Box sx={{ textAlign: 'left', my: 3, display: 'flex', justifyContent: 'left', alignItems: 'center', gap: 2 }}>
                     <Typography variant="h4" sx={{ fontWeight: 'bold', color: '#FFF' }}>
-                      Cloud Renderer 1
+                      Cloud Renderer
                     </Typography>
                     <Typography variant="h5" sx={{ fontWeight: 'bold', color: '#FFF' }}>
                     <Box sx={{ overflow: 'hidden', display: 'flex', alignItems: 'center', background: 'linear-gradient(90deg, #b20ca0, #8c26b9)', borderRadius: 2, px: 2, py: 1 }}>
@@ -285,148 +285,39 @@ export default function Dashboard() {
                   </Grid>
                 </Grid>
                 <Grid item xs={12} sm={3}>
-                  <Card
-                    sx={{
-                      borderRadius: 2,
-                      boxShadow: 3,
-                      p: 0,
-                      position: 'relative',
-                      overflow: 'hidden',
-                      background: "#19191c"
-                    }}
-                  >
-                    <CardContent>
-                      <Typography variant="subtitle1" sx={{ color: '#E1306C', fontWeight: 500 }}>
-                      Total Bots
-                      </Typography>
-                      <Typography variant="h5" sx={{ fontWeight: 600 }}>
-                      {totalRequests !== null ? totalRequests.current : 'Cargando...'}
-                      </Typography>
-                      <Box display="flex" mt={1}>
-                        <Typography variant="body2" color="text.secondary">
-                          Aumento
-                        </Typography>
-                        <Box
-                          display="flex"
-                          alignItems="center"
-                          sx={{ ml: 2, color:  'success.main'  }}
-                        >
-                            <ArrowUpwardIcon sx={{ fontSize: '0.8rem' }} />
-                          <Typography variant="body2" ml={0.5}>
-                            {totalRequests !== null ? totalRequests.percentageChange : '0'}%
-                          </Typography>
-                        </Box>
-                      </Box>
-                    </CardContent>
-                  </Card>
-                </Grid>
+                  <CardIndicador 
+                    title="Total Bots"
+                    mainValue={totalRequests !== null ? totalRequests.current : 'Cargando...'}
+                    extraTitleInfo="Visitantes automáticos"
+                    extraInfo={`${totalRequests !== null ? totalRequests.percentageChange : '0'}%`}
+                  />
+                  <CardIndicador 
+                    title="Total Bots"
+                    mainValue={uniqueURLs !== null ? uniqueURLs.current : 'Cargando...'}
+                    extraTitleInfo="Páginas indexadas"
+                    extraInfo={`${uniqueURLs !== null ? uniqueURLs.percentageChange : '0'}%`}
+                  />
+                  <CardIndicador 
+                    title="% Errores"
+                    mainValue={percentageErrors !== null ? `${percentageErrors.current}%` : 'Cargando...'}
+                    extraTitleInfo=""
+                    extraInfo={`${percentageErrors !== null ? percentageErrors.percentageChange : '0'}%`}
+                  />
+                  <CardIndicador 
+                    title="Bot Más Activo"
+                    mainValue={mostActiveBot !== null ? mostActiveBot.bot_type : 'Cargando...'} 
+                    extraTitleInfo= {mostActiveBot !== null ? mostActiveBot.ip  : 'Cargando...'}
+                    extraInfo={mostActiveBot !== null ? mostActiveBot.total_requests : '-'} Peticiones
+                  />
+                  
+
+        
                 <Grid item xs={12} sm={3}>
-                  <Card
-                    sx={{
-                      borderRadius: 2,
-                      boxShadow: 3,
-                      p: 0,
-                      position: 'relative',
-                      overflow: 'hidden',
-                      background: "#19191c"
-                    }}
-                  >
-                    <CardContent>
-                      <Typography variant="subtitle1" sx={{ color: '#E1306C', fontWeight: 500 }}>
-                      URLs Visitadas
-                      </Typography>
-                      <Typography variant="h5" sx={{ fontWeight: 600 }}>
-                      {uniqueURLs !== null ? uniqueURLs.current : 'Cargando...'}
-                      </Typography>
-                      <Box display="flex" mt={1}>
-                        <Typography variant="body2" color="text.secondary">
-                          Followers
-                        </Typography>
-                        <Box
-                          display="flex"
-                          alignItems="center"
-                          sx={{ ml: 2, color:  'success.main'  }}
-                        >
-                            <ArrowUpwardIcon sx={{ fontSize: '0.8rem' }} />
-                          <Typography variant="body2" ml={0.5}>
-                              {uniqueURLs !== null ? uniqueURLs.percentageChange : '0'}%
-                          </Typography>
-                        </Box>
-                      </Box>
-                    </CardContent>
-                  </Card>
+            
                 </Grid>
-                <Grid item xs={12} sm={3}>
-                  <Card
-                    sx={{
-                      borderRadius: 2,
-                      boxShadow: 3,
-                      p: 0,
-                      position: 'relative',
-                      overflow: 'hidden',
-                      background: "#19191c"
-                    }}
-                  >
-                    <CardContent>
-                      <Typography variant="subtitle1" sx={{ color: '#E1306C', fontWeight: 500 }}>
-                      % Errores
-                      </Typography>
-                      <Typography variant="h5" sx={{ fontWeight: 600 }}>
-                      {percentageErrors !== null ? `${percentageErrors.current}%` : 'Cargando...'}
-                      </Typography>
-                      <Box display="flex" mt={1}>
-                        <Typography variant="body2" color="text.secondary">
-                          Followers
-                        </Typography>
-                        <Box
-                          display="flex"
-                          alignItems="center"
-                          sx={{ ml: 2, color:  'success.main'  }}
-                        >
-                            <ArrowUpwardIcon sx={{ fontSize: '0.8rem' }} />
-                          <Typography variant="body2" ml={0.5}>
-                              {percentageErrors !== null ? `${percentageErrors.percentageChange}` : '0'}%
-                          </Typography>
-                        </Box>
-                      </Box>
-                    </CardContent>
-                  </Card>
-                </Grid>
-                <Grid item xs={12} sm={3}>
-                        <Card
-                          sx={{
-                            borderRadius: 2,
-                            boxShadow: 3,
-                            p: 0,
-                            position: 'relative',
-                            overflow: 'hidden',
-                            background: "#19191c"
-                          }}
-                        >
-                          <CardContent>
-                            <Typography variant="subtitle1" sx={{ color: '#E1306C', fontWeight: 500 }}>
-                            Bot Más Activo
-                            </Typography>
-                            <Typography variant="h5" sx={{ fontWeight: 600 }}>
-                            {mostActiveBot !== null ? mostActiveBot.bot_type : 'Cargando...'} 
-                            </Typography>
-                            <Box display="flex" mt={1}>
-                              <Typography variant="body2" color="text.secondary">
-                                {mostActiveBot !== null ? mostActiveBot.ip  : 'Cargando...'}
-                              </Typography>
-                              <Box
-                                display="flex"
-                                alignItems="center"
-                                sx={{ ml: 2, color:  'success.main'  }}
-                              >
-                                <Typography variant="body2" ml={0.5}>
-                                  {mostActiveBot !== null ? mostActiveBot.total_requests : '-'} Peticiones
-                                </Typography>
-                              </Box>
-                            </Box>
-                          </CardContent>
-                        </Card>
-                </Grid>
+
+
+  
             </Grid>
           </Grid>
 

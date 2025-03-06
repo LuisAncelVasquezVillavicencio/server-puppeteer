@@ -1,0 +1,50 @@
+import React from 'react';
+import { Card, CardContent, Typography, Box } from '@mui/material';
+
+function CardIndicador({ title, mainValue, extraTitleInfo , extraInfo }) {
+  return (
+    <Card
+      sx={{
+        borderRadius: 2,
+        boxShadow: 3,
+        p: 0,
+        position: 'relative',
+        overflow: 'hidden',
+        background: '#090f21',
+      }}
+    >
+      <CardContent>
+        {/* Título */}
+        <Typography variant="subtitle1" sx={{ color: '#000000', fontWeight: 500 }}>
+          {title}
+        </Typography>
+
+        {/* Valor principal (puede ser número, texto, etc.) */}
+        <Typography variant="h5" sx={{ fontWeight: 600 }}>
+          {mainValue !== null && mainValue !== undefined ? mainValue : 'Cargando...'}
+        </Typography>
+
+        {/* Información adicional (porcentaje, texto o lo que quieras) */}
+        {extraInfo && (
+          <Box display="flex" mt={1}>
+            <Typography variant="body2" color="text.secondary">
+                {extraTitleInfo}
+            </Typography>
+            <Box
+                display="flex"
+                alignItems="center"
+                sx={{ ml: 2, color:  'success.main'  }}
+            >
+                <ArrowUpwardIcon sx={{ fontSize: '0.8rem' }} />
+                <Typography variant="body2" ml={0.5}>
+                    {extraInfo}
+                </Typography>
+            </Box>
+            </Box>
+        )}
+      </CardContent>
+    </Card>
+  );
+}
+
+export default CardIndicador;
