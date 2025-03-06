@@ -245,84 +245,88 @@ export default function Dashboard() {
           <Grid item xs={12} sm={8}>
             <Grid container spacing={2}>
               {/* Combo de dominio */}
-                <Grid item xs={12}>
-                  <Grid container spacing={2} >
-                    <Grid item >
-                      <FormControl sx={{ m: 1, minWidth: 120 }} size="small">
-                          <InputLabel id="demo-select-small-label">Dominio</InputLabel>
-                          <Select
-                            value={selectedDomain}
-                            labelId="demo-select-small-label"
-                            label="Age"
-                            onChange={handleDomainChange}
-                          >
-                            <MenuItem value="tudominio.com">tudominio.com</MenuItem>
-                            <MenuItem value="otrodominio.com">otrodominio.com</MenuItem>
-                            <MenuItem value="tudominio.com">tudominio.com</MenuItem>
-                            <MenuItem value="otrodominio.com">otrodominio.com</MenuItem>
-                          </Select>
-                      </FormControl>
-                    </Grid>
-                    {/* Controles para seleccionar fecha */}
-                    <Grid item >
-                        <TextField
-                          label="Fecha de Inicio"
-                          type="date"
-                          InputLabelProps={{ shrink: true }}
-                          onChange={(e) => setStartDate(new Date(e.target.value).toISOString())}
-                          size="small"
-                        />
-                    </Grid>
-                    <Grid item >
-                        <TextField
-                          label="Fecha de Fin"
-                          type="date"
-                          InputLabelProps={{ shrink: true }}
-                          onChange={(e) => setEndDate(new Date(e.target.value).toISOString())}
-                          size="small"
-                        />
+                  <Grid item xs={12}>
+                    <Grid container spacing={2} >
+                      <Grid item >
+                        <FormControl sx={{ m: 1, minWidth: 120 }} size="small">
+                            <InputLabel id="demo-select-small-label">Dominio</InputLabel>
+                            <Select
+                              value={selectedDomain}
+                              labelId="demo-select-small-label"
+                              label="Age"
+                              onChange={handleDomainChange}
+                            >
+                              <MenuItem value="tudominio.com">tudominio.com</MenuItem>
+                              <MenuItem value="otrodominio.com">otrodominio.com</MenuItem>
+                              <MenuItem value="tudominio.com">tudominio.com</MenuItem>
+                              <MenuItem value="otrodominio.com">otrodominio.com</MenuItem>
+                            </Select>
+                        </FormControl>
+                      </Grid>
+                      {/* Controles para seleccionar fecha */}
+                      <Grid item >
+                          <TextField
+                            label="Fecha de Inicio"
+                            type="date"
+                            InputLabelProps={{ shrink: true }}
+                            onChange={(e) => setStartDate(new Date(e.target.value).toISOString())}
+                            size="small"
+                          />
+                      </Grid>
+                      <Grid item >
+                          <TextField
+                            label="Fecha de Fin"
+                            type="date"
+                            InputLabelProps={{ shrink: true }}
+                            onChange={(e) => setEndDate(new Date(e.target.value).toISOString())}
+                            size="small"
+                          />
+                      </Grid>
                     </Grid>
                   </Grid>
-                </Grid>
-                <Grid item xs={12} sm={3}>
-                  <CardIndicador 
-                    title="Total Bots"
-                    mainValue={totalRequests !== null ? totalRequests.current : 'Cargando...'}
-                    extraTitleInfo="Visitantes automáticos"
-                    extraInfo={`${totalRequests !== null ? totalRequests.percentageChange : '0'}%`}
-                  />
-                  <CardIndicador 
-                    title="Total Bots"
-                    mainValue={uniqueURLs !== null ? uniqueURLs.current : 'Cargando...'}
-                    extraTitleInfo="Páginas indexadas"
-                    extraInfo={`${uniqueURLs !== null ? uniqueURLs.percentageChange : '0'}%`}
-                  />
-                  <CardIndicador 
-                    title="% Errores"
-                    mainValue={percentageErrors !== null ? `${percentageErrors.current}%` : 'Cargando...'}
-                    extraTitleInfo=""
-                    extraInfo={`${percentageErrors !== null ? percentageErrors.percentageChange : '0'}%`}
-                  />
-                  <CardIndicador 
-                    title="Bot Más Activo"
-                    mainValue={mostActiveBot !== null ? mostActiveBot.bot_type : 'Cargando...'} 
-                    extraTitleInfo= {mostActiveBot !== null ? mostActiveBot.ip  : 'Cargando...'}
-                    extraInfo={mostActiveBot !== null ? mostActiveBot.total_requests : '-'} Peticiones
-                  />
-                  
+             
+                  <Grid item xs={12} sm={3}>
+                      <CardIndicador 
+                        title="Total Bots"
+                        mainValue={totalRequests !== null ? totalRequests.current : 'Cargando...'}
+                        extraTitleInfo="Visitantes automáticos"
+                        extraInfo={`${totalRequests !== null ? totalRequests.percentageChange : '0'}%`}
+                      />
+                  </Grid>
+                  <Grid item xs={12} sm={3}>
+                      <CardIndicador 
+                        title="Total Bots"
+                        mainValue={uniqueURLs !== null ? uniqueURLs.current : 'Cargando...'}
+                        extraTitleInfo="Páginas indexadas"
+                        extraInfo={`${uniqueURLs !== null ? uniqueURLs.percentageChange : '0'}%`}
+                      />
+                  </Grid>
+                  <Grid item xs={12} sm={3}>
+                    <CardIndicador 
+                      title="% Errores"
+                      mainValue={percentageErrors !== null ? `${percentageErrors.current}%` : 'Cargando...'}
+                      extraTitleInfo=""
+                      extraInfo={`${percentageErrors !== null ? percentageErrors.percentageChange : '0'}%`}
+                    />
+                  </Grid>
+                  <Grid item xs={12} sm={3}>
+                    <CardIndicador 
+                      title="Bot Más Activo"
+                      mainValue={mostActiveBot !== null ? mostActiveBot.bot_type : 'Cargando...'} 
+                      extraTitleInfo= {mostActiveBot !== null ? mostActiveBot.ip  : 'Cargando...'}
+                      extraInfo={mostActiveBot !== null ? mostActiveBot.total_requests : '-'} Peticiones
+                    />
+                   </Grid>
 
         
-                <Grid item xs={12} sm={3}>
+                
             
-                </Grid>
-
-
-  
             </Grid>
           </Grid>
-
-
         </Grid>
+
+
+       
 
  
 
