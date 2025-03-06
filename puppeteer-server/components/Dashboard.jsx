@@ -210,7 +210,7 @@ export default function Dashboard() {
           <Grid item xs={12} sm={4}>
             <Box sx={{ textAlign: 'left', my: 3, display: 'flex', justifyContent: 'left', alignItems: 'center', gap: 2 }}>
                     <Typography variant="h4" sx={{ fontWeight: 'bold', color: '#FFF' }}>
-                      Cloud Renderer
+                      Cloud Renderer 1
                     </Typography>
                     <Typography variant="h5" sx={{ fontWeight: 'bold', color: '#FFF' }}>
                     <Box sx={{ overflow: 'hidden', display: 'flex', alignItems: 'center', background: 'linear-gradient(90deg, #b20ca0, #8c26b9)', borderRadius: 2, px: 2, py: 1 }}>
@@ -430,7 +430,7 @@ export default function Dashboard() {
             </Grid>
           </Grid>
 
-          
+
         </Grid>
 
  
