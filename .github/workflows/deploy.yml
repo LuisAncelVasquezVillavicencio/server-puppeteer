@@ -31,6 +31,9 @@ jobs:
       # 4. Conectarse por SSH y ejecutar script
       - name: Deploy code in GCE
         run: |
-          gcloud compute ssh deployer@puppeteer-vm \
+          gcloud compute ssh puppeteer-vm \
             --zone=us-central1-a \
+            --project=probable-scout-446005-v7 \
             --command="sudo su - deployer -c '~/update_code.sh'"
+
+          
