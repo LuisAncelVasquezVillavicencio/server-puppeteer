@@ -11,7 +11,7 @@ function CardIndicador({ title, mainValue, extraTitleInfo , extraInfo }) {
         position: 'relative',
         overflow: 'hidden',
         background: '#090f21',
-        border: '2px solid #8000e9',
+        border: '1px solid #8000e9',
       }}
     >
       <CardContent>
