@@ -339,7 +339,7 @@ export default function Dashboard() {
               <Typography variant="subtitle1" gutterBottom>
                 Actividad de Bots
               </Typography>
-              <Box sx={{ height: 200, backgroundColor: '#f0f0f0' }}>
+              <Box>
                   <BotActivityChart />
               </Box>
             </Paper>
