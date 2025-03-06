@@ -16,6 +16,9 @@ const {
 const {
   getBotGeoDistribution,
 } = require('./queries/botGeoQueries');
+const { 
+  getBotActivityStats
+} = require('../queries/botRequestsService');
 
 // Endpoint para obtener el total de solicitudes de bots
 router.get('/total-bot-requests', async (req, res) => {
@@ -112,5 +115,20 @@ router.get('/most-active-bot', async (req, res) => {
     res.status(500).json({ error: 'Error al obtener el bot más activo' });
   }
 });
+
+router.get('/bot-activity', async (req, res) => {
+  try {
+    // Extraer fechas desde query params, si se requiere
+    const { startDate, endDate } = req.query;
+
+    // Llama a tu método en la capa de servicios
+    const data = await getBotActivityStats(startDate, endDate);
+    res.json(data);
+  } catch (error) {
+    console.error('Error al obtener actividad de bots:', error);
+    res.status(500).json({ error: 'Error al obtener actividad de bots' });
+  }
+});
+
 
 module.exports = router;

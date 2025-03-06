@@ -58,3 +58,13 @@ export const getPercentageErrors = async (startDate, endDate) => {
 export const getMostActiveBot = async (startDate, endDate) => {
   return handleRequest(api.get('/most-active-bot', { params: { startDate, endDate } }));
 };
+
+
+// 🔹 9. Obtener la actividad diaria de bots (para el gráfico)
+export const getDailyBotActivity = async (startDate, endDate) => {
+  return handleRequest(
+    api.get('/bot-activity', {
+      params: { startDate, endDate },
+    })
+  );
+};
