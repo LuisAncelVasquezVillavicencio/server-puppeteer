@@ -64,6 +64,7 @@ export default function Dashboard() {
   const fetchUniqueURLs = async () => {
     try {
       const result = await getUniqueURLs(startDate, endDate);
+      console.log('URLs únicas:', result);
       setUniqueURLs(result.current);
     } catch (error) {
       console.error('Error al obtener URLs únicas:', error);
