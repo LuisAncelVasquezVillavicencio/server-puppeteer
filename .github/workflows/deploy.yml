@@ -24,13 +24,13 @@ jobs:
 
       # 3. Configurar el proyecto
       - name: Set GCP Project
-        run: gcloud config set project ${{ env.GCP_PROJECT_ID }}
+        run: gcloud config set project probable-scout-446005-v7
         # O si prefieres, pon el proyecto "en duro" sin variable:
         # run: gcloud config set project tu-proyecto-id
 
       # 4. Conectarse por SSH y ejecutar script
       - name: Deploy code in GCE
         run: |
-          gcloud compute ssh deployer@my-instance \
+          gcloud compute ssh deployer@puppeteer-vm \
             --zone=us-central1-a \
             --command="sudo su - deployer -c '~/update_code.sh'"
