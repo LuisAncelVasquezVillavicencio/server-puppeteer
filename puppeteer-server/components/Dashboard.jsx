@@ -55,31 +55,28 @@ export default function Dashboard() {
   const fetchTotalRequests = async () => {
     try {
       const result = await getTotalBotRequests(startDate, endDate, null, null);
-      setTotalRequests(result.current);
+      setTotalRequests(result);
     } catch (error) {
       console.error('Error al obtener total de solicitudes:', error);
     }
   };
-
   const fetchUniqueURLs = async () => {
     try {
       const result = await getUniqueURLs(startDate, endDate);
       console.log('URLs únicas:', result);
-      setUniqueURLs(result.current);
+      setUniqueURLs(result);
     } catch (error) {
       console.error('Error al obtener URLs únicas:', error);
     }
   };
-
   const fetchPercentageErrors = async () => {
     try {
       const result = await getPercentageErrors(startDate, endDate);
-      setPercentageErrors(result.current);
+      setPercentageErrors(result);
     } catch (error) {
       console.error('Error al obtener porcentaje de errores:', error);
     }
   };
-
   const fetchMostActiveBot = async () => {
     try {
       const result = await getMostActiveBot(startDate, endDate);
@@ -300,10 +297,10 @@ export default function Dashboard() {
                   >
                     <CardContent>
                       <Typography variant="subtitle1" sx={{ color: '#E1306C', fontWeight: 500 }}>
-                      Total Bot Requests
+                      Total Bots
                       </Typography>
                       <Typography variant="h5" sx={{ fontWeight: 600 }}>
-                      {totalRequests !== null ? totalRequests : 'Cargando...'}
+                      {totalRequests !== null ? totalRequests.current : 'Cargando...'}
                       </Typography>
                       <Box display="flex" mt={1}>
                         <Typography variant="body2" color="text.secondary">
@@ -316,7 +313,7 @@ export default function Dashboard() {
                         >
                             <ArrowUpwardIcon sx={{ fontSize: '0.8rem' }} />
                           <Typography variant="body2" ml={0.5}>
-                             -1.5%
+                            {totalRequests !== null ? totalRequests.percentageChange : '0'}%
                           </Typography>
                         </Box>
                       </Box>
@@ -336,10 +333,10 @@ export default function Dashboard() {
                   >
                     <CardContent>
                       <Typography variant="subtitle1" sx={{ color: '#E1306C', fontWeight: 500 }}>
-                      URLs Únicas
+                      URLs Visitadas
                       </Typography>
                       <Typography variant="h5" sx={{ fontWeight: 600 }}>
-                      {uniqueURLs !== null ? uniqueURLs : 'Cargando...'}
+                      {uniqueURLs !== null ? uniqueURLs.current : 'Cargando...'}
                       </Typography>
                       <Box display="flex" mt={1}>
                         <Typography variant="body2" color="text.secondary">
@@ -352,7 +349,7 @@ export default function Dashboard() {
                         >
                             <ArrowUpwardIcon sx={{ fontSize: '0.8rem' }} />
                           <Typography variant="body2" ml={0.5}>
-                             -1.5%
+                              {uniqueURLs !== null ? uniqueURLs.percentageChange : '0'}%
                           </Typography>
                         </Box>
                       </Box>
@@ -375,7 +372,7 @@ export default function Dashboard() {
                       % Errores
                       </Typography>
                       <Typography variant="h5" sx={{ fontWeight: 600 }}>
-                      {percentageErrors !== null ? `${percentageErrors.percentage}%` : 'Cargando...'}
+                      {percentageErrors !== null ? `${percentageErrors.current}%` : 'Cargando...'}
                       </Typography>
                       <Box display="flex" mt={1}>
                         <Typography variant="body2" color="text.secondary">
@@ -388,7 +385,7 @@ export default function Dashboard() {
                         >
                             <ArrowUpwardIcon sx={{ fontSize: '0.8rem' }} />
                           <Typography variant="body2" ml={0.5}>
-                             -1.5%
+                              {percentageErrors !== null ? `${percentageErrors.percentageChange}` : '0'}%
                           </Typography>
                         </Box>
                       </Box>
@@ -432,6 +429,8 @@ export default function Dashboard() {
                 </Grid>
             </Grid>
           </Grid>
+
+          
         </Grid>
 
  
@@ -441,7 +440,7 @@ export default function Dashboard() {
           <Grid item xs={12}>
             <Paper sx={{ p: 2 }}>
               <Typography variant="subtitle1" gutterBottom>
-                Tendencia de Peticiones
+                Actividad de Bots
               </Typography>
               <Box sx={{ height: 200, backgroundColor: '#f0f0f0' }}>
                 {/* Aquí iría tu componente de gráfico */}
