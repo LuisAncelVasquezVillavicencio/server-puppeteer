@@ -20,9 +20,9 @@ import {
   InputLabel 
 } from '@mui/material';
 import RotatingText from './RotatingText.jsx';
-import ArrowUpwardIcon from '@mui/icons-material/ArrowUpward';
 
 
+import BotActivityChart from './ui/BotActivityChart';
 import CardIndicador from './ui/CardIndicador.jsx';
 // 1. Importa TODAS las funciones del servicio
 import {
@@ -340,7 +340,7 @@ export default function Dashboard() {
                 Actividad de Bots
               </Typography>
               <Box sx={{ height: 200, backgroundColor: '#f0f0f0' }}>
-                {/* Aquí iría tu componente de gráfico */}
+                  <BotActivityChart />
               </Box>
             </Paper>
           </Grid>
