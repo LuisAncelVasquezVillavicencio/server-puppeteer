@@ -1,6 +1,6 @@
 import React from 'react';
 import { Card, CardContent, Typography, Box } from '@mui/material';
-
+import ArrowUpwardIcon from '@mui/icons-material/ArrowUpward';
 function CardIndicador({ title, mainValue, extraTitleInfo , extraInfo }) {
   return (
     <Card
