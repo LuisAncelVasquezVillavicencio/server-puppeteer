@@ -6,7 +6,7 @@ function CardIndicador({ title, mainValue, extraTitleInfo , extraInfo }) {
     <Card
       sx={{
         borderRadius: 2,
-        boxShadow: 3,
+        boxShadow: 3, 
         p: 0,
         position: 'relative',
         overflow: 'hidden',

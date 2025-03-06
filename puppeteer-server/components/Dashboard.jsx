@@ -22,7 +22,7 @@ import {
 import RotatingText from './RotatingText.jsx';
 import ArrowUpwardIcon from '@mui/icons-material/ArrowUpward';
 
-import CardIndicador from '.ui/CardIndicador';
+import CardIndicador from '.ui/CardIndicador.jsx';
 // 1. Importa TODAS las funciones del servicio
 import {
   getTotalBotRequests,
@@ -323,6 +323,7 @@ export default function Dashboard() {
             
             </Grid>
           </Grid>
+          
         </Grid>
 
 
