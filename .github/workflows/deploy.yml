@@ -1,0 +1,36 @@
+# .github/workflows/deploy.yml
+
+name: Deploy to GCE
+
+on:
+  push:
+    branches:
+      - main  # o la rama que quieras
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+
+    steps:
+      # 1. Descarga el código (si hicieras algo con él, no siempre es necesario)
+      - name: Checkout code
+        uses: actions/checkout@v3
+
+      # 2. Autenticarse en GCP usando tu Service Account Key
+      - name: Auth to GCP
+        uses: google-github-actions/auth@v1
+        with:
+          credentials_json: ${{ secrets.GCP_SA_KEY }}
+
+      # 3. Configurar el proyecto
+      - name: Set GCP Project
+        run: gcloud config set project ${{ env.GCP_PROJECT_ID }}
+        # O si prefieres, pon el proyecto "en duro" sin variable:
+        # run: gcloud config set project tu-proyecto-id
+
+      # 4. Conectarse por SSH y ejecutar script
+      - name: Deploy code in GCE
+        run: |
+          gcloud compute ssh deployer@my-instance \
+            --zone=us-central1-a \
+            --command="sudo su - deployer -c '~/update_code.sh'"
