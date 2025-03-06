@@ -11,11 +11,12 @@ function CardIndicador({ title, mainValue, extraTitleInfo , extraInfo }) {
         position: 'relative',
         overflow: 'hidden',
         background: '#090f21',
+        borderColor: '#6b21a8',
       }}
     >
       <CardContent>
         {/* Título */}
-        <Typography variant="subtitle1" sx={{ color: '#000000', fontWeight: 500 }}>
+        <Typography variant="subtitle1" sx={{ color: '#ffffff', fontWeight: 500 }}>
           {title}
         </Typography>
 
