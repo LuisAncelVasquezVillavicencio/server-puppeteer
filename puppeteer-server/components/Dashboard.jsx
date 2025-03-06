@@ -339,7 +339,7 @@ export default function Dashboard() {
                       URLs Únicas
                       </Typography>
                       <Typography variant="h5" sx={{ fontWeight: 600 }}>
-                      {uniqueURLs !== null ? uniqueURLs.current : 'Cargando...'}
+                      { uniqueURLs.current }
                       </Typography>
                       <Box display="flex" mt={1}>
                         <Typography variant="body2" color="text.secondary">
