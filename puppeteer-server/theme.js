@@ -61,9 +61,9 @@ const theme = createTheme({
             background: 'linear-gradient(to bottom, #080e20, #0d1528)',
             border: '1px solid #8000e9',
             // Sombras con prefijos
-            WebkitBoxShadow: '0px 23px 32px 1px rgba(128,0,233,0.29)',
-            MozBoxShadow: '0px 23px 32px 1px rgba(128,0,233,0.29)',
-            boxShadow: '0px 23px 32px 1px rgba(128,0,233,0.29)',
+            WebkitBoxShadow: '0px 5px 15px 1px rgba(128,0,233,0.29)',
+            MozBoxShadow: '0px 5px 15px 1px rgba(128,0,233,0.29)',
+            boxShadow: '0px 5px 15px 1px rgba(128,0,233,0.29)',
             borderRadius: 8,
             padding: 16,
           },

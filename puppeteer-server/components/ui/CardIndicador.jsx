@@ -5,16 +5,7 @@ import ArrowUpwardIcon from '@mui/icons-material/ArrowUpward';
 function CardIndicador({ title, mainValue, extraTitleInfo , extraInfo }) {
   return (
     <Paper variant="cosmicCard">
-      <Card
-        sx={{
-          borderRadius: 2,
-          boxShadow: 3, 
-          p: 0,
-          position: 'relative',
-          overflow: 'hidden',
-          background: '#090f21',
-        }}
-      >
+      <Card sx={{ p: 0 }} >
         <CardContent>
           {/* Título */}
           <Typography variant="subtitle1" sx={{ color: '#ffffff', fontWeight: 500 }}>
