@@ -3,7 +3,7 @@ import { createTheme } from '@mui/material/styles';
 
 const theme = createTheme({
   palette: {
-    mode: 'dark', // modo oscuro
+    mode: '', // modo oscuro
     primary: {
       main: '#B834F3', // Púrpura neón
     },
@@ -12,7 +12,6 @@ const theme = createTheme({
     },
     background: {
       default: '#1A1A1A',   // Fondo general
-      paper: '#232323'      // Cartas/paneles un poco menos oscuro
     },
     text: {
       primary: '#ECECEC',   // Texto principal
