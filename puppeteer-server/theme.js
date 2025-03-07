@@ -3,7 +3,6 @@ import { createTheme } from '@mui/material/styles';
 
 const theme = createTheme({
   palette: {
-    mode: '', // modo oscuro
     primary: {
       main: '#B834F3', // Púrpura neón
     },
