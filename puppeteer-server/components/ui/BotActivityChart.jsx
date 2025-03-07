@@ -9,7 +9,7 @@ import {
   ResponsiveContainer,
   Legend
 } from 'recharts';
-import { Paper } from '@mui/material'; 
+import { Box } from '@mui/material';
 const BotActivityChart = () => {
   // Datos de ejemplo; reemplázalos con tus datos reales
   const data = [
@@ -23,7 +23,7 @@ const BotActivityChart = () => {
   ];
 
   return (
-    <div  sx={{ width: '100%', height: 300 }}>
+    <Box sx={{ width: '100%', height: 300 }}>
       <ResponsiveContainer>
         <LineChart data={data} margin={{ top: 20, right: 30, left: 0, bottom: 5 }}>
           <CartesianGrid strokeDasharray="3 3" />
@@ -42,7 +42,7 @@ const BotActivityChart = () => {
           />
         </LineChart>
       </ResponsiveContainer>
-    </div>
+    </Box>
   );
 };
 
