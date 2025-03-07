@@ -201,7 +201,11 @@ export default function Dashboard() {
   };
 
   return (
-    <Grid sx={{ p: 2, background: "#2d2d30" }}>
+    <Grid  sx={{
+              p: 2,
+              backgroundColor: '#2d2d30', // color de respaldo
+              background: 'linear-gradient(180deg, rgba(8,15,29,1) 24%, rgba(22,40,77,1) 100%)',
+            }}>
       <Box sx={{ flexGrow: 1, p: 2 }}>
         
        
