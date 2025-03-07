@@ -20,7 +20,7 @@ import {
   InputLabel 
 } from '@mui/material';
 import RotatingText from './RotatingText.jsx';
-
+import { Sparkles } from 'lucide-react';
 
 import BotActivityChart from './ui/BotActivityChart';
 import CardIndicador from './ui/CardIndicador.jsx';
@@ -231,7 +231,12 @@ export default function Dashboard() {
                     </Typography>
             </Box>
             <Typography variant="body2">
-                Este Dashboard reúne en una sola vista toda la actividad de los bots y redes sociales que rastrean tu sitio, mostrando gráficamente picos de visitas, listados de URLs más consultadas y posibles errores de indexación. Con este enfoque, obtienes una visión rápida y unificada de la salud SEO de tu dominio, facilitando la toma de decisiones para mejorar tu posicionamiento y rendimiento en línea.
+                <Sparkles
+                  size={24}
+                  color="#818cf8"
+                  strokeWidth={2}
+                />
+                Monitoreo inteligente de actividad de bots con procesamiento analítico de Cloudflare
             </Typography>
             <Grid item xs={12} container spacing={1}>
                 <ButtonGroup variant="text" aria-label="Basic button group">
