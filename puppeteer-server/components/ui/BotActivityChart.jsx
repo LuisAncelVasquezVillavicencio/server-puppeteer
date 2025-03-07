@@ -9,7 +9,7 @@ import {
   ResponsiveContainer,
   Legend
 } from 'recharts';
-
+import { Paper } from '@mui/material'; 
 const BotActivityChart = () => {
   // Datos de ejemplo; reemplázalos con tus datos reales
   const data = [
@@ -23,22 +23,7 @@ const BotActivityChart = () => {
   ];
 
   return (
-    <div
-      style={{
-        width: '100%',
-        height: 300,
-        // Gradiente de arriba (#080e20) hacia abajo (#0d1528)
-        background: 'linear-gradient(to bottom, #080e20, #0d1528)',
-        // Borde de 1px con color #8000e9
-        border: '1px solid #8000e9',
-        // Sombra difuminada de color #8000e9
-        boxShadow: '0 0 10px #8000e9',
-        // Bordes redondeados a 8px
-        borderRadius: '8px',
-        // Un pequeño relleno interno para que el gráfico no pegue al borde
-        padding: '16px',
-      }}
-    >
+    <Paper variant="cosmicCard" sx={{ width: '100%', height: 300 }}>
       <ResponsiveContainer>
         <LineChart data={data} margin={{ top: 20, right: 30, left: 0, bottom: 5 }}>
           <CartesianGrid strokeDasharray="3 3" />
@@ -57,7 +42,7 @@ const BotActivityChart = () => {
           />
         </LineChart>
       </ResponsiveContainer>
-    </div>
+    </Paper>
   );
 };
 

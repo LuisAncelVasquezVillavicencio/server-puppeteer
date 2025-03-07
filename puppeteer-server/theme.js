@@ -29,7 +29,6 @@ const theme = createTheme({
     }
   },
   typography: {
-    // Ajustes tipográficos, si deseas una fuente futurista (ej: 'Orbitron')
     fontFamily: '"Roboto", "Orbitron", "Helvetica", "Arial", sans-serif',
     h1: {
       fontWeight: 700,
@@ -37,13 +36,12 @@ const theme = createTheme({
     h2: {
       fontWeight: 600,
     },
-    // y así sucesivamente...
+    // etc.
   },
-  // Overrides opcionales para dar aspecto “glow” en ciertos componentes
-  shadows: Array(25).fill('none'), 
-  // O, si quieres usar sombras personalizadas, puedes meter arrays con estilo neón
+  // Deshabilita las sombras por defecto:
+  shadows: Array(25).fill('none'),
   components: {
-    // Ejemplo: un estilo “glow” en Buttons
+    // Ejemplo: estilo “glow” en los Buttons
     MuiButton: {
       styleOverrides: {
         root: {
@@ -54,7 +52,24 @@ const theme = createTheme({
         },
       },
     },
-    // ... añade overrides para tarjetas, inputs, etc.
+    // Variante personalizada “cosmicCard” para Paper
+    MuiPaper: {
+      variants: [
+        {
+          props: { variant: 'cosmicCard' },
+          style: {
+            background: 'linear-gradient(to bottom, #080e20, #0d1528)',
+            border: '1px solid #8000e9',
+            // Sombras con prefijos
+            WebkitBoxShadow: '0px 23px 32px 1px rgba(128,0,233,0.29)',
+            MozBoxShadow: '0px 23px 32px 1px rgba(128,0,233,0.29)',
+            boxShadow: '0px 23px 32px 1px rgba(128,0,233,0.29)',
+            borderRadius: 8,
+            padding: 16,
+          },
+        },
+      ],
+    },
   },
 });
 
