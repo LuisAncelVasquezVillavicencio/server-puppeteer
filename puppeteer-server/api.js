@@ -18,7 +18,7 @@ const {
 } = require('./queries/botGeoQueries');
 const { 
   getBotActivityStats
-} = require('../queries/botRequestsService');
+} = require('./queries/botRequestsService');
 
 // Endpoint para obtener el total de solicitudes de bots
 router.get('/total-bot-requests', async (req, res) => {
