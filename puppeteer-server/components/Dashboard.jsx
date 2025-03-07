@@ -333,9 +333,9 @@ export default function Dashboard() {
  
 
         {/* Gráfica de tendencias (Placeholder) */}
-        <Grid container spacing={2} sx={{ mb: 2 }}>
+        <Grid container spacing={2} sx={{ mb: 2 }} >
           <Grid item xs={12}>
-            <Paper sx={{ p: 2 }}>
+            <Paper sx={{ p: 2 }} variant="cosmicCard" >
               <Typography variant="subtitle1" gutterBottom>
                 Actividad de Bots
               </Typography>
