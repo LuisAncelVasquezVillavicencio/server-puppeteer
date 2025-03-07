@@ -4,8 +4,8 @@ import { Paper } from '@mui/material';
 import ArrowUpwardIcon from '@mui/icons-material/ArrowUpward';
 function CardIndicador({ title, mainValue, extraTitleInfo , extraInfo }) {
   return (
-    <Paper variant="cosmicCard">
-      <Card sx={{ p: 0 }} >
+
+      <Card sx={{ p: 0 }} variant="cosmicCard" >
         <CardContent>
           {/* Título */}
           <Typography variant="subtitle1" sx={{ color: '#ffffff', fontWeight: 500 }}>
@@ -37,7 +37,7 @@ function CardIndicador({ title, mainValue, extraTitleInfo , extraInfo }) {
           )}
         </CardContent>
       </Card>
-    </Paper>
+ 
   );
 }
 
