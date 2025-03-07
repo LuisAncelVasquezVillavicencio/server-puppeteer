@@ -230,12 +230,15 @@ export default function Dashboard() {
                     </Box>
                     </Typography>
             </Box>
-            <Typography variant="body2">
-                <Sparkles
-                  size={24}
-                  color="#818cf8"
-                  strokeWidth={2}
-                />
+            <Typography
+                variant="body2"
+                sx={{
+                  display: 'inline-flex',  
+                  alignItems: 'center',
+                  gap: 1,                   
+                }}
+              >
+                <Sparkles size={24} color="#818cf8" strokeWidth={2} />
                 Monitoreo inteligente de actividad de bots con procesamiento analítico de Cloudflare
             </Typography>
             <Grid item xs={12} container spacing={1}>
