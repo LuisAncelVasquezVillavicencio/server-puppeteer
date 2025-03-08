@@ -215,7 +215,7 @@ export default function Dashboard() {
         {/* Filtro de dominio y botones */}
         <Grid container spacing={2} sx={{ mb: 2 }} alignItems="center">
           {/* Encabezado */}
-          <Grid item xs={12} sm={4}>
+          <Grid item xs={12} sm={5}>
             <Box sx={{ textAlign: 'left', my: 2, display: 'flex', justifyContent: 'left', alignItems: 'center', gap: 2 }}>
                     <Typography 
                           variant="h4" 
@@ -282,7 +282,7 @@ export default function Dashboard() {
                   </Grid>
                   <Grid item xs={12} sm={3}>
                     <CardIndicador 
-                      title="Total Usuarios Unicos"
+                      title="Usuarios Unicos"
                       mainValue={percentageErrors !== null ? `${percentageErrors.current}%` : 'Cargando...'}
                       extraTitleInfo="Bots"
                       extraInfo="3"
