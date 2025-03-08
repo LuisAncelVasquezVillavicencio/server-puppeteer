@@ -218,7 +218,7 @@ export default function Dashboard() {
           <Grid item xs={12} sm={4}>
             <Box sx={{ textAlign: 'left', my: 2, display: 'flex', justifyContent: 'left', alignItems: 'center', gap: 2 }}>
                     <Typography 
-                          variant="h5" 
+                          variant="h4" 
                           sx={{ 
                             fontWeight: 'bold', 
                             color: '#FFF',
@@ -227,9 +227,9 @@ export default function Dashboard() {
                             m: 0
                           }}
                     >
-                      Cloud Renderer
+                      Cloud<br/>Renderer
                     </Typography>
-                    <Typography variant="h6" sx={{ fontWeight: 'bold', color: '#FFF' }}>
+                    <Typography variant="h5" sx={{ fontWeight: 'bold', color: '#FFF' }}>
                     <Box sx={{ overflow: 'hidden', display: 'flex', alignItems: 'center', background: 'linear-gradient(90deg, #b20ca0, #8c26b9)', borderRadius: 2, px: 2, py: 1 }}>
                       <RotatingText
                         texts={['Renderizado Web', 'Indexación', 'Optimización', 'SEO Avanzado']}  
