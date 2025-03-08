@@ -227,7 +227,7 @@ export default function Dashboard() {
                             m: 0
                           }}
                     >
-                      Cloud<br/>Renderer
+                      Cloud Renderer
                     </Typography>
                     <Typography variant="h5" sx={{ fontWeight: 'bold', color: '#FFF' }}>
                     <Box sx={{ overflow: 'hidden', display: 'flex', alignItems: 'center', background: 'linear-gradient(90deg, #b20ca0, #8c26b9)', borderRadius: 2, px: 2, py: 1 }}>
@@ -266,26 +266,26 @@ export default function Dashboard() {
              
                   <Grid item xs={12} sm={3}>
                       <CardIndicador 
-                        title="Total Bots"
+                        title="Total de Solicitudes"
                         mainValue={totalRequests !== null ? totalRequests.current : 'Cargando...'}
-                        extraTitleInfo="Visitantes automáticos"
-                        extraInfo={`${totalRequests !== null ? totalRequests.percentageChange : '0'}%`}
+                        extraTitleInfo="Bots"
+                        extraInfo={totalRequests !== null ? totalRequests.current : 'Cargando...'}
                       />
                   </Grid>
                   <Grid item xs={12} sm={3}>
                       <CardIndicador 
-                        title="Total Bots"
+                        title="URLs Únicas"
                         mainValue={uniqueURLs !== null ? uniqueURLs.current : 'Cargando...'}
-                        extraTitleInfo="Páginas indexadas"
+                        extraTitleInfo="Bots"
                         extraInfo={`${uniqueURLs !== null ? uniqueURLs.percentageChange : '0'}%`}
                       />
                   </Grid>
                   <Grid item xs={12} sm={3}>
                     <CardIndicador 
-                      title="% Errores"
+                      title="Total Usuarios Unicos"
                       mainValue={percentageErrors !== null ? `${percentageErrors.current}%` : 'Cargando...'}
-                      extraTitleInfo=""
-                      extraInfo={`${percentageErrors !== null ? percentageErrors.percentageChange : '0'}%`}
+                      extraTitleInfo="Bots"
+                      extraInfo="3"
                     />
                   </Grid>
                   <Grid item xs={12} sm={3}>
