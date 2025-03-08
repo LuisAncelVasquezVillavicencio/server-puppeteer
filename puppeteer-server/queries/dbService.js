@@ -211,7 +211,8 @@ async function ensureTableExists() {
             network JSONB,
             bot_type TEXT,
             bot_category TEXT,
-            bot_logo TEXT 
+            bot_logo TEXT ,
+            isBot TEXT
         );
     `;
     try {
@@ -262,9 +263,9 @@ async function saveRequestData(data) {
         INSERT INTO bot_requests (
         url, method, headers, query_params, body, timestamp,
         render_time, error, ip, user_agent, referrer, network,
-        bot_type, bot_category, bot_logo
+        bot_type, bot_category, bot_logo , isBot
         )
-        VALUES ($1, $2, $3, $4, $5, $6, $7, $8, $9, $10, $11, $12, $13, $14, $15)
+        VALUES ($1, $2, $3, $4, $5, $6, $7, $8, $9, $10, $11, $12, $13, $14, $15, $16)
     `;
     
     const userAgent = data.headers?.['user-agent'] || null;
@@ -286,7 +287,8 @@ async function saveRequestData(data) {
         JSON.stringify(data.network) || null,
         label,     // bot_type
         category,  // bot_category
-        logo      // bot_logo
+        logo  ,    // bot_logo,
+        isBot
     ];
     
     try {
