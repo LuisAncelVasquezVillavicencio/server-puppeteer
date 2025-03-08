@@ -261,41 +261,38 @@ export default function Dashboard() {
 
           <Grid item xs={12} sm={7}>
             <Grid container spacing={2}>
-              {/* Combo de dominio */}
-              
-             
               <Grid item xs={12} sm={3}>
                 <CardIndicador 
                   title="Solicitudes Totales"
-                  mainValue={totalRequests !== null ? totalRequests.totalRequests : 'Cargando...'}
+                  mainValue={totalRequests !== null ? totalRequests.current.totalRequests : 'Cargando...'}
                   description="Número total de solicitudes procesadas"
+                  icon="activity"
                 />
               </Grid>
               <Grid item xs={12} sm={3}>
                 <CardIndicador 
                   title="Total Bots"
-                  mainValue={totalRequests !== null ? totalRequests.botRequests : 'Cargando...'}
+                  mainValue={totalRequests !== null ? totalRequests.current.botRequests : 'Cargando...'}
                   description="Número total de páginas diferentes visitadas por bots"
+                  icon="bot"
                 />
               </Grid>
               <Grid item xs={12} sm={3}>
                 <CardIndicador 
                   title="Total Usuarios"
-                  mainValue={totalRequests !== null ? totalRequests.userRequests : 'Cargando...'}
+                  mainValue={totalRequests !== null ? totalRequests.current.userRequests : 'Cargando...'}
                   description="Número total de páginas diferentes visitadas por usuarios"
+                  icon="users"
                 />
               </Grid>
               <Grid item xs={12} sm={3}>
                 <CardIndicador 
                   title="URLs Únicas Visitadas"
                   mainValue={uniqueURLs !== null ? uniqueURLs.current : 'Cargando...'}
-                  description="Cantidad de URLs únicas que han sido accedidas."
+                  description="Cantidad de URLs únicas que han sido accedidas"
+                  icon="link"
                 />
               </Grid>
-
-        
-                
-            
             </Grid>
           </Grid>
           
