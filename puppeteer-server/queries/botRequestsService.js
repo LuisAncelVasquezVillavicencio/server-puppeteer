@@ -1,13 +1,11 @@
 const pool = require('../services/dbConfig'); 
 
-
-// Ejemplo:
 async function getBotActivityStats(startDate, endDate) {
   let query = `
     SELECT
       TO_CHAR(timestamp, 'MM/DD') AS fecha,
-      COUNT(CASE WHEN isBot = true THEN 1 END)::int AS bot_requests,
-      COUNT(CASE WHEN isBot = false OR isBot IS NULL THEN 1 END)::int AS user_requests
+      COUNT(CASE WHEN isbot::boolean = true THEN 1 END)::int AS bot_requests,
+      COUNT(CASE WHEN isbot::boolean = false OR isbot IS NULL THEN 1 END)::int AS user_requests
     FROM bot_requests
   `;
   const params = [];
