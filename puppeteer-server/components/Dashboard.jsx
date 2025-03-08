@@ -214,7 +214,7 @@ export default function Dashboard() {
         {/* Filtro de dominio y botones */}
         <Grid container spacing={2} sx={{ mb: 2 }} alignItems="center">
           {/* Encabezado */}
-          <Grid item xs={12} sm={4}>
+          <Grid item xs={12} sm={5}>
             <Box sx={{ textAlign: 'left', my: 3, display: 'flex', justifyContent: 'left', alignItems: 'center', gap: 2 }}>
                     <Typography variant="h4" sx={{ fontWeight: 'bold', color: '#FFF' }}>
                       Cloud Renderer
@@ -295,10 +295,10 @@ export default function Dashboard() {
                       </Grid>
                     </Grid>
             </Grid>
-            
+
           </Grid>
 
-          <Grid item xs={12} sm={8}>
+          <Grid item xs={12} sm={7}>
             <Grid container spacing={2}>
               {/* Combo de dominio */}
               
