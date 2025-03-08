@@ -259,42 +259,7 @@ export default function Dashboard() {
             </Typography>
           </Grid>
 
-          <Grid item xs={12} sm={7}>
-            <Grid container spacing={2}>
-              <Grid item xs={12} sm={3}>
-                <CardIndicador 
-                  title="Solicitudes Totales"
-                  mainValue={totalRequests?.totalRequests}
-                  description="Número total de solicitudes procesadas"
-                  icon="activity"
-                />
-              </Grid>
-              <Grid item xs={12} sm={3}>
-                <CardIndicador 
-                  title="Total Bots"
-                  mainValue={totalRequests?.botRequests}
-                  description="Número total de páginas diferentes visitadas por bots"
-                  icon="activity"
-                />
-              </Grid>
-              <Grid item xs={12} sm={3}>
-                <CardIndicador 
-                  title="Total Usuarios"
-                  mainValue={totalRequests?.userRequests}
-                  description="Número total de páginas diferentes visitadas por usuarios"
-                  icon="users"
-                />
-              </Grid>
-              <Grid item xs={12} sm={3}>
-                <CardIndicador 
-                  title="URLs Únicas Visitadas"
-                  mainValue={uniqueURLs.current}
-                  description="Cantidad de URLs únicas que han sido accedidas"
-                  icon="link"
-                />
-              </Grid>
-            </Grid>
-          </Grid>
+     
           
         </Grid>
         <Grid container spacing={2} sx={{ mt: 2 }} alignItems="center">
