@@ -297,7 +297,7 @@ export default function Dashboard() {
           </Grid>
           
         </Grid>
-        <Grid container spacing={2} sx={{ mb: 2 }} alignItems="center">
+        <Grid container spacing={2} sx={{ mt: 2 }} alignItems="center">
             <DashboardFilters 
               selectedDomain={selectedDomain}
               onDomainChange={handleDomainChange}
