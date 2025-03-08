@@ -1,3 +1,4 @@
+
 const express = require('express');
 const router = express.Router();
 const {
@@ -19,6 +20,7 @@ const {
 const { 
   getBotActivityStats
 } = require('./queries/botRequestsService');
+const { logRequestHandler } = require('./controllers/requestLogController');
 
 // Endpoint para obtener el total de solicitudes de bots
 router.get('/total-bot-requests', async (req, res) => {
@@ -129,6 +131,9 @@ router.get('/bot-activity', async (req, res) => {
     res.status(500).json({ error: 'Error al obtener actividad de bots' });
   }
 });
+
+// Agregar esta nueva ruta
+router.post('/log-request', logRequestHandler);
 
 
 module.exports = router;
