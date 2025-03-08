@@ -49,7 +49,7 @@ const mockData = [
 
 function GeoDistributionTable() {
   return (
-    <Paper variant="cosmicCard" sx={{ p: 3 }}>
+    <Paper variant="cosmicCard" sx={{ p: 3 , height: '400px' }} >
       <Box sx={{ display: 'flex', alignItems: 'center', gap: 1, mb: 3 }}>
         <Globe size={24} color="#10b981" />
         <Typography variant="h6">Distribución por País</Typography>
