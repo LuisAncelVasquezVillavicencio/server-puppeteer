@@ -24,6 +24,8 @@ import { Sparkles } from 'lucide-react';
 
 import BotActivityChart from './ui/BotActivityChart';
 import CardIndicador from './ui/CardIndicador.jsx';
+import BotCategoriesChart from './ui/BotCategoriesChart';
+
 // 1. Importa TODAS las funciones del servicio
 import {
   getTotalBotRequests,
@@ -357,6 +359,21 @@ export default function Dashboard() {
             </Paper>
           </Grid>
         </Grid>
+        
+
+        <Grid container spacing={2}>
+          <Grid item xs={12} md={6}>
+            <Card>
+              <CardContent>
+                <Typography variant="h6" gutterBottom>
+                  Bot Categorias Distribución
+                </Typography>
+                <BotCategoriesChart startDate={startDate} endDate={endDate} />
+              </CardContent>
+            </Card>
+          </Grid>
+        </Grid>
+
 
         {/* Sección con dos columnas: Bots Activos / URLs Más Rastreadas */}
         <Grid container spacing={2}>
