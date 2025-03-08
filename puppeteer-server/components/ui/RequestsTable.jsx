@@ -78,7 +78,7 @@ function RequestsTable() {
   };
 
   return (
-    <Card variant="outlined" sx={{ bgcolor: 'background.paper' }}>
+    <Card variant="cosmicCard" >
       <CardContent>
         <Box sx={{ display: 'flex', justifyContent: 'space-between', mb: 2, alignItems: 'center' }}>
           <Typography variant="h6">Últimas Peticiones</Typography>
