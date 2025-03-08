@@ -1,4 +1,3 @@
-
 import React, { useEffect, useState } from 'react';
 import { 
   Grid, 
@@ -298,7 +297,17 @@ export default function Dashboard() {
           </Grid>
           
         </Grid>
-
+        <Grid container spacing={2} sx={{ mb: 2 }} alignItems="center">
+            <DashboardFilters 
+              selectedDomain={selectedDomain}
+              onDomainChange={handleDomainChange}
+              onStartDateChange={setStartDate}
+              onEndDateChange={setEndDate}
+              onEditRoot={handleEditRoot}
+              onEditXML={handleEditXML}
+              onLogConnect={handleConnectLog}
+            />
+        </Grid>
 
        
 
