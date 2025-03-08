@@ -21,11 +21,11 @@ import {
 import RotatingText from './RotatingText.jsx';
 import { Sparkles } from 'lucide-react';
 
-import BotActivityChart from './ui/BotActivityChart';
+import BotActivityChart from './ui/BotActivityChart.jsx';
 import CardIndicador from './ui/CardIndicador.jsx';
-import BotCategoriesChart from './ui/BotCategoriesChart';
-import DashboardFilters from './ui/DashboardFilters';
-import GeoDistributionTable from './ui/GeoDistributionTable';
+import BotCategoriesChart from './ui/BotCategoriesChart.jsx';
+import DashboardFilters from './ui/DashboardFilters.jsx';
+import GeoDistributionTable from './ui/GeoDistributionTable.jsx';
 
 // 1. Importa TODAS las funciones del servicio
 import {
@@ -264,7 +264,7 @@ export default function Dashboard() {
               <Grid item xs={12} sm={3}>
                 <CardIndicador 
                   title="Solicitudes Totales"
-                  mainValue={totalRequests !== null ? totalRequests.totalRequests : 'Cargando...'}
+                  mainValue={totalRequests?.totalRequests}
                   description="Número total de solicitudes procesadas"
                   icon="activity"
                 />
@@ -272,7 +272,7 @@ export default function Dashboard() {
               <Grid item xs={12} sm={3}>
                 <CardIndicador 
                   title="Total Bots"
-                  mainValue={totalRequests !== null ? totalRequests.botRequests : 'Cargando...'}
+                  mainValue={totalRequests?.botRequests}
                   description="Número total de páginas diferentes visitadas por bots"
                   icon="bot"
                 />
@@ -280,7 +280,7 @@ export default function Dashboard() {
               <Grid item xs={12} sm={3}>
                 <CardIndicador 
                   title="Total Usuarios"
-                  mainValue={totalRequests !== null ? totalRequests.userRequests : 'Cargando...'}
+                  mainValue={totalRequests?.userRequests}
                   description="Número total de páginas diferentes visitadas por usuarios"
                   icon="users"
                 />
@@ -288,7 +288,7 @@ export default function Dashboard() {
               <Grid item xs={12} sm={3}>
                 <CardIndicador 
                   title="URLs Únicas Visitadas"
-                  mainValue={uniqueURLs !== null ? uniqueURLs.current : 'Cargando...'}
+                  mainValue={uniqueURLs.current}
                   description="Cantidad de URLs únicas que han sido accedidas"
                   icon="link"
                 />

@@ -19,7 +19,7 @@ function CardIndicador({ title, mainValue, description, icon }) {
       case 'activity':
         return <Activity size={24} color="#10b981" />;
       case 'bot':
-        return <Robot size={24} color="#818cf8" />;
+        return <Activity size={24} color="#10b981" />;
       case 'users':
         return <Users size={24} color="#f59e0b" />;
       case 'link':
