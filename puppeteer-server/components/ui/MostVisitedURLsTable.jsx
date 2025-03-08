@@ -6,7 +6,6 @@ import {
   Box,
   Link,
   Chip,
-  Stack
 } from '@mui/material';
 import { Link as LinkIcon } from 'lucide-react';
 
@@ -18,64 +17,65 @@ const MostVisitedURLsTable = () => {
       uniqueBots: 2,
       lastVisit: '5/3/2025 9:09:23'
     },
-    // ... rest of the data
+    {
+      url: 'https://mivisualization.com/',
+      visits: 6,
+      uniqueBots: 2,
+      lastVisit: '5/3/2025 10:16:05'
+    },
+    {
+      url: 'https://mivisualization.com/dashboard',
+      visits: 3,
+      uniqueBots: 2,
+      lastVisit: '5/3/2025 13:17:32'
+    },
+    {
+      url: 'http://micanva.com/',
+      visits: 2,
+      uniqueBots: 1,
+      lastVisit: '5/3/2025 12:35:46'
+    }
   ];
 
   return (
-    <Card 
-      variant="cosmicCard" 
-      sx={{ 
-        height: '400px',
-        background: 'linear-gradient(135deg, rgba(13,17,31,0.9) 0%, rgba(28,23,43,0.9) 100%)',
-        backdropFilter: 'blur(8px)',
-        border: '1px solid rgba(255,255,255,0.1)',
-      }}
-    >
-      <CardContent sx={{ height: '100%', p: 3 }}>
-        <Box sx={{ 
-          display: 'flex', 
-          alignItems: 'center', 
-          gap: 1, 
-          mb: 3,
-          borderBottom: '1px solid rgba(255,255,255,0.1)',
-          pb: 2
-        }}>
-          <LinkIcon size={24} color="#818cf8" />
-          <Typography variant="h6" component="div" sx={{ fontWeight: 500 }}>
+    <Card variant="cosmicCard" sx={{ height: '400px' }}>
+      <CardContent>
+        <Box sx={{ display: 'flex', alignItems: 'center', gap: 1, mb: 3 }}>
+          <LinkIcon size={20} color="#818cf8" />
+          <Typography variant="h6" component="div">
             URLs Más Visitadas
           </Typography>
         </Box>
 
-        <Stack 
-          spacing={2} 
-          sx={{ 
-            maxHeight: 'calc(100% - 70px)',
-            overflow: 'auto',
-            '&::-webkit-scrollbar': {
-              width: '8px',
-            },
-            '&::-webkit-scrollbar-thumb': {
-              backgroundColor: 'rgba(255,255,255,0.1)',
-              borderRadius: '4px',
-            }
-          }}
-        >
-          {urlData.map((row, index) => (
-            <Box
-              key={index}
-              sx={{
-                display: 'flex',
+        <Box sx={{ display: 'flex', flexDirection: 'column', gap: 1 }}>
+          <Box sx={{ 
+            display: 'grid', 
+            gridTemplateColumns: '2fr 0.8fr 0.8fr 1fr',
+            gap: 2,
+            px: 2,
+            py: 1,
+            borderBottom: '1px solid rgba(255,255,255,0.1)'
+          }}>
+            <Typography variant="subtitle2" sx={{ color: 'rgba(255,255,255,0.7)' }}>URL</Typography>
+            <Typography variant="subtitle2" sx={{ color: 'rgba(255,255,255,0.7)', textAlign: 'center' }}>Visitas</Typography>
+            <Typography variant="subtitle2" sx={{ color: 'rgba(255,255,255,0.7)', textAlign: 'center' }}>Bots</Typography>
+            <Typography variant="subtitle2" sx={{ color: 'rgba(255,255,255,0.7)', textAlign: 'right' }}>Última Visita</Typography>
+          </Box>
+
+          <Box sx={{ display: 'flex', flexDirection: 'column', gap: 1, overflow: 'auto' }}>
+            {urlData.map((row, index) => (
+              <Box key={index} sx={{ 
+                display: 'grid',
+                gridTemplateColumns: '2fr 0.8fr 0.8fr 1fr',
+                gap: 2,
+                px: 2,
+                py: 1.5,
                 alignItems: 'center',
-                justifyContent: 'space-between',
-                p: 1.5,
                 borderRadius: 1,
-                backgroundColor: 'rgba(255,255,255,0.02)',
                 '&:hover': {
-                  backgroundColor: 'rgba(255,255,255,0.05)',
+                  backgroundColor: 'rgba(255,255,255,0.03)'
                 }
-              }}
-            >
-              <Box sx={{ flex: 1, mr: 2 }}>
+              }}>
                 <Link 
                   href={row.url} 
                   target="_blank" 
@@ -84,43 +84,43 @@ const MostVisitedURLsTable = () => {
                     color: '#818cf8',
                     textDecoration: 'none',
                     '&:hover': { 
-                      textDecoration: 'underline',
-                      color: '#B834F3'
+                      color: '#B834F3',
+                      textDecoration: 'underline'
                     }
                   }}
                 >
                   {row.url}
                 </Link>
-              </Box>
-
-              <Stack direction="row" spacing={2} alignItems="center">
-                <Chip 
-                  label={`${row.visits} visitas`}
-                  size="small"
-                  sx={{ 
-                    background: 'linear-gradient(135deg, #B834F3 0%, #818cf8 100%)',
-                    color: 'white',
-                    minWidth: '80px',
-                    fontWeight: 500
-                  }}
-                />
-                <Chip 
-                  label={`${row.uniqueBots} bots`}
-                  size="small"
-                  sx={{
-                    border: '1px solid #818cf8',
-                    color: '#818cf8',
-                    backgroundColor: 'transparent',
-                    minWidth: '70px'
-                  }}
-                />
-                <Typography variant="caption" sx={{ color: 'rgba(255,255,255,0.5)', minWidth: '140px', textAlign: 'right' }}>
+                <Box sx={{ textAlign: 'center' }}>
+                  <Chip 
+                    label={row.visits}
+                    size="small"
+                    sx={{ 
+                      background: 'linear-gradient(135deg, #B834F3 0%, #818cf8 100%)',
+                      color: 'white',
+                      minWidth: '45px'
+                    }}
+                  />
+                </Box>
+                <Box sx={{ textAlign: 'center' }}>
+                  <Chip 
+                    label={row.uniqueBots}
+                    size="small"
+                    sx={{
+                      border: '1px solid #818cf8',
+                      color: '#818cf8',
+                      backgroundColor: 'transparent',
+                      minWidth: '45px'
+                    }}
+                  />
+                </Box>
+                <Typography sx={{ color: 'text.secondary', textAlign: 'right' }}>
                   {row.lastVisit}
                 </Typography>
-              </Stack>
-            </Box>
-          ))}
-        </Stack>
+              </Box>
+            ))}
+          </Box>
+        </Box>
       </CardContent>
     </Card>
   );
