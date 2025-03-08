@@ -1,23 +1,37 @@
 import React from 'react';
 import { Card, CardContent, Typography, Box, Tooltip, IconButton } from '@mui/material';
 import HelpOutlineIcon from '@mui/icons-material/HelpOutline';
-import RobotIcon from '@mui/icons-material/SmartToy';
-import SpiderIcon from '@mui/icons-material/BugReport';
-import ErrorIcon from '@mui/icons-material/Error';
-import SpeedIcon from '@mui/icons-material/Speed';
+import { 
+  Activity, 
+  Robot, 
+  Users, 
+  Link2, 
+  Network,
+  BarChart2,
+  AlertTriangle,
+  Zap
+} from 'lucide-react';
 
 function CardIndicador({ title, mainValue, description, icon }) {
-  // Icon mapping based on title
+  // Icon mapping based on icon prop
   const getIcon = () => {
-    switch (title) {
-      case 'Total Bots':
-        return <RobotIcon sx={{ color: '#818cf8' }} />;
-      case '% Errores':
-        return <ErrorIcon sx={{ color: '#ef4444' }} />;
-      case 'Bot Más Activo':
-        return <SpiderIcon sx={{ color: '#10b981' }} />;
+    switch (icon) {
+      case 'activity':
+        return <Activity size={24} color="#10b981" />;
+      case 'bot':
+        return <Robot size={24} color="#818cf8" />;
+      case 'users':
+        return <Users size={24} color="#f59e0b" />;
+      case 'link':
+        return <Link2 size={24} color="#8b5cf6" />;
+      case 'network':
+        return <Network size={24} color="#ec4899" />;
+      case 'chart':
+        return <BarChart2 size={24} color="#14b8a6" />;
+      case 'alert':
+        return <AlertTriangle size={24} color="#ef4444" />;
       default:
-        return <SpeedIcon sx={{ color: '#f59e0b' }} />;
+        return <Zap size={24} color="#6366f1" />;
     }
   };
 
