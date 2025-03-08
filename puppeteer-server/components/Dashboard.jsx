@@ -264,7 +264,7 @@ export default function Dashboard() {
               <Grid item xs={12} sm={3}>
                 <CardIndicador 
                   title="Solicitudes Totales"
-                  mainValue={totalRequests !== null ? totalRequests.current?.totalRequests : 'Cargando...'}
+                  mainValue={totalRequests !== null ? totalRequests.totalRequests : 'Cargando...'}
                   description="Número total de solicitudes procesadas"
                   icon="activity"
                 />
@@ -272,7 +272,7 @@ export default function Dashboard() {
               <Grid item xs={12} sm={3}>
                 <CardIndicador 
                   title="Total Bots"
-                  mainValue={totalRequests !== null ? totalRequests.current?.botRequests : 'Cargando...'}
+                  mainValue={totalRequests !== null ? totalRequests.botRequests : 'Cargando...'}
                   description="Número total de páginas diferentes visitadas por bots"
                   icon="bot"
                 />
@@ -280,7 +280,7 @@ export default function Dashboard() {
               <Grid item xs={12} sm={3}>
                 <CardIndicador 
                   title="Total Usuarios"
-                  mainValue={totalRequests !== null ? totalRequests.current?.userRequests : 'Cargando...'}
+                  mainValue={totalRequests !== null ? totalRequests.userRequests : 'Cargando...'}
                   description="Número total de páginas diferentes visitadas por usuarios"
                   icon="users"
                 />
@@ -328,6 +328,7 @@ export default function Dashboard() {
           <Grid item xs={6}  >
             <GeoDistributionTable />
           </Grid>
+         
         </Grid>
         
 

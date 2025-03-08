@@ -64,40 +64,15 @@ async function getTotalBotRequests(currentStart, currentEnd, prevStart, prevEnd)
     `;
   }
   const currentResult = await pool.query(currentQuery, currentParams);
-  const current = {
-    totalRequests: parseInt(currentResult.rows[0].total_requests, 10),
-    botRequests: parseInt(currentResult.rows[0].bot_requests, 10),
-    userRequests: parseInt(currentResult.rows[0].user_requests, 10)
-  };
-
-  let previous = null;
-  if (prevStart && prevEnd) {
-    const prevQuery = `
-      SELECT 
-        COUNT(*) as total_requests,
-        COUNT(CASE WHEN isBot = 'true' THEN 1 END) as bot_requests,
-        COUNT(CASE WHEN isBot = 'false' THEN 1 END) as user_requests
-      FROM bot_requests 
-      WHERE timestamp BETWEEN $1 AND $2
-    `;
-    const prevParams = [prevStart, prevEnd];
-    const prevResult = await pool.query(prevQuery, prevParams);
-    previous = {
-      totalRequests: parseInt(prevResult.rows[0].total_requests, 10),
-      botRequests: parseInt(prevResult.rows[0].bot_requests, 10),
-      userRequests: parseInt(prevResult.rows[0].user_requests, 10)
-    };
-  }
-
-  let percentageChange = null;
-  if (previous !== null && previous.totalRequests !== 0) {
-    percentageChange = ((current.totalRequests - previous.totalRequests) / previous.totalRequests) * 100;
-  }
+  
+  const totalRequests = parseInt(currentResult.rows[0].total_requests, 10);
+  const botRequests = parseInt(currentResult.rows[0].bot_requests, 10);
+  const userRequests = parseInt(currentResult.rows[0].user_requests, 10);
 
   return {
-    current,
-    previous,
-    percentageChange
+    totalRequests,
+    botRequests,
+    userRequests
   };
 }
 
