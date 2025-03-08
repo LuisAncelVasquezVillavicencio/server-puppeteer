@@ -215,8 +215,8 @@ export default function Dashboard() {
         {/* Filtro de dominio y botones */}
         <Grid container spacing={2} sx={{ mb: 2 }} alignItems="center">
           {/* Encabezado */}
-          <Grid item xs={12} sm={5}>
-            <Box sx={{ textAlign: 'left', my: 3, display: 'flex', justifyContent: 'left', alignItems: 'center', gap: 2 }}>
+          <Grid item xs={12} sm={4}>
+            <Box sx={{ textAlign: 'left', my: 2, display: 'flex', justifyContent: 'left', alignItems: 'center', gap: 2 }}>
                     <Typography 
                           variant="h4" 
                           sx={{ 
@@ -247,18 +247,16 @@ export default function Dashboard() {
                     </Typography>
             </Box>
             <Typography
-                variant="body2"
-                sx={{
-                  display: 'inline-flex',  
-                  alignItems: 'center',
-                  gap: 1,                   
-                }}
-              >
-                <Sparkles size={24} color="#818cf8" strokeWidth={2} />
-                Monitoreo inteligente de actividad de bots con procesamiento analítico de Cloudflare
+                        variant="body2"
+                        sx={{
+                          display: 'inline-flex',  
+                          alignItems: 'center',
+                          gap: 1,               
+                        }}
+                      >
+                        <Sparkles size={24} color="#818cf8" strokeWidth={2} />
+                        Monitoreo inteligente de actividad de bots con procesamiento analítico de Cloudflare
             </Typography>
-            
-
           </Grid>
 
           <Grid item xs={12} sm={7}>
