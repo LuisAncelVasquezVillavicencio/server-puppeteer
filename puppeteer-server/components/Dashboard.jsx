@@ -21,11 +21,11 @@ import {
 import RotatingText from './RotatingText.jsx';
 import { Sparkles } from 'lucide-react';
 
-import BotActivityChart from './ui/BotActivityChart.jsx';
-import CardIndicador from './ui/CardIndicador.jsx';
-import BotCategoriesChart from './ui/BotCategoriesChart.jsx';
-import DashboardFilters from './ui/DashboardFilters.jsx';
-import GeoDistributionTable from './ui/GeoDistributionTable.jsx';
+import BotActivityChart from './ui/BotActivityChart';
+import CardIndicador from './ui/CardIndicador';
+import BotCategoriesChart from './ui/BotCategoriesChart';
+import DashboardFilters from './ui/DashboardFilters';
+import GeoDistributionTable from './ui/GeoDistributionTable';
 
 // 1. Importa TODAS las funciones del servicio
 import {
