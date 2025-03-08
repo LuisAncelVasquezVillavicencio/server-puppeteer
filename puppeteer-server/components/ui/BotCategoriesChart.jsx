@@ -1,16 +1,16 @@
 import React, { useEffect, useState } from 'react';
 import {
-  BarChart,
-  Bar,
-  XAxis,
-  YAxis,
-  CartesianGrid,
+  PieChart,
+  Pie,
+  Cell,
   Tooltip,
   ResponsiveContainer,
   Legend
 } from 'recharts';
 import { Box } from '@mui/material';
-import { getBotDistributionByType } from '../../services/apiService';
+import { getBotDistributionByCategory } from '../../services/apiService';
+
+const COLORS = ['#0088FE', '#00C49F', '#FFBB28', '#FF8042'];
 
 const BotCategoriesChart = ({ startDate, endDate }) => {
   const [data, setData] = useState([]);
@@ -18,7 +18,7 @@ const BotCategoriesChart = ({ startDate, endDate }) => {
   useEffect(() => {
     const fetchData = async () => {
       try {
-        const result = await getBotDistributionByType(startDate, endDate);
+        const result = await getBotDistributionByCategory(startDate, endDate);
         setData(result);
       } catch (error) {
         console.error('Error fetching bot categories data:', error);
@@ -33,27 +33,28 @@ const BotCategoriesChart = ({ startDate, endDate }) => {
   return (
     <Box sx={{ width: '100%', height: 300 }}>
       <ResponsiveContainer>
-        <BarChart data={data} margin={{ top: 20, right: 30, left: 20, bottom: 5 }}>
-          <CartesianGrid strokeDasharray="3 3" />
-          <XAxis dataKey="bot_type" />
-          <YAxis />
+        <PieChart>
+          <Pie
+            data={data}
+            dataKey="total"
+            nameKey="bot_category"
+            cx="50%"
+            cy="50%"
+            outerRadius={100}
+            label={({ bot_category, percentage }) => `${bot_category} (${percentage}%)`}
+          >
+            {data.map((entry, index) => (
+              <Cell key={`cell-${index}`} fill={COLORS[index % COLORS.length]} />
+            ))}
+          </Pie>
           <Tooltip 
-            formatter={(value, name) => {
-              return name === 'percentage' ? `${value}%` : value;
-            }}
+            formatter={(value, name, props) => [
+              `Total: ${value} (${props.payload.percentage}%)`,
+              name
+            ]}
           />
           <Legend />
-          <Bar 
-            dataKey="total" 
-            fill="#8884d8" 
-            name="Total Requests"
-          />
-          <Bar 
-            dataKey="percentage" 
-            fill="#82ca9d" 
-            name="Percentage (%)"
-          />
-        </BarChart>
+        </PieChart>
       </ResponsiveContainer>
     </Box>
   );
