@@ -27,6 +27,7 @@ import BotCategoriesChart from './ui/BotCategoriesChart';
 import DashboardFilters from './ui/DashboardFilters';
 import GeoDistributionTable from './ui/GeoDistributionTable';
 import MostVisitedURLsTable from './ui/MostVisitedURLsTable';
+import RequestsTable from './ui/RequestsTable';
 
 // 1. Importa TODAS las funciones del servicio
 import {
@@ -340,6 +341,10 @@ export default function Dashboard() {
             </Grid>
             <Grid item xs={12}  md={6}>
               <GeoDistributionTable />
+            </Grid>
+
+            <Grid item xs={12}  md={6}>
+              <RequestsTable />
             </Grid>
             
 
