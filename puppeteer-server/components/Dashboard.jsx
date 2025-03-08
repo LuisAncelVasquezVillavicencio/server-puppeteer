@@ -264,7 +264,7 @@ export default function Dashboard() {
 
           <Grid item xs={12} sm={7}>
             <Grid container spacing={2}>
-              <Grid item xs={12} sm={3}>
+              <Grid item xs={12} sm={6} md={3}>
                 <CardIndicador 
                   title="Solicitudes Totales"
                   mainValue={totalRequests?.totalRequests}
@@ -272,7 +272,7 @@ export default function Dashboard() {
                   icon="activity"
                 />
               </Grid>
-              <Grid item xs={12} sm={3}>
+              <Grid item xs={12} sm={6} md={3}>
                 <CardIndicador 
                   title="Total Bots"
                   mainValue={totalRequests?.botRequests}
@@ -280,7 +280,7 @@ export default function Dashboard() {
                   icon="activity"
                 />
               </Grid>
-              <Grid item xs={12} sm={3}>
+              <Grid item xs={12} sm={6} md={3}>
                 <CardIndicador 
                   title="Total Usuarios"
                   mainValue={totalRequests?.userRequests}
@@ -288,7 +288,7 @@ export default function Dashboard() {
                   icon="activity"
                 />
               </Grid>
-              <Grid item xs={12} sm={3}>
+              <Grid item xs={12} sm={6} md={3}>
                 <CardIndicador 
                   title="URLs Únicas Visitadas"
                   mainValue={uniqueURLs?.current}
