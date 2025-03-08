@@ -19,7 +19,13 @@ const BotCategoriesChart = ({ startDate, endDate }) => {
     const fetchData = async () => {
       try {
         const result = await getBotDistributionByCategory(startDate, endDate);
-        setData(result);
+        // Convert string numbers to actual numbers
+        const formattedData = result.map(item => ({
+          ...item,
+          total: parseInt(item.total),
+          percentage: parseFloat(item.percentage)
+        }));
+        setData(formattedData);
       } catch (error) {
         console.error('Error fetching bot categories data:', error);
       }
@@ -40,20 +46,27 @@ const BotCategoriesChart = ({ startDate, endDate }) => {
             nameKey="bot_category"
             cx="50%"
             cy="50%"
-            outerRadius={100}
-            label={({ bot_category, percentage }) => `${bot_category} (${percentage}%)`}
+            outerRadius={80}
+            innerRadius={0}
+            paddingAngle={5}
+            label={({ name, percent }) => `${name} (${(percent * 100).toFixed(2)}%)`}
           >
             {data.map((entry, index) => (
-              <Cell key={`cell-${index}`} fill={COLORS[index % COLORS.length]} />
+              <Cell 
+                key={`cell-${index}`} 
+                fill={COLORS[index % COLORS.length]}
+              />
             ))}
           </Pie>
           <Tooltip 
             formatter={(value, name, props) => [
-              `Total: ${value} (${props.payload.percentage}%)`,
-              name
+              `${value} (${props.payload.percentage}%)`,
+              props.payload.bot_category
             ]}
           />
-          <Legend />
+          <Legend 
+            formatter={(value, entry) => entry.payload.bot_category}
+          />
         </PieChart>
       </ResponsiveContainer>
     </Box>
