@@ -24,7 +24,13 @@ const theme = createTheme({
     },
     error: {
       main: '#FF3366'
-    }
+    },
+    dialog: {
+      paper: {
+        backgroundColor: '#080f1d',
+        color: '#ffffff',
+      }
+    },
   },
   typography: {
     fontFamily: '"Roboto", "Orbitron", "Helvetica", "Arial", sans-serif',
@@ -39,6 +45,38 @@ const theme = createTheme({
   // Deshabilita las sombras por defecto:
   shadows: Array(25).fill('none'),
   components: {
+    MuiDialog: {
+      styleOverrides: {
+        paper: {
+          backgroundColor: '#080f1d',
+          color: '#ffffff',
+        }
+      }
+    },
+    MuiDialogTitle: {
+      styleOverrides: {
+        root: {
+          color: '#ffffff',
+          borderBottom: '1px solid #7e34e9'
+        }
+      }
+    },
+    MuiDialogContent: {
+      styleOverrides: {
+        root: {
+          backgroundColor: '#1A1A1A',
+          color: '#ffffff'
+        }
+      }
+    },
+    MuiDialogActions: {
+      styleOverrides: {
+        root: {
+          backgroundColor: '#080f1d',
+          borderTop: '1px solid #7e34e9'
+        }
+      }
+    },
     // Ejemplo: estilo “glow” en los Buttons
     MuiButton: {
       styleOverrides: {
