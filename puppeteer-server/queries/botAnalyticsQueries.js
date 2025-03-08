@@ -80,13 +80,13 @@ async function getBotDistributionByType(startDate, endDate) {
 async function getBotDistributionByCategory(startDate, endDate) {
   const query = `
     SELECT 
-      bot_category,
+      label,
       COUNT(*) AS total,
       ROUND((COUNT(*) * 100.0 / (SELECT COUNT(*) FROM bot_requests WHERE timestamp BETWEEN $1 AND $2))::numeric, 2) AS percentage
     FROM bot_requests
     WHERE timestamp BETWEEN $1 AND $2
     AND isBot = 'true'
-    GROUP BY bot_category
+    GROUP BY label
     ORDER BY total DESC;
   `;
   try {
