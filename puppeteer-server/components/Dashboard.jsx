@@ -249,15 +249,7 @@ export default function Dashboard() {
                 <Sparkles size={24} color="#818cf8" strokeWidth={2} />
                 Monitoreo inteligente de actividad de bots con procesamiento analítico de Cloudflare
             </Typography>
-            <DashboardFilters 
-              selectedDomain={selectedDomain}
-              onDomainChange={handleDomainChange}
-              onStartDateChange={setStartDate}
-              onEndDateChange={setEndDate}
-              onEditRoot={handleEditRoot}
-              onEditXML={handleEditXML}
-              onLogConnect={handleConnectLog}
-            />
+            
 
           </Grid>
 
