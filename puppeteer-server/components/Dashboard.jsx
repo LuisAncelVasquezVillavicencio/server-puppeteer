@@ -214,6 +214,8 @@ export default function Dashboard() {
        
         {/* Filtro de dominio y botones */}
         <Grid container spacing={2} sx={{ mb: 2 }} alignItems="center">
+
+
           {/* Encabezado */}
           <Grid item xs={12} sm={5}>
             <Box sx={{ textAlign: 'left', my: 2, display: 'flex', justifyContent: 'left', alignItems: 'center', gap: 2 }}>
@@ -296,9 +298,7 @@ export default function Dashboard() {
             </Grid>
           </Grid>
           
-        </Grid>
-        <Grid container spacing={2} sx={{ mt: 2 }} alignItems="center">
-            <DashboardFilters 
+          <DashboardFilters 
               selectedDomain={selectedDomain}
               onDomainChange={handleDomainChange}
               onStartDateChange={setStartDate}
@@ -307,15 +307,8 @@ export default function Dashboard() {
               onEditXML={handleEditXML}
               onLogConnect={handleConnectLog}
             />
-        </Grid>
-
-       
-
- 
-
-        {/* Gráfica de tendencias (Placeholder) */}
-        <Grid container spacing={2} sx={{ mb: 2 }} >
-          <Grid item xs={6}  >
+            
+            <Grid item xs={12}  >
             <Paper sx={{ p: 2 }} variant="cosmicCard" >
               <Typography variant="subtitle1" gutterBottom>
                 Actividad de Bots
@@ -324,26 +317,32 @@ export default function Dashboard() {
                   <BotActivityChart startDate={startDate} endDate={endDate} />
               </Box>
             </Paper>
-          </Grid>
-          <Grid item xs={6}  >
-            <GeoDistributionTable />
-          </Grid>
-         
+            </Grid>
+            
+            
+            <Grid item xs={12} md={6}>
+                <Card variant="cosmicCard" >
+                  <CardContent>
+                    <Typography variant="h6" gutterBottom>
+                      Bot Categorias Distribución
+                    </Typography>
+                    <BotCategoriesChart startDate={startDate} endDate={endDate} />
+                  </CardContent>
+                </Card>
+            </Grid>
+            
+            <Grid item xs={12}  md={6}>
+              <GeoDistributionTable />
+            </Grid>
+
+
         </Grid>
+      
+
+
         
 
-        <Grid container spacing={2}>
-          <Grid item xs={12} md={6}>
-            <Card variant="cosmicCard" >
-              <CardContent>
-                <Typography variant="h6" gutterBottom>
-                  Bot Categorias Distribución
-                </Typography>
-                <BotCategoriesChart startDate={startDate} endDate={endDate} />
-              </CardContent>
-            </Card>
-          </Grid>
-        </Grid>
+        
 
 
         {/* Sección con dos columnas: Bots Activos / URLs Más Rastreadas */}
