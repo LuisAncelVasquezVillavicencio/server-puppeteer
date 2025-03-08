@@ -25,7 +25,7 @@ import BotActivityChart from './ui/BotActivityChart';
 import CardIndicador from './ui/CardIndicador.jsx';
 import BotCategoriesChart from './ui/BotCategoriesChart';
 import DashboardFilters from './ui/DashboardFilters';
-
+import GeoDistributionTable from './ui/GeoDistributionTable';
 
 // 1. Importa TODAS las funciones del servicio
 import {
@@ -315,7 +315,7 @@ export default function Dashboard() {
 
         {/* Gráfica de tendencias (Placeholder) */}
         <Grid container spacing={2} sx={{ mb: 2 }} >
-          <Grid item xs={12}  >
+          <Grid item xs={6}  >
             <Paper sx={{ p: 2 }} variant="cosmicCard" >
               <Typography variant="subtitle1" gutterBottom>
                 Actividad de Bots
@@ -324,6 +324,9 @@ export default function Dashboard() {
                   <BotActivityChart startDate={startDate} endDate={endDate} />
               </Box>
             </Paper>
+          </Grid>
+          <Grid item xs={6}  >
+            <GeoDistributionTable />
           </Grid>
         </Grid>
         
