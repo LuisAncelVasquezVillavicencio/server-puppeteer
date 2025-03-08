@@ -216,7 +216,7 @@ export default function Dashboard() {
         <Grid container spacing={2} sx={{ mb: 2 }} alignItems="center">
           {/* Encabezado */}
           <Grid item xs={12} sm={5}>
-            <Box sx={{ textAlign: 'left', my: 3, display: 'flex', justifyContent: 'left', alignItems: 'center', gap: 2 }}>
+            <Box sx={{ textAlign: 'left', my: 3, alignItems: 'left', gap: 2 }}>
                     <Typography variant="h4" sx={{ fontWeight: 'bold', color: '#FFF' }}>
                       Cloud Renderer
                     </Typography>
