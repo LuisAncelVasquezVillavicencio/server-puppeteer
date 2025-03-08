@@ -43,7 +43,7 @@ const BotCategoriesChart = ({ startDate, endDate }) => {
           <Pie
             data={data}
             dataKey="total"
-            nameKey="bot_category"
+            nameKey="bot_type"
             cx="50%"
             cy="50%"
             outerRadius={80}
@@ -61,11 +61,11 @@ const BotCategoriesChart = ({ startDate, endDate }) => {
           <Tooltip 
             formatter={(value, name, props) => [
               `${value} (${props.payload.percentage}%)`,
-              props.payload.bot_category
+              props.payload.bot_type
             ]}
           />
           <Legend 
-            formatter={(value, entry) => entry.payload.bot_category}
+            formatter={(value, entry) => entry.payload.bot_type}
           />
         </PieChart>
       </ResponsiveContainer>
