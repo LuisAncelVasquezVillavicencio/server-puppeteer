@@ -266,30 +266,30 @@ export default function Dashboard() {
              
               <Grid item xs={12} sm={3}>
                 <CardIndicador 
-                  title="Total Bots"
-                  mainValue={totalRequests !== null ? totalRequests.current : 'Cargando...'}
-                  description="Total de visitas de bots detectados en el período seleccionado"
+                  title="Solicitudes Totales"
+                  mainValue={totalRequests !== null ? totalRequests.totalRequests : 'Cargando...'}
+                  description="Número total de solicitudes procesadas"
                 />
               </Grid>
               <Grid item xs={12} sm={3}>
                 <CardIndicador 
                   title="Total Bots"
-                  mainValue={uniqueURLs !== null ? uniqueURLs.current : 'Cargando...'}
+                  mainValue={totalRequests !== null ? totalRequests.botRequests : 'Cargando...'}
                   description="Número total de páginas diferentes visitadas por bots"
                 />
               </Grid>
               <Grid item xs={12} sm={3}>
                 <CardIndicador 
-                  title="% Errores"
-                  mainValue={percentageErrors !== null ? `${percentageErrors.current}%` : 'Cargando...'}
-                  description="Porcentaje de errores en las solicitudes de bots"
+                  title="Total Usuarios"
+                  mainValue={totalRequests !== null ? totalRequests.userRequests : 'Cargando...'}
+                  description="Número total de páginas diferentes visitadas por usuarios"
                 />
               </Grid>
               <Grid item xs={12} sm={3}>
                 <CardIndicador 
-                  title="Bot Más Activo"
-                  mainValue={mostActiveBot !== null ? mostActiveBot.bot_type : 'Cargando...'}
-                  description="Bot con mayor número de solicitudes en el período"
+                  title="URLs Únicas Visitadas"
+                  mainValue={uniqueURLs !== null ? uniqueURLs.current : 'Cargando...'}
+                  description="Cantidad de URLs únicas que han sido accedidas."
                 />
               </Grid>
 
