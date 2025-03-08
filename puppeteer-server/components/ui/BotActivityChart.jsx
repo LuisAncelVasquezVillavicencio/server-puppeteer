@@ -47,7 +47,7 @@ const BotActivityChart = ({ startDate, endDate }) => {
             isAnimationActive={true}
             dot={{ r: 3 }}
             activeDot={{ r: 5 }}
-            name="Bot Requests"
+            name="Peticiones Bot "
           />
           <Line
             type="monotone"
@@ -57,7 +57,7 @@ const BotActivityChart = ({ startDate, endDate }) => {
             isAnimationActive={true}
             dot={{ r: 3 }}
             activeDot={{ r: 5 }}
-            name="User Requests"
+            name="Peticiones Usuarios"
           />
         </LineChart>
       </ResponsiveContainer>
