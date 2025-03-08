@@ -53,8 +53,7 @@ const MostVisitedURLsTable = () => {
             gridTemplateColumns: '2fr 0.8fr 0.8fr 1fr',
             gap: 2,
             px: 2,
-            py: 1,
-            borderBottom: '1px solid rgba(255,255,255,0.1)'
+            py: 1
           }}>
             <Typography variant="subtitle2" sx={{ color: 'rgba(255,255,255,0.7)' }}>URL</Typography>
             <Typography variant="subtitle2" sx={{ color: 'rgba(255,255,255,0.7)', textAlign: 'center' }}>Visitas</Typography>
