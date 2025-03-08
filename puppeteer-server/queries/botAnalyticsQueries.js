@@ -73,21 +73,12 @@ async function getBotDistributionByType(startDate, endDate) {
  * @param {string} endDate - Fecha de fin (ISO)
  * @returns {Promise<Array>} Array de objetos con { bot_category, total, percentage }
  */
+// ... existing code ...
+
 async function getBotDistributionByCategory(startDate, endDate) {
   const query = `
     SELECT 
-      CASE 
-        WHEN LOWER(user_agent) LIKE '%whatsapp%' 
-          OR LOWER(user_agent) LIKE '%facebook%' 
-          OR LOWER(user_agent) LIKE '%twitter%' THEN 'Redes Sociales'
-        WHEN LOWER(user_agent) LIKE '%googlebot%' 
-          OR LOWER(user_agent) LIKE '%bingbot%' 
-          OR LOWER(user_agent) LIKE '%yandex%' THEN 'Buscadores'
-        WHEN LOWER(user_agent) LIKE '%python-requests%' 
-          OR LOWER(user_agent) LIKE '%curl%' 
-          OR LOWER(user_agent) LIKE '%ahrefsbot%' THEN 'Scrapers'
-        ELSE 'Otros'
-      END AS bot_category,
+      bot_category,
       COUNT(*) AS total,
       ROUND((COUNT(*) * 100.0 / (SELECT COUNT(*) FROM bot_requests WHERE timestamp BETWEEN $1 AND $2))::numeric, 2) AS percentage
     FROM bot_requests
@@ -103,6 +94,8 @@ async function getBotDistributionByCategory(startDate, endDate) {
     throw error;
   }
 }
+
+// ... rest of the code ...
 
 module.exports = {
   getBotDistributionByType,
