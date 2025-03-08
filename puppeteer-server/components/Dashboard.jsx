@@ -255,12 +255,8 @@ export default function Dashboard() {
                   <Button  onClick={() => handleConnectLog('pm2')} > Log Streaming </Button>
                 </ButtonGroup>
             </Grid>
-          </Grid>
 
-          <Grid item xs={12} sm={8}>
-            <Grid container spacing={2}>
-              {/* Combo de dominio */}
-                  <Grid item xs={12}>
+            <Grid item xs={12}>
                     <Grid container spacing={2} >
                       <Grid item >
                         <FormControl sx={{ m: 1, minWidth: 120 }} size="small">
@@ -298,7 +294,14 @@ export default function Dashboard() {
                           />
                       </Grid>
                     </Grid>
-                  </Grid>
+            </Grid>
+            
+          </Grid>
+
+          <Grid item xs={12} sm={8}>
+            <Grid container spacing={2}>
+              {/* Combo de dominio */}
+              
              
                   <Grid item xs={12} sm={3}>
                       <CardIndicador 
