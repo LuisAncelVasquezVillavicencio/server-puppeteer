@@ -358,65 +358,12 @@ export default function Dashboard() {
         
 
 
-        {/* Sección con dos columnas: Bots Activos / URLs Más Rastreadas */}
-        <Grid container spacing={2}>
-          <Grid item xs={12} md={6}>
-            <Paper sx={{ p: 2 }} variant="cosmicCard" >
-              <Typography variant="subtitle1" gutterBottom>
-                Bots Activos
-              </Typography>
-              <Box sx={{ mt: 1 }}>
-                <Typography>- Googlebot: 4,500 hits</Typography>
-                <Typography>- Bingbot: 1,300 hits</Typography>
-                <Typography>- Facebook: 500 hits</Typography>
-                <Typography>- WhatsApp: 350 hits</Typography>
-              </Box>
-            </Paper>
-          </Grid>
-          <Grid item xs={12} md={6}>
-            <Paper sx={{ p: 2 }}>
-              <Typography variant="subtitle1" gutterBottom>
-                URLs Más Rastreadas
-              </Typography>
-              <Box sx={{ mt: 1 }}>
-                <Typography>1) /producto-share/123 - 450 hits</Typography>
-                <Typography>2) /blog/seo-tips - 300 hits</Typography>
-                <Typography>3) / - 200 hits</Typography>
-                <Typography>4) /robots.txt - 120 hits</Typography>
-              </Box>
-            </Paper>
-          </Grid>
-        </Grid>
+ 
 
-        {/* Otra fila: Errores / Social-WhatsApp */}
-        <Grid container spacing={2} sx={{ mt: 2 }}>
-          <Grid item xs={12} md={6}>
-            <Paper sx={{ p: 2 }}>
-              <Typography variant="subtitle1" gutterBottom>
-                Errores
-              </Typography>
-              <Box sx={{ mt: 1 }}>
-                <Typography>404 - /old-link (50 ocurrencias)</Typography>
-                <Typography>500 - /producto-share/999 (10 ocurrencias)</Typography>
-              </Box>
-            </Paper>
-          </Grid>
-          <Grid item xs={12} md={6}>
-            <Paper sx={{ p: 2 }}>
-              <Typography variant="subtitle1" gutterBottom>
-                Social / WhatsApp
-              </Typography>
-              <Box sx={{ mt: 1 }}>
-                <Typography>/compartido-wsp - 100 hits</Typography>
-                <Typography>/preview-facebook - 80 hits</Typography>
-              </Box>
-            </Paper>
-          </Grid>
-        </Grid>
       </Box>
 
       {/* Modal para Logs */}
-      <Dialog open={openLogModal} onClose={handleCloseLogModal} fullWidth maxWidth="md">
+      <Dialog open={openLogModal} onClose={handleCloseLogModal} fullWidth maxWidth="md" variant="cosmicCard" >
         <DialogTitle>
           {logType === 'startup' ? 'Log de Inicio' : 'Log Streaming Bot'}
         </DialogTitle>
