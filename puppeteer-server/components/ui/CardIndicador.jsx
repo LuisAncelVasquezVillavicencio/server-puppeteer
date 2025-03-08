@@ -1,37 +1,41 @@
 import React from 'react';
 import { Card, CardContent, Typography, Box, Tooltip, IconButton } from '@mui/material';
 import HelpOutlineIcon from '@mui/icons-material/HelpOutline';
-import { 
-  Activity, 
-  Robot, 
-  Users, 
-  Link2, 
-  Network,
-  BarChart2,
-  AlertTriangle,
-  Zap
-} from 'lucide-react';
+
+import HelpOutlineIcon from '@mui/icons-material/HelpOutline';
+import ActivityIcon from '@mui/icons-material/Timeline';
+import RobotIcon from '@mui/icons-material/SmartToy';
+import UsersIcon from '@mui/icons-material/Group';
+import LinkIcon from '@mui/icons-material/Link';
+import NetworkIcon from '@mui/icons-material/Hub';
+import ChartIcon from '@mui/icons-material/BarChart';
+import AlertIcon from '@mui/icons-material/Warning';
+import BoltIcon from '@mui/icons-material/Bolt';
+
+  
+
+  
 
 function CardIndicador({ title, mainValue, description, icon }) {
   // Icon mapping based on icon prop
   const getIcon = () => {
     switch (icon) {
       case 'activity':
-        return <Activity size={24} color="#10b981" />;
+        return <ActivityIcon sx={{ color: "#10b981" }} />;
       case 'bot':
-        return <Activity size={24} color="#10b981" />;
+        return <RobotIcon sx={{ color: "#818cf8" }} />;
       case 'users':
-        return <Users size={24} color="#f59e0b" />;
+        return <UsersIcon sx={{ color: "#f59e0b" }} />;
       case 'link':
-        return <Link2 size={24} color="#8b5cf6" />;
+        return <LinkIcon sx={{ color: "#8b5cf6" }} />;
       case 'network':
-        return <Network size={24} color="#ec4899" />;
+        return <NetworkIcon sx={{ color: "#ec4899" }} />;
       case 'chart':
-        return <BarChart2 size={24} color="#14b8a6" />;
+        return <ChartIcon sx={{ color: "#14b8a6" }} />;
       case 'alert':
-        return <AlertTriangle size={24} color="#ef4444" />;
+        return <AlertIcon sx={{ color: "#ef4444" }} />;
       default:
-        return <Zap size={24} color="#6366f1" />;
+        return <BoltIcon sx={{ color: "#6366f1" }} />;
     }
   };
 
