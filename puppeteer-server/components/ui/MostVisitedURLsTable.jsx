@@ -44,7 +44,7 @@ const MostVisitedURLsTable = () => {
   ];
 
   return (
-    <Card variant="cosmicCard">
+    <Card variant="cosmicCard" sx={{ height: '400px' }} >
       <CardContent>
         <Box sx={{ display: 'flex', alignItems: 'center', gap: 1, mb: 2 }}>
           <LinkIcon size={20} color="#818cf8" />
