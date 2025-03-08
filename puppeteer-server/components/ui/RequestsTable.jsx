@@ -98,7 +98,7 @@ function RequestsTable() {
           />
         </Box>
 
-        <Paper sx={{ width: '100%', overflow: 'hidden' }}>
+        <Paper sx={{ width: '100%', overflow: 'hidden' , background: 'transparent' }}>
           <Table size="small">
             <TableHead>
               <TableRow>
