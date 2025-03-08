@@ -288,7 +288,7 @@ export default function Dashboard() {
               <Grid item xs={12} sm={3}>
                 <CardIndicador 
                   title="URLs Únicas Visitadas"
-                  mainValue={uniqueURLs.current}
+                  mainValue={uniqueURLs?.current}
                   description="Cantidad de URLs únicas que han sido accedidas"
                   icon="activity"
                 />
