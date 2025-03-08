@@ -45,28 +45,60 @@ async function getTotalBotRequests(currentStart, currentEnd, prevStart, prevEnd)
   let currentQuery = '';
   let currentParams = [];
   if (currentStart && currentEnd) {
-    currentQuery = 'SELECT COUNT(*) as total FROM bot_requests WHERE timestamp BETWEEN $1 AND $2';
+    currentQuery = `
+      SELECT 
+        COUNT(*) as total_requests,
+        COUNT(CASE WHEN isBot = 'true' THEN 1 END) as bot_requests,
+        COUNT(CASE WHEN isBot = 'false' THEN 1 END) as user_requests
+      FROM bot_requests 
+      WHERE timestamp BETWEEN $1 AND $2
+    `;
     currentParams = [currentStart, currentEnd];
   } else {
-    currentQuery = 'SELECT COUNT(*) as total FROM bot_requests';
+    currentQuery = `
+      SELECT 
+        COUNT(*) as total_requests,
+        COUNT(CASE WHEN isBot = 'true' THEN 1 END) as bot_requests,
+        COUNT(CASE WHEN isBot = 'false' THEN 1 END) as user_requests
+      FROM bot_requests
+    `;
   }
   const currentResult = await pool.query(currentQuery, currentParams);
-  const currentTotal = parseInt(currentResult.rows[0].total, 10);
+  const current = {
+    totalRequests: parseInt(currentResult.rows[0].total_requests, 10),
+    botRequests: parseInt(currentResult.rows[0].bot_requests, 10),
+    userRequests: parseInt(currentResult.rows[0].user_requests, 10)
+  };
 
-  let previousTotal = null;
+  let previous = null;
   if (prevStart && prevEnd) {
-    const prevQuery = 'SELECT COUNT(*) as total FROM bot_requests WHERE timestamp BETWEEN $1 AND $2';
+    const prevQuery = `
+      SELECT 
+        COUNT(*) as total_requests,
+        COUNT(CASE WHEN isBot = 'true' THEN 1 END) as bot_requests,
+        COUNT(CASE WHEN isBot = 'false' THEN 1 END) as user_requests
+      FROM bot_requests 
+      WHERE timestamp BETWEEN $1 AND $2
+    `;
     const prevParams = [prevStart, prevEnd];
     const prevResult = await pool.query(prevQuery, prevParams);
-    previousTotal = parseInt(prevResult.rows[0].total, 10);
+    previous = {
+      totalRequests: parseInt(prevResult.rows[0].total_requests, 10),
+      botRequests: parseInt(prevResult.rows[0].bot_requests, 10),
+      userRequests: parseInt(prevResult.rows[0].user_requests, 10)
+    };
   }
 
   let percentageChange = null;
-  if (previousTotal !== null && previousTotal !== 0) {
-    percentageChange = ((currentTotal - previousTotal) / previousTotal) * 100;
+  if (previous !== null && previous.totalRequests !== 0) {
+    percentageChange = ((current.totalRequests - previous.totalRequests) / previous.totalRequests) * 100;
   }
 
-  return { current: currentTotal, previous: previousTotal, percentageChange };
+  return {
+    current,
+    previous,
+    percentageChange
+  };
 }
 
 /**
@@ -176,6 +208,7 @@ async function getMostActiveBot(currentStart, currentEnd) {
       SELECT ip, bot_type, COUNT(*) AS total_requests
       FROM bot_requests
       WHERE ip IS NOT NULL
+        AND isBot = 'true'
         AND timestamp BETWEEN $1 AND $2
       GROUP BY ip, bot_type
       ORDER BY total_requests DESC
@@ -187,6 +220,7 @@ async function getMostActiveBot(currentStart, currentEnd) {
       SELECT ip, bot_type, COUNT(*) AS total_requests
       FROM bot_requests
       WHERE ip IS NOT NULL
+        AND isBot = 'true'
       GROUP BY ip, bot_type
       ORDER BY total_requests DESC
       LIMIT 1;
@@ -196,7 +230,6 @@ async function getMostActiveBot(currentStart, currentEnd) {
   const result = await pool.query(query, params);
   return result.rows[0] || null;
 }
-
 
 module.exports = {
   getTotalBotRequests,
