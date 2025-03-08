@@ -264,38 +264,34 @@ export default function Dashboard() {
               {/* Combo de dominio */}
               
              
-                  <Grid item xs={12} sm={3}>
-                      <CardIndicador 
-                        title="Total de Solicitudes"
-                        mainValue={totalRequests !== null ? totalRequests.current : 'Cargando...'}
-                        extraTitleInfo="Bots"
-                        extraInfo={totalRequests !== null ? totalRequests.current : 'Cargando...'}
-                      />
-                  </Grid>
-                  <Grid item xs={12} sm={3}>
-                      <CardIndicador 
-                        title="URLs Únicas"
-                        mainValue={uniqueURLs !== null ? uniqueURLs.current : 'Cargando...'}
-                        extraTitleInfo="Bots"
-                        extraInfo={`${uniqueURLs !== null ? uniqueURLs.percentageChange : '0'}%`}
-                      />
-                  </Grid>
-                  <Grid item xs={12} sm={3}>
-                    <CardIndicador 
-                      title="Usuarios Unicos"
-                      mainValue={percentageErrors !== null ? `${percentageErrors.current}%` : 'Cargando...'}
-                      extraTitleInfo="Bots"
-                      extraInfo="3"
-                    />
-                  </Grid>
-                  <Grid item xs={12} sm={3}>
-                    <CardIndicador 
-                      title="Bot Más Activo"
-                      mainValue={mostActiveBot !== null ? mostActiveBot.bot_type : 'Cargando...'} 
-                      extraTitleInfo= {mostActiveBot !== null ? mostActiveBot.ip  : 'Cargando...'}
-                      extraInfo={mostActiveBot !== null ? mostActiveBot.total_requests : '-'} Peticiones
-                    />
-                   </Grid>
+              <Grid item xs={12} sm={3}>
+                <CardIndicador 
+                  title="Total Bots"
+                  mainValue={totalRequests !== null ? totalRequests.current : 'Cargando...'}
+                  description="Total de visitas de bots detectados en el período seleccionado"
+                />
+              </Grid>
+              <Grid item xs={12} sm={3}>
+                <CardIndicador 
+                  title="Total Bots"
+                  mainValue={uniqueURLs !== null ? uniqueURLs.current : 'Cargando...'}
+                  description="Número total de páginas diferentes visitadas por bots"
+                />
+              </Grid>
+              <Grid item xs={12} sm={3}>
+                <CardIndicador 
+                  title="% Errores"
+                  mainValue={percentageErrors !== null ? `${percentageErrors.current}%` : 'Cargando...'}
+                  description="Porcentaje de errores en las solicitudes de bots"
+                />
+              </Grid>
+              <Grid item xs={12} sm={3}>
+                <CardIndicador 
+                  title="Bot Más Activo"
+                  mainValue={mostActiveBot !== null ? mostActiveBot.bot_type : 'Cargando...'}
+                  description="Bot con mayor número de solicitudes en el período"
+                />
+              </Grid>
 
         
                 
