@@ -288,7 +288,7 @@ async function saveRequestData(data) {
         label,     // bot_type
         category,  // bot_category
         logo  ,    // bot_logo,
-        isBot
+        data.isBot
     ];
     
     try {
