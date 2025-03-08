@@ -218,7 +218,7 @@ export default function Dashboard() {
 
 
           {/* Encabezado */}
-          <Grid item xs={12} sm={5}>
+          <Grid item xs={12} sm={12} md={5}>
             <Box sx={{ textAlign: 'left', my: 2, display: 'flex', justifyContent: 'left', alignItems: 'center', gap: 2 }}>
                     <Typography 
                           variant="h4" 
@@ -262,9 +262,9 @@ export default function Dashboard() {
             </Typography>
           </Grid>
 
-          <Grid item xs={12} sm={7}>
+          <Grid item xs={12} sm={12} md={7}>
             <Grid container spacing={2}>
-              <Grid item xs={12} sm={6} md={3}>
+              <Grid item xs={12} sm={6} md={6}>
                 <CardIndicador 
                   title="Solicitudes Totales"
                   mainValue={totalRequests?.totalRequests}
@@ -272,7 +272,7 @@ export default function Dashboard() {
                   icon="activity"
                 />
               </Grid>
-              <Grid item xs={12} sm={6} md={3}>
+              <Grid item xs={12} sm={6} md={6}>
                 <CardIndicador 
                   title="Total Bots"
                   mainValue={totalRequests?.botRequests}
@@ -280,7 +280,7 @@ export default function Dashboard() {
                   icon="activity"
                 />
               </Grid>
-              <Grid item xs={12} sm={6} md={3}>
+              <Grid item xs={12} sm={6} md={6}>
                 <CardIndicador 
                   title="Total Usuarios"
                   mainValue={totalRequests?.userRequests}
@@ -288,7 +288,7 @@ export default function Dashboard() {
                   icon="activity"
                 />
               </Grid>
-              <Grid item xs={12} sm={6} md={3}>
+              <Grid item xs={12} sm={6} md={6}>
                 <CardIndicador 
                   title="URLs Únicas Visitadas"
                   mainValue={uniqueURLs?.current}
