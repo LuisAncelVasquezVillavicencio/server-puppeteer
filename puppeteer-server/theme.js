@@ -45,6 +45,45 @@ const theme = createTheme({
   // Deshabilita las sombras por defecto:
   shadows: Array(25).fill('none'),
   components: {
+    MuiTable: {
+      styleOverrides: {
+        root: {
+          backgroundColor: 'transparent',
+        }
+      }
+    },
+    MuiTableCell: {
+      styleOverrides: {
+        root: {
+          borderColor: 'rgba(255, 255, 255, 0.1)',
+          color: '#fff'
+        },
+        head: {
+          color: 'rgba(255, 255, 255, 0.7)',
+          fontWeight: 500,
+          backgroundColor: 'transparent'
+        }
+      }
+    },
+    MuiTableRow: {
+      styleOverrides: {
+        root: {
+          '&:hover': {
+            backgroundColor: 'rgba(255, 255, 255, 0.03) !important'
+          }
+        }
+      }
+    },
+    MuiPaper: {
+      styleOverrides: {
+        root: {
+          '&.MuiTableContainer-root': {
+            backgroundColor: 'transparent',
+            backgroundImage: 'none'
+          }
+        }
+      }
+    },
     MuiDialog: {
       styleOverrides: {
         paper: {
