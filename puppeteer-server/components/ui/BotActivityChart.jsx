@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useEffect, useState } from 'react';
 import {
   LineChart,
   Line,
@@ -10,17 +10,25 @@ import {
   Legend
 } from 'recharts';
 import { Box } from '@mui/material';
-const BotActivityChart = () => {
-  // Datos de ejemplo; reemplázalos con tus datos reales
-  const data = [
-    { fecha: '03/01', total: 10 },
-    { fecha: '03/02', total: 15 },
-    { fecha: '03/03', total: 12 },
-    { fecha: '03/04', total: 20 },
-    { fecha: '03/05', total: 25 },
-    { fecha: '03/06', total: 18 },
-    { fecha: '03/07', total: 22 },
-  ];
+import { getDailyBotActivity } from '../../services/apiService';
+
+const BotActivityChart = ({ startDate, endDate }) => {
+  const [data, setData] = useState([]);
+
+  useEffect(() => {
+    const fetchData = async () => {
+      try {
+        const result = await getDailyBotActivity(startDate, endDate);
+        setData(result);
+      } catch (error) {
+        console.error('Error fetching bot activity data:', error);
+      }
+    };
+
+    if (startDate && endDate) {
+      fetchData();
+    }
+  }, [startDate, endDate]);
 
   return (
     <Box sx={{ width: '100%', height: 300 }}>
@@ -39,6 +47,7 @@ const BotActivityChart = () => {
             isAnimationActive={true}
             dot={{ r: 3 }}
             activeDot={{ r: 5 }}
+            name="Total Requests"
           />
         </LineChart>
       </ResponsiveContainer>

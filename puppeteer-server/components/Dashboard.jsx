@@ -352,7 +352,7 @@ export default function Dashboard() {
                 Actividad de Bots
               </Typography>
               <Box>
-                  <BotActivityChart />
+                  <BotActivityChart startDate={startDate} endDate={endDate} />
               </Box>
             </Paper>
           </Grid>
