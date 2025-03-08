@@ -274,7 +274,7 @@ export default function Dashboard() {
                   title="Total Bots"
                   mainValue={totalRequests?.botRequests}
                   description="Número total de páginas diferentes visitadas por bots"
-                  icon="bot"
+                  icon="activity"
                 />
               </Grid>
               <Grid item xs={12} sm={3}>
