@@ -25,6 +25,8 @@ import { Sparkles } from 'lucide-react';
 import BotActivityChart from './ui/BotActivityChart';
 import CardIndicador from './ui/CardIndicador.jsx';
 import BotCategoriesChart from './ui/BotCategoriesChart';
+import DashboardFilters from './ui/DashboardFilters';
+
 
 // 1. Importa TODAS las funciones del servicio
 import {
@@ -247,54 +249,15 @@ export default function Dashboard() {
                 <Sparkles size={24} color="#818cf8" strokeWidth={2} />
                 Monitoreo inteligente de actividad de bots con procesamiento analítico de Cloudflare
             </Typography>
-            <Grid item xs={12} container spacing={1}>
-                <ButtonGroup variant="text" aria-label="Basic button group">
-                  <Button onClick={handleEditRoot} >Editar root.txt </Button>
-                  <Button onClick={handleEditXML} >Editar XML Sitemap </Button>
-                  <Button  onClick={() => handleConnectLog('startup')} > Log Inicio </Button>
-                  <Button  onClick={() => handleConnectLog('pm2')} > Log Streaming </Button>
-                </ButtonGroup>
-            </Grid>
-
-            <Grid item xs={12}>
-                    <Grid container spacing={2} >
-                      <Grid item >
-                        <FormControl sx={{ m: 1, minWidth: 120 }} size="small">
-                            <InputLabel id="demo-select-small-label">Dominio</InputLabel>
-                            <Select
-                              value={selectedDomain}
-                              labelId="demo-select-small-label"
-                              label="Age"
-                              onChange={handleDomainChange}
-                            >
-                              <MenuItem value="tudominio.com">tudominio.com</MenuItem>
-                              <MenuItem value="otrodominio.com">otrodominio.com</MenuItem>
-                              <MenuItem value="tudominio.com">tudominio.com</MenuItem>
-                              <MenuItem value="otrodominio.com">otrodominio.com</MenuItem>
-                            </Select>
-                        </FormControl>
-                      </Grid>
-                      {/* Controles para seleccionar fecha */}
-                      <Grid item >
-                          <TextField
-                            label="Fecha de Inicio"
-                            type="date"
-                            InputLabelProps={{ shrink: true }}
-                            onChange={(e) => setStartDate(new Date(e.target.value).toISOString())}
-                            size="small"
-                          />
-                      </Grid>
-                      <Grid item >
-                          <TextField
-                            label="Fecha de Fin"
-                            type="date"
-                            InputLabelProps={{ shrink: true }}
-                            onChange={(e) => setEndDate(new Date(e.target.value).toISOString())}
-                            size="small"
-                          />
-                      </Grid>
-                    </Grid>
-            </Grid>
+            <DashboardFilters 
+              selectedDomain={selectedDomain}
+              onDomainChange={handleDomainChange}
+              onStartDateChange={setStartDate}
+              onEndDateChange={setEndDate}
+              onEditRoot={handleEditRoot}
+              onEditXML={handleEditXML}
+              onLogConnect={handleConnectLog}
+            />
 
           </Grid>
 
