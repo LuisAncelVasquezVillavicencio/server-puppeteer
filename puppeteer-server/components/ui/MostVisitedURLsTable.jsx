@@ -74,7 +74,7 @@ const MostVisitedURLsTable = () => {
                 '&:hover': {
                   backgroundColor: 'rgba(255,255,255,0.03)'
                 },
-                borderBottom: index !== mockData.length - 1 ? '1px solid rgba(255,255,255,0.1)' : 'none'
+                borderBottom: index !== urlData.length - 1 ? '1px solid rgba(255,255,255,0.1)' : 'none'
               }}>
                 <Link 
                   href={row.url} 
