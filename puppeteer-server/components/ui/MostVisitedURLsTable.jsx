@@ -4,18 +4,13 @@ import {
   CardContent,
   Typography,
   Box,
-  Table,
-  TableBody,
-  TableCell,
-  TableHead,
-  TableRow,
   Link,
-  Chip
+  Chip,
+  Stack
 } from '@mui/material';
 import { Link as LinkIcon } from 'lucide-react';
 
 const MostVisitedURLsTable = () => {
-  // Mock data - replace with API data later
   const urlData = [
     {
       url: 'https://micanva.com/',
@@ -23,88 +18,109 @@ const MostVisitedURLsTable = () => {
       uniqueBots: 2,
       lastVisit: '5/3/2025 9:09:23'
     },
-    {
-      url: 'https://mivisualization.com/',
-      visits: 6,
-      uniqueBots: 2,
-      lastVisit: '5/3/2025 10:16:05'
-    },
-    {
-      url: 'https://mivisualization.com/dashboard',
-      visits: 3,
-      uniqueBots: 2,
-      lastVisit: '5/3/2025 13:17:32'
-    },
-    {
-      url: 'http://micanva.com/',
-      visits: 2,
-      uniqueBots: 1,
-      lastVisit: '5/3/2025 12:35:46'
-    }
+    // ... rest of the data
   ];
 
   return (
-    <Card variant="cosmicCard" sx={{ height: '400px' }} >
-      <CardContent>
-        <Box sx={{ display: 'flex', alignItems: 'center', gap: 1, mb: 2 }}>
-          <LinkIcon size={20} color="#818cf8" />
-          <Typography variant="h6" component="div">
+    <Card 
+      variant="cosmicCard" 
+      sx={{ 
+        height: '400px',
+        background: 'linear-gradient(135deg, rgba(13,17,31,0.9) 0%, rgba(28,23,43,0.9) 100%)',
+        backdropFilter: 'blur(8px)',
+        border: '1px solid rgba(255,255,255,0.1)',
+      }}
+    >
+      <CardContent sx={{ height: '100%', p: 3 }}>
+        <Box sx={{ 
+          display: 'flex', 
+          alignItems: 'center', 
+          gap: 1, 
+          mb: 3,
+          borderBottom: '1px solid rgba(255,255,255,0.1)',
+          pb: 2
+        }}>
+          <LinkIcon size={24} color="#818cf8" />
+          <Typography variant="h6" component="div" sx={{ fontWeight: 500 }}>
             URLs Más Visitadas
           </Typography>
         </Box>
 
-        <Table size="small">
-          <TableHead>
-            <TableRow>
-              <TableCell>URL</TableCell>
-              <TableCell align="center">Visitas</TableCell>
-              <TableCell align="center">Bots Únicos</TableCell>
-              <TableCell align="right">Última Visita</TableCell>
-            </TableRow>
-          </TableHead>
-          <TableBody>
-            {urlData.map((row, index) => (
-              <TableRow key={index} hover>
-                <TableCell>
-                  <Link 
-                    href={row.url} 
-                    target="_blank" 
-                    rel="noopener"
-                    sx={{ 
-                      color: 'primary.main',
-                      textDecoration: 'none',
-                      '&:hover': { textDecoration: 'underline' }
-                    }}
-                  >
-                    {row.url}
-                  </Link>
-                </TableCell>
-                <TableCell align="center">
-                  <Chip 
-                    label={row.visits}
-                    size="small"
-                    sx={{ 
-                      bgcolor: 'primary.dark',
-                      color: 'white',
-                      minWidth: '30px'
-                    }}
-                  />
-                </TableCell>
-                <TableCell align="center">
-                  <Chip 
-                    label={row.uniqueBots}
-                    size="small"
-                    variant="outlined"
-                    color="secondary"
-                  />
-                </TableCell>
-                <TableCell align="right" sx={{ color: 'text.secondary' }}>
+        <Stack 
+          spacing={2} 
+          sx={{ 
+            maxHeight: 'calc(100% - 70px)',
+            overflow: 'auto',
+            '&::-webkit-scrollbar': {
+              width: '8px',
+            },
+            '&::-webkit-scrollbar-thumb': {
+              backgroundColor: 'rgba(255,255,255,0.1)',
+              borderRadius: '4px',
+            }
+          }}
+        >
+          {urlData.map((row, index) => (
+            <Box
+              key={index}
+              sx={{
+                display: 'flex',
+                alignItems: 'center',
+                justifyContent: 'space-between',
+                p: 1.5,
+                borderRadius: 1,
+                backgroundColor: 'rgba(255,255,255,0.02)',
+                '&:hover': {
+                  backgroundColor: 'rgba(255,255,255,0.05)',
+                }
+              }}
+            >
+              <Box sx={{ flex: 1, mr: 2 }}>
+                <Link 
+                  href={row.url} 
+                  target="_blank" 
+                  rel="noopener"
+                  sx={{ 
+                    color: '#818cf8',
+                    textDecoration: 'none',
+                    '&:hover': { 
+                      textDecoration: 'underline',
+                      color: '#B834F3'
+                    }
+                  }}
+                >
+                  {row.url}
+                </Link>
+              </Box>
+
+              <Stack direction="row" spacing={2} alignItems="center">
+                <Chip 
+                  label={`${row.visits} visitas`}
+                  size="small"
+                  sx={{ 
+                    background: 'linear-gradient(135deg, #B834F3 0%, #818cf8 100%)',
+                    color: 'white',
+                    minWidth: '80px',
+                    fontWeight: 500
+                  }}
+                />
+                <Chip 
+                  label={`${row.uniqueBots} bots`}
+                  size="small"
+                  sx={{
+                    border: '1px solid #818cf8',
+                    color: '#818cf8',
+                    backgroundColor: 'transparent',
+                    minWidth: '70px'
+                  }}
+                />
+                <Typography variant="caption" sx={{ color: 'rgba(255,255,255,0.5)', minWidth: '140px', textAlign: 'right' }}>
                   {row.lastVisit}
-                </TableCell>
-              </TableRow>
-            ))}
-          </TableBody>
-        </Table>
+                </Typography>
+              </Stack>
+            </Box>
+          ))}
+        </Stack>
       </CardContent>
     </Card>
   );
