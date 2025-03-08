@@ -1,7 +1,7 @@
 const { renderizarPagina } = require('../services/puppeteerService');
 const { actualizarSitemap } = require('../services/sitemapService');
 const { getCache, setCache } = require('../services/cacheService');
-const { saveRequestData } = require('../queries/dbService'); 
+//const { saveRequestData } = require('../queries/dbService'); 
 
 async function renderHandler(req, res) {
     if (req.method !== 'POST') {
@@ -29,7 +29,7 @@ async function renderHandler(req, res) {
             // Medir tiempo de obtención desde caché
             requestData.renderTime = 0; // Indica que proviene de caché
             // Procesar requestData en segundo plano sin afectar la respuesta
-            setImmediate(() => saveRequestData(requestData));
+            //setImmediate(() => saveRequestData(requestData));
             return res.status(200).send(cachedHtml);
         }
 
@@ -50,7 +50,7 @@ async function renderHandler(req, res) {
         await setCache(cacheKey, content);
 
         // Procesar requestData en segundo plano sin afectar la respuesta
-        setImmediate(() => saveRequestData(requestData));
+        //setImmediate(() => saveRequestData(requestData));
         
         res.status(200).send(content);
     } catch (error) {
@@ -58,7 +58,7 @@ async function renderHandler(req, res) {
 
         // Agregar error a requestData y guardarlo en PostgreSQL
         requestData.error = error.message;
-        setImmediate(() => saveRequestData(requestData));
+        //setImmediate(() => saveRequestData(requestData));
         
         res.status(500).send(`Error al renderizar la página: ${error.message}`);
     }

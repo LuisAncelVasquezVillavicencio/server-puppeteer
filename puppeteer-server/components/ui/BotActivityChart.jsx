@@ -41,13 +41,23 @@ const BotActivityChart = ({ startDate, endDate }) => {
           <Legend />
           <Line
             type="monotone"
-            dataKey="total"
+            dataKey="bot_requests"
             stroke="#8884d8"
             strokeWidth={2}
             isAnimationActive={true}
             dot={{ r: 3 }}
             activeDot={{ r: 5 }}
-            name="Total Requests"
+            name="Bot Requests"
+          />
+          <Line
+            type="monotone"
+            dataKey="user_requests"
+            stroke="#82ca9d"
+            strokeWidth={2}
+            isAnimationActive={true}
+            dot={{ r: 3 }}
+            activeDot={{ r: 5 }}
+            name="User Requests"
           />
         </LineChart>
       </ResponsiveContainer>

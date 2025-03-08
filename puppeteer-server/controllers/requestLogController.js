@@ -3,12 +3,10 @@ const { saveRequestData } = require('../queries/dbService');
 async function logRequestHandler(req, res) {
     try {
         const requestData = req.body;
-        
         // Validación básica
         if (!requestData || !requestData.url) {
             return res.status(400).json({ error: 'Datos de solicitud inválidos' });
         }
-
         // Procesar los datos en segundo plano
         setImmediate(() => saveRequestData(requestData));
         
