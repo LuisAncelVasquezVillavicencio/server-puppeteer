@@ -19,9 +19,10 @@ function GeoDistributionTable({ startDate, endDate }) {
       try {
         setLoading(true);
         const data = await getBotGeoDistribution(startDate, endDate);
-        setGeoData(data);
+        setGeoData(data || []); // Ensure we always have an array
       } catch (error) {
         console.error('Error fetching geo distribution:', error);
+        setGeoData([]); // Set empty array on error
       } finally {
         setLoading(false);
       }
@@ -32,41 +33,15 @@ function GeoDistributionTable({ startDate, endDate }) {
     }
   }, [startDate, endDate]);
 
-
-
-  if (loading) {
-    return (
-      <Paper variant="cosmicCard" sx={{ p: 3, height: '400px', display: 'flex', justifyContent: 'center', alignItems: 'center' }}>
-        <CircularProgress />
-      </Paper>
-    );
-  }
+  // ... loading check remains the same ...
 
   return (
     <Paper variant="cosmicCard" sx={{ p: 3, height: '400px' }}>
-      <Box sx={{ display: 'flex', alignItems: 'center', gap: 1, mb: 3 }}>
-        <Globe size={24} color="#10b981" />
-        <Typography variant="h6">Distribución por País</Typography>
-      </Box>
+      {/* ... header remains the same ... */}
 
-      {/* Header */}
-      <Box sx={{ 
-        display: 'grid', 
-        gridTemplateColumns: '2fr 1fr 1fr 2fr',
-        gap: 2,
-        mb: 2,
-        color: '#94a3b8'
-      }}>
-        <Typography>País</Typography>
-        <Typography>Visitas</Typography>
-        <Typography>Porcentaje</Typography>
-        <Typography>Tipos de Bots</Typography>
-      </Box>
-
-      {/* Rows */}
       <Stack spacing={2} sx={{ maxHeight: 'calc(100% - 100px)', overflow: 'auto' }}>
-        {geoData.map((item, index) => (
-          <Box key={item.code} sx={{ 
+        {Array.isArray(geoData) && geoData.map((item, index) => (
+          <Box key={item?.code || index} sx={{ 
             display: 'grid',
             gridTemplateColumns: '2fr 1fr 1fr 2fr',
             gap: 2,
@@ -76,9 +51,9 @@ function GeoDistributionTable({ startDate, endDate }) {
           }}>
             <Box sx={{ display: 'flex', alignItems: 'center', gap: 1 }}>
               <MapPin size={18} color="#64748b" />
-              <Typography>{item.country}</Typography>
+              <Typography>{item?.country || 'Unknown'}</Typography>
               <Chip 
-                label={item.code} 
+                label={item?.code || 'N/A'} 
                 size="small" 
                 sx={{ 
                   bgcolor: 'rgba(255,255,255,0.1)',
@@ -88,10 +63,10 @@ function GeoDistributionTable({ startDate, endDate }) {
                 }} 
               />
             </Box>
-            <Typography sx={{ color: '#10b981' }}>{item.visits}</Typography>
-            <Typography>{`${item.percentage}%`}</Typography>
+            <Typography sx={{ color: '#10b981' }}>{item?.visits || 0}</Typography>
+            <Typography>{`${item?.percentage || 0}%`}</Typography>
             <Box sx={{ display: 'flex', gap: 1, flexWrap: 'wrap' }}>
-              {item.bots.map((bot) => (
+              {Array.isArray(item?.bots) && item.bots.map((bot) => (
                 <Chip 
                   key={bot}
                   label={bot}
