@@ -6,7 +6,7 @@ import {
   Chip,
   Stack,
   Switch,
-  FormControlLabel // Agregado este import
+  FormControlLabel 
 } from '@mui/material';
 import { Globe, MapPin } from 'lucide-react';
 import { getBotGeoDistribution } from '../../services/apiService';
