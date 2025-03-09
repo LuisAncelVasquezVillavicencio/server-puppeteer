@@ -13,7 +13,7 @@ import { getBotGeoDistribution } from '../../services/apiService';
 function GeoDistributionTable({ startDate, endDate }) {
   const [geoData, setGeoData] = useState([]);
   const [loading, setLoading] = useState(true);
-  
+
   useEffect(() => {
     const fetchGeoData = async () => {
       try {
@@ -89,7 +89,7 @@ function GeoDistributionTable({ startDate, endDate }) {
               />
             </Box>
             <Typography sx={{ color: '#10b981' }}>{item.visits}</Typography>
-            <Typography>{`${item.percentage.toFixed(1)}%`}</Typography>
+            <Typography>{`${item.percentage}%`}</Typography>
             <Box sx={{ display: 'flex', gap: 1, flexWrap: 'wrap' }}>
               {item.bots.map((bot) => (
                 <Chip 
