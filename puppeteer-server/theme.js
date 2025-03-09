@@ -45,6 +45,25 @@ const theme = createTheme({
   // Deshabilita las sombras por defecto:
   shadows: Array(25).fill('none'),
   components: {
+    MuiCssBaseline: {
+      styleOverrides: {
+        '*::-webkit-scrollbar': {
+          width: '8px',
+          background: 'transparent'
+        },
+        '*::-webkit-scrollbar-thumb': {
+          background: 'rgba(16, 185, 129, 0.2)',
+          borderRadius: '4px',
+          '&:hover': {
+            background: 'rgba(16, 185, 129, 0.4)'
+          }
+        },
+        '*::-webkit-scrollbar-track': {
+          background: 'rgba(255, 255, 255, 0.05)',
+          borderRadius: '4px'
+        }
+      }
+    }, 
     MuiTable: {
       styleOverrides: {
         root: {

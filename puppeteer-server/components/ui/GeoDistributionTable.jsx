@@ -37,7 +37,22 @@ function GeoDistributionTable({ startDate, endDate }) {
 
   return (
     <Paper variant="cosmicCard" sx={{ p: 3, height: '400px' }}>
-      {/* ... header remains the same ... */}
+      <Box sx={{ display: 'flex', alignItems: 'center', gap: 1, mb: 3 }}>
+        <Globe size={24} color="#10b981" />
+        <Typography variant="h6">Distribución por País</Typography>
+      </Box>
+      <Box sx={{ 
+        display: 'grid', 
+        gridTemplateColumns: '2fr 1fr 1fr 2fr',
+        gap: 2,
+        mb: 2,
+        color: '#94a3b8'
+      }}>
+        <Typography>País</Typography>
+        <Typography>Visitas</Typography>
+        <Typography>Porcentaje</Typography>
+        <Typography>Tipos de Bots</Typography>
+      </Box>
 
       <Stack spacing={2} sx={{ maxHeight: 'calc(100% - 100px)', overflow: 'auto' }}>
         {Array.isArray(geoData) && geoData.map((item, index) => (
