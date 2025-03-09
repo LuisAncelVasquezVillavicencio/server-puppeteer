@@ -38,7 +38,7 @@ const getDateFormat = (timeGranularity) => {
   }
 };
 
-const BotActivityChart = ({ startDate, endDate , onDateRangeChange }) => {
+const BotActivityChart = ({ startDate, endDate, onDateRangeChange }) => {
   const [data, setData] = useState([]);
   const [timeGranularity, setTimeGranularity] = useState('DAY');
   const [selectionStart, setSelectionStart] = useState(null);
@@ -112,10 +112,6 @@ const BotActivityChart = ({ startDate, endDate , onDateRangeChange }) => {
     }
   };
 
-  // Modificar la definición del componente para incluir onDateRangeChange
-const BotActivityChart = ({ startDate, endDate, onDateRangeChange }) => {
-  // ... existing state declarations ...
-
   const handleMouseUp = () => {
     if (selectionStart && selectionEnd) {
       const startIndex = data.findIndex(item => item.fecha === selectionStart);
@@ -125,7 +121,6 @@ const BotActivityChart = ({ startDate, endDate, onDateRangeChange }) => {
       
       const selection = data.slice(start, end + 1);
       
-      // Actualizar las fechas del dashboard
       if (onDateRangeChange && selection.length > 0) {
         const newStartDate = new Date(selection[0].fecha);
         const newEndDate = new Date(selection[selection.length - 1].fecha);
@@ -144,8 +139,6 @@ const BotActivityChart = ({ startDate, endDate, onDateRangeChange }) => {
     setSelectionStart(null);
     setSelectionEnd(null);
   };
-
-
 
   useEffect(() => {
     const fetchData = async () => {
