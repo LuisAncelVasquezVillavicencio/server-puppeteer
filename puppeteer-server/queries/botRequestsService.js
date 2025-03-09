@@ -3,9 +3,9 @@ const pool = require('../services/dbConfig');
 async function getBotActivityStats(startDate, endDate) {
   let query = `
     SELECT
-      TO_CHAR(timestamp, 'MM/DD') AS fecha,
-      COUNT(CASE WHEN isbot::boolean = true THEN 1 END)::int AS bot_requests,
-      COUNT(CASE WHEN isbot::boolean = false OR isbot IS NULL THEN 1 END)::int AS user_requests
+      timestamp,
+      isbot,
+      EXTRACT(EPOCH FROM timestamp) as epoch_time
     FROM bot_requests
   `;
   const params = [];
@@ -19,13 +19,15 @@ async function getBotActivityStats(startDate, endDate) {
   }
 
   query += `
-    GROUP BY 1
-    ORDER BY 1
+    ORDER BY timestamp ASC
   `;
 
   try {
     const { rows } = await pool.query(query, params);
-    return rows;
+    return rows.map(row => ({
+      ...row,
+      timestamp: new Date(row.timestamp).toISOString()
+    }));
   } catch (error) {
     console.error('Error al obtener estadísticas de bot_requests:', error);
     throw error;
