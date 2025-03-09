@@ -19,7 +19,7 @@
  */
 
 const pool = require('../services/dbConfig'); 
-
+const { getCountryName } = require('../services/countryCodes');
 /**
  * getBotGeoDistribution
  *
@@ -58,14 +58,7 @@ async function getBotGeoDistribution(startDate, endDate) {
     )
     SELECT 
       cs.country_code as code,
-      CASE 
-        WHEN cs.country_code = 'US' THEN 'Estados Unidos'
-        WHEN cs.country_code = 'PE' THEN 'Perú'
-        WHEN cs.country_code = 'ES' THEN 'España'
-        WHEN cs.country_code = 'MX' THEN 'México'
-        WHEN cs.country_code = 'CO' THEN 'Colombia'
-        ELSE cs.country_code
-      END as country,
+      cs.country_code as country,
       cs.visits,
       cs.percentage,
       cs.bots
@@ -75,12 +68,19 @@ async function getBotGeoDistribution(startDate, endDate) {
 
   try {
     const result = await pool.query(query, [startDate, endDate]);
-    return result.rows;
+    // Transform the country codes to names using the utility
+    const transformedRows = result.rows.map(row => ({
+      ...row,
+      country: getCountryName(row.code)
+    }));
+    return transformedRows;
   } catch (error) {
     console.error("❌ Error en getBotGeoDistribution:", error);
     throw error;
   }
 }
+
+// ... rest of the code ...
 
 module.exports = {
   getBotGeoDistribution,
