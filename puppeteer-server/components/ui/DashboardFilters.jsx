@@ -53,7 +53,7 @@ const DashboardFilters = ({
             label="Fecha de Inicio"
             type="datetime-local"
             value={startDate ? startDate.slice(0, 16) : ''}
-            onChange={(e) => onStartDateChange(e.target.value)}
+            
             InputLabelProps={{ shrink: true }}
             size="small"
             fullWidth
@@ -67,7 +67,7 @@ const DashboardFilters = ({
             type="datetime-local"
             value={endDate ? endDate.slice(0, 16) : ''}
             InputLabelProps={{ shrink: true }}
-            onChange={(e) => onEndDateChange(e.target.value)}
+            
             size="small"
             fullWidth
             sx={{ width: { xs: '100%', sm: 200 } }}
