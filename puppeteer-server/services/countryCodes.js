@@ -40,9 +40,11 @@ const countryNames = {
     'YE': 'Yemen', 'ZM': 'Zambia', 'ZW': 'Zimbabue'
   };
   
-  export const getCountryName = (code) => {
+const getCountryName = (code) => {
     return countryNames[code] || code;
-  };
+};
   
-  export default countryNames;
-  
+module.exports = {
+    getCountryName,
+    countryNames
+};
