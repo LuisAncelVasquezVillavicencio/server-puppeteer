@@ -52,14 +52,14 @@ const theme = createTheme({
           background: 'transparent'
         },
         '*::-webkit-scrollbar-thumb': {
-          background: 'rgba(16, 185, 129, 0.2)',
+          background: '#8000e93b',
           borderRadius: '4px',
           '&:hover': {
-            background: 'rgba(16, 185, 129, 0.4)'
+            background: '#8000e93b'
           }
         },
         '*::-webkit-scrollbar-track': {
-          background: 'rgba(255, 255, 255, 0.05)',
+          background: '#8000e93b',
           borderRadius: '4px'
         }
       }
