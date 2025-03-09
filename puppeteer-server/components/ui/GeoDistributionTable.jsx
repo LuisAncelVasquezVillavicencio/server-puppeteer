@@ -13,16 +13,17 @@ import { getBotGeoDistribution } from '../../services/apiService';
 function GeoDistributionTable({ startDate, endDate }) {
   const [geoData, setGeoData] = useState([]);
   const [loading, setLoading] = useState(true);
+  const [isBot, setIsBot] = useState(true);
 
   useEffect(() => {
     const fetchGeoData = async () => {
       try {
         setLoading(true);
-        const data = await getBotGeoDistribution(startDate, endDate);
-        setGeoData(data || []); // Ensure we always have an array
+        const data = await getBotGeoDistribution(startDate, endDate, isBot);
+        setGeoData(data || []);
       } catch (error) {
         console.error('Error fetching geo distribution:', error);
-        setGeoData([]); // Set empty array on error
+        setGeoData([]);
       } finally {
         setLoading(false);
       }
@@ -31,16 +32,47 @@ function GeoDistributionTable({ startDate, endDate }) {
     if (startDate && endDate) {
       fetchGeoData();
     }
-  }, [startDate, endDate]);
+  }, [startDate, endDate, isBot]);
 
   // ... loading check remains the same ...
 
   return (
     <Paper variant="cosmicCard" sx={{ p: 3, height: '400px' }}>
-      <Box sx={{ display: 'flex', alignItems: 'center', gap: 1, mb: 3 }}>
-        <Globe size={24} color="#10b981" />
-        <Typography variant="h6">Distribución por País</Typography>
+      
+      <Box sx={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', mb: 3 }}>
+        <Box sx={{ display: 'flex', alignItems: 'center', gap: 1 }}>
+          <Globe size={24} color="#10b981" />
+          <Typography variant="h6">Distribución por País</Typography>
+        </Box>
+        <FormControlLabel
+          control={
+            <Switch
+              checked={isBot}
+              onChange={(e) => setIsBot(e.target.checked)}
+              sx={{
+                '& .MuiSwitch-switchBase.Mui-checked': {
+                  color: '#10b981',
+                  '&:hover': {
+                    backgroundColor: 'rgba(16, 185, 129, 0.08)',
+                  },
+                },
+                '& .MuiSwitch-switchBase.Mui-checked + .MuiSwitch-track': {
+                  backgroundColor: '#10b981',
+                },
+              }}
+            />
+          }
+          label={isBot ? "Bots" : "Usuarios"}
+          sx={{
+            '& .MuiFormControlLabel-label': {
+              color: '#94a3b8',
+              fontSize: '0.875rem'
+            }
+          }}
+        />
       </Box>
+
+
       <Box sx={{ 
         display: 'grid', 
         gridTemplateColumns: '2fr 1fr 1fr 2fr',

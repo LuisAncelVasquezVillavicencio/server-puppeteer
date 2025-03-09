@@ -40,8 +40,8 @@ export const getBotConnectionTypeDistribution = async (startDate, endDate) => {
 };
 
 // 🔹 5. Obtener distribución geográfica de bots
-export const getBotGeoDistribution = async (startDate, endDate) => {
-  return handleRequest(api.get('/bot-geo-distribution', { params: { startDate, endDate } }));
+export const getBotGeoDistribution = async (startDate, endDate,isBot) => {
+  return handleRequest(api.get('/bot-geo-distribution', { params: { startDate, endDate , isBot } }));
 };
 
 // 🔹 6. Obtener URLs únicas
