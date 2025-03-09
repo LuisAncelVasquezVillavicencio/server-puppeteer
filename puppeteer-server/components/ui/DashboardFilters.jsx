@@ -18,7 +18,9 @@ const DashboardFilters = ({
   onEndDateChange,
   onEditRoot,
   onEditXML,
-  onLogConnect
+  onLogConnect,
+  startDate,  // Añadir estas props
+  endDate 
 }) => {
   return (
     <Box sx={{ width: '100%', my: 2 }}>
@@ -49,9 +51,10 @@ const DashboardFilters = ({
         <Grid item xs={12} sm="auto">
           <TextField
             label="Fecha de Inicio"
-            type="date"
+            type="datetime-local"
+            value={startDate ? startDate.slice(0, 16) : ''}
+            onChange={(e) => onStartDateChange(e.target.value)}
             InputLabelProps={{ shrink: true }}
-            onChange={(e) => onStartDateChange(new Date(e.target.value).toISOString())}
             size="small"
             fullWidth
             sx={{ width: { xs: '100%', sm: 200 } }}
@@ -61,9 +64,10 @@ const DashboardFilters = ({
         <Grid item xs={12} sm="auto">
           <TextField
             label="Fecha de Fin"
-            type="date"
+            type="datetime-local"
+            value={endDate ? endDate.slice(0, 16) : ''}
             InputLabelProps={{ shrink: true }}
-            onChange={(e) => onEndDateChange(new Date(e.target.value).toISOString())}
+            onChange={(e) => onEndDateChange(e.target.value)}
             size="small"
             fullWidth
             sx={{ width: { xs: '100%', sm: 200 } }}
