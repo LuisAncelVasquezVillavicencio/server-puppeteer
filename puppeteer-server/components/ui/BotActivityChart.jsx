@@ -155,6 +155,27 @@ const BotActivityChart = ({ startDate, endDate, onDateRangeChange }) => {
       fetchData();
     }
   }, [startDate, endDate, timeGranularity]);
+  
+  const formatDate = (dateString, timeGranularity) => {
+    try {
+      const date = new Date(dateString);
+      if (isNaN(date.getTime())) {
+        return 'Fecha inválida';
+      }
+      return date.toLocaleString('es', {
+        ...getDateFormat(timeGranularity),
+        year: 'numeric',
+        month: 'short',
+        day: 'numeric',
+        hour: ['SECOND', 'MINUTE', 'HOUR'].includes(timeGranularity) ? '2-digit' : undefined,
+        minute: ['SECOND', 'MINUTE'].includes(timeGranularity) ? '2-digit' : undefined,
+        second: timeGranularity === 'SECOND' ? '2-digit' : undefined,
+      });
+    } catch (error) {
+      console.error('Error formatting date:', error);
+      return 'Fecha inválida';
+    }
+  };
 
   return (
     <Box sx={{ width: '100%', height: 400, position: 'relative' }}>
@@ -186,25 +207,11 @@ const BotActivityChart = ({ startDate, endDate, onDateRangeChange }) => {
           <CartesianGrid strokeDasharray="3 3" />
           <XAxis 
             dataKey="fecha"
-            tickFormatter={(value) => {
-              const date = new Date(value);
-              return date.toLocaleString('es', getDateFormat(timeGranularity));
-            }}
+            tickFormatter={(value) => formatDate(value, timeGranularity)}
           />
           <YAxis />
           <Tooltip 
-            labelFormatter={(value) => {
-              const date = new Date(value);
-              return date.toLocaleString('es', {
-                ...getDateFormat(timeGranularity),
-                year: 'numeric',
-                month: 'short',
-                day: 'numeric',
-                hour: ['SECOND', 'MINUTE', 'HOUR'].includes(timeGranularity) ? '2-digit' : undefined,
-                minute: ['SECOND', 'MINUTE'].includes(timeGranularity) ? '2-digit' : undefined,
-                second: timeGranularity === 'SECOND' ? '2-digit' : undefined,
-              });
-            }}
+            labelFormatter={(value) => formatDate(value, timeGranularity)}
             contentStyle={{
               backgroundColor: '#080f1d',
               border: '1px solid #8000e9',
