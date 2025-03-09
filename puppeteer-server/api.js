@@ -21,6 +21,8 @@ const {
   getBotActivityStats
 } = require('./queries/botRequestsService');
 const { logRequestHandler } = require('./controllers/requestLogController');
+const { getLatestRequests } = require('./queries/requestQueries');
+
 
 // Endpoint para obtener el total de solicitudes de bots
 router.get('/total-bot-requests', async (req, res) => {
@@ -139,6 +141,25 @@ router.get('/bot-activity', async (req, res) => {
 
 // Agregar esta nueva ruta
 router.post('/log-request', logRequestHandler);
+
+
+
+router.get('/latest-requests', async (req, res) => {
+  const { page = 1, limit = 10, search = '' } = req.query;
+  try {
+    const result = await getLatestRequests({
+      page: parseInt(page),
+      limit: parseInt(limit),
+      search
+    });
+    res.json(result);
+  } catch (error) {
+    console.error('Error in /latest-requests:', error);
+    res.status(500).json({ error: 'Error fetching latest requests' });
+  }
+});
+
+
 
 
 module.exports = router;

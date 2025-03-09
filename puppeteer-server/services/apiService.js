@@ -60,6 +60,7 @@ export const getMostActiveBot = async (startDate, endDate) => {
 };
 
 
+
 // 🔹 9. Obtener la actividad diaria de bots (para el gráfico)
 export const getDailyBotActivity = async (startDate, endDate) => {
   return handleRequest(
@@ -68,3 +69,14 @@ export const getDailyBotActivity = async (startDate, endDate) => {
     })
   );
 };
+
+
+
+export const getLatestRequests = async ({ page, limit, search }) => {
+  return handleRequest(
+    api.get('/latest-requests', {
+      params: { page, limit, search }
+    })
+  );
+};
+
