@@ -19,6 +19,8 @@ import { getDailyBotActivity } from '../../services/apiService';
 
 const getDateFormat = (timeGranularity) => {
   switch (timeGranularity) {
+    case 'SECOND':
+      return { hour: '2-digit', minute: '2-digit', second: '2-digit' };
     case 'MINUTE':
       return { hour: '2-digit', minute: '2-digit' };
     case 'HOUR':
@@ -52,6 +54,9 @@ const BotActivityChart = ({ startDate, endDate }) => {
       let key;
       
       switch (timeGranularity) {
+        case 'SECOND':
+          key = date.toISOString().slice(0, 19); // YYYY-MM-DDTHH:mm:ss
+          break;
         case 'MINUTE':
           key = date.toISOString().slice(0, 16);
           break;
@@ -114,8 +119,9 @@ const BotActivityChart = ({ startDate, endDate }) => {
             onChange={handleGranularityChange}
             size="small"
           >
-            <ToggleButton value="MINUTE">Minuto</ToggleButton>
-            <ToggleButton value="HOUR">Hora</ToggleButton>
+            <ToggleButton value="SECOND">Seg</ToggleButton>
+            <ToggleButton value="MINUTE">Min</ToggleButton>
+            <ToggleButton value="HOUR">Hr</ToggleButton>
             <ToggleButton value="DAY">Día</ToggleButton>
             <ToggleButton value="MONTH">Mes</ToggleButton>
             <ToggleButton value="YEAR">Año</ToggleButton>
@@ -141,8 +147,9 @@ const BotActivityChart = ({ startDate, endDate }) => {
                 year: 'numeric',
                 month: 'short',
                 day: 'numeric',
-                hour: ['MINUTE', 'HOUR'].includes(timeGranularity) ? '2-digit' : undefined,
-                minute: timeGranularity === 'MINUTE' ? '2-digit' : undefined,
+                hour: ['SECOND', 'MINUTE', 'HOUR'].includes(timeGranularity) ? '2-digit' : undefined,
+                minute: ['SECOND', 'MINUTE'].includes(timeGranularity) ? '2-digit' : undefined,
+                second: timeGranularity === 'SECOND' ? '2-digit' : undefined,
               });
             }}
             contentStyle={{
