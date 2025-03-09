@@ -337,10 +337,10 @@ export default function Dashboard() {
             </Grid>
             
             <Grid item xs={12}  md={6}>
-              <MostVisitedURLsTable />
+              <MostVisitedURLsTable startDate={startDate} endDate={endDate}  />
             </Grid>
             <Grid item xs={12}  md={6}>
-              <GeoDistributionTable />
+              <GeoDistributionTable startDate={startDate} endDate={endDate} />
             </Grid>
 
             <Grid item xs={12}>

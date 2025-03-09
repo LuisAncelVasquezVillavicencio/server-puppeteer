@@ -10,20 +10,15 @@ import {
 import { Globe, MapPin } from 'lucide-react';
 import { getBotGeoDistribution } from '../../services/apiService';
 
-function GeoDistributionTable() {
+function GeoDistributionTable({ startDate, endDate }) {
   const [geoData, setGeoData] = useState([]);
   const [loading, setLoading] = useState(true);
-
+  
   useEffect(() => {
     const fetchGeoData = async () => {
       try {
         setLoading(true);
-        // You can adjust the date range as needed
-        const endDate = new Date();
-        const startDate = new Date();
-        startDate.setDate(startDate.getDate() - 30); // Last 30 days
-
-        const data = await getBotGeoDistribution(startDate.toISOString(), endDate.toISOString());
+        const data = await getBotGeoDistribution(startDate, endDate);
         setGeoData(data);
       } catch (error) {
         console.error('Error fetching geo distribution:', error);
@@ -32,8 +27,12 @@ function GeoDistributionTable() {
       }
     };
 
-    fetchGeoData();
-  }, []);
+    if (startDate && endDate) {
+      fetchGeoData();
+    }
+  }, [startDate, endDate]);
+
+
 
   if (loading) {
     return (
