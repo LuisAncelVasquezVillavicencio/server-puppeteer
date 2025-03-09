@@ -54,7 +54,6 @@ async function getBotGeoDistribution(startDate, endDate) {
       WHERE 
         timestamp BETWEEN $1 AND $2
         AND headers->>'cf-ipcountry' IS NOT NULL
-        AND isbot = 'true'
       GROUP BY headers->>'cf-ipcountry'
     )
     SELECT 
