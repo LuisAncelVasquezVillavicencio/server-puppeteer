@@ -5,7 +5,8 @@ import {
   Paper,
   Chip,
   Stack,
-  CircularProgress
+  Switch,
+  FormControlLabel // Agregado este import
 } from '@mui/material';
 import { Globe, MapPin } from 'lucide-react';
 import { getBotGeoDistribution } from '../../services/apiService';
