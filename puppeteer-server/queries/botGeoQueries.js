@@ -38,30 +38,47 @@ const pool = require('../services/dbConfig');
  *    - percentage: Porcentaje que representa ese país sobre el total de registros (dentro del rango de fechas).
  */
 async function getBotGeoDistribution(startDate, endDate) {
-  /*const query = `
-    SELECT 
-      country,
-      COUNT(*) AS total,
-      ROUND((COUNT(*) * 100.0 / 
-        (SELECT COUNT(*) FROM bot_requests 
-         WHERE timestamp BETWEEN $1 AND $2 AND country IS NOT NULL)
-      )::numeric, 2) AS percentage
-    FROM bot_requests
-    WHERE timestamp BETWEEN $1 AND $2
-      AND country IS NOT NULL
-    GROUP BY country
-    ORDER BY total DESC;
-  `;*/
   const query = `
+    WITH CountryStats AS (
+      SELECT 
+        headers->>'cf-ipcountry' as country_code,
+        COUNT(*) AS visits,
+        ROUND((COUNT(*) * 100.0 / (
+          SELECT COUNT(*) 
+          FROM bot_requests 
+          WHERE timestamp BETWEEN $1 AND $2 
+          AND headers->>'cf-ipcountry' IS NOT NULL
+        ))::numeric, 2) AS percentage,
+        ARRAY_AGG(DISTINCT bot_type) FILTER (WHERE bot_type IS NOT NULL) as bots
+      FROM bot_requests
+      WHERE 
+        timestamp BETWEEN $1 AND $2
+        AND headers->>'cf-ipcountry' IS NOT NULL
+        AND isbot = 'true'
+      GROUP BY headers->>'cf-ipcountry'
+    )
     SELECT 
-      *
-    FROM bot_requests ;
+      cs.country_code as code,
+      CASE 
+        WHEN cs.country_code = 'US' THEN 'Estados Unidos'
+        WHEN cs.country_code = 'PE' THEN 'Perú'
+        WHEN cs.country_code = 'ES' THEN 'España'
+        WHEN cs.country_code = 'MX' THEN 'México'
+        WHEN cs.country_code = 'CO' THEN 'Colombia'
+        ELSE cs.country_code
+      END as country,
+      cs.visits,
+      cs.percentage,
+      cs.bots
+    FROM CountryStats cs
+    ORDER BY cs.visits DESC;
   `;
+
   try {
-    const result = await pool.query(query);
+    const result = await pool.query(query, [startDate, endDate]);
     return result.rows;
   } catch (error) {
-    console.error("❌ Error en getBotGeoDistribution :", error);
+    console.error("❌ Error en getBotGeoDistribution:", error);
     throw error;
   }
 }

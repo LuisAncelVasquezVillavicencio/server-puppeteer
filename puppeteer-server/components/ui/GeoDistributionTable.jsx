@@ -1,55 +1,50 @@
-import React from 'react';
+import React, { useState, useEffect } from 'react';
 import { 
   Box, 
   Typography, 
   Paper,
   Chip,
-  Stack
+  Stack,
+  CircularProgress
 } from '@mui/material';
 import { Globe, MapPin } from 'lucide-react';
-
-// Mock data - Replace with real data later
-const mockData = [
-  { 
-    country: 'Estados Unidos', 
-    code: 'US', 
-    visits: 14, 
-    percentage: 58.3, 
-    bots: ['Google', 'Bing']
-  },
-  { 
-    country: 'Perú', 
-    code: 'PE', 
-    visits: 6, 
-    percentage: 25, 
-    bots: ['WhatsApp']
-  },
-  { 
-    country: 'España', 
-    code: 'ES', 
-    visits: 2, 
-    percentage: 8.3, 
-    bots: ['Facebook', 'Twitter']
-  },
-  { 
-    country: 'México', 
-    code: 'MX', 
-    visits: 1, 
-    percentage: 4.2, 
-    bots: ['Facebook']
-  },
-  { 
-    country: 'Colombia', 
-    code: 'CO', 
-    visits: 1, 
-    percentage: 4.2, 
-    bots: ['WhatsApp']
-  }
-];
+import { getBotGeoDistribution } from '../../services/apiService';
 
 function GeoDistributionTable() {
+  const [geoData, setGeoData] = useState([]);
+  const [loading, setLoading] = useState(true);
+
+  useEffect(() => {
+    const fetchGeoData = async () => {
+      try {
+        setLoading(true);
+        // You can adjust the date range as needed
+        const endDate = new Date();
+        const startDate = new Date();
+        startDate.setDate(startDate.getDate() - 30); // Last 30 days
+
+        const data = await getBotGeoDistribution(startDate.toISOString(), endDate.toISOString());
+        setGeoData(data);
+      } catch (error) {
+        console.error('Error fetching geo distribution:', error);
+      } finally {
+        setLoading(false);
+      }
+    };
+
+    fetchGeoData();
+  }, []);
+
+  if (loading) {
+    return (
+      <Paper variant="cosmicCard" sx={{ p: 3, height: '400px', display: 'flex', justifyContent: 'center', alignItems: 'center' }}>
+        <CircularProgress />
+      </Paper>
+    );
+  }
+
   return (
-    <Paper variant="cosmicCard" sx={{ p: 3 , height: '400px' }} >
+    <Paper variant="cosmicCard" sx={{ p: 3, height: '400px' }}>
       <Box sx={{ display: 'flex', alignItems: 'center', gap: 1, mb: 3 }}>
         <Globe size={24} color="#10b981" />
         <Typography variant="h6">Distribución por País</Typography>
@@ -70,15 +65,15 @@ function GeoDistributionTable() {
       </Box>
 
       {/* Rows */}
-      <Stack spacing={2}>
-        {mockData.map((item, index) => (
+      <Stack spacing={2} sx={{ maxHeight: 'calc(100% - 100px)', overflow: 'auto' }}>
+        {geoData.map((item, index) => (
           <Box key={item.code} sx={{ 
             display: 'grid',
             gridTemplateColumns: '2fr 1fr 1fr 2fr',
             gap: 2,
             alignItems: 'center',
             py: 1,
-            borderBottom: index !== mockData.length - 1 ? '1px solid rgba(255,255,255,0.1)' : 'none'
+            borderBottom: index !== geoData.length - 1 ? '1px solid rgba(255,255,255,0.1)' : 'none'
           }}>
             <Box sx={{ display: 'flex', alignItems: 'center', gap: 1 }}>
               <MapPin size={18} color="#64748b" />
@@ -95,7 +90,7 @@ function GeoDistributionTable() {
               />
             </Box>
             <Typography sx={{ color: '#10b981' }}>{item.visits}</Typography>
-            <Typography>{`${item.percentage}%`}</Typography>
+            <Typography>{`${item.percentage.toFixed(1)}%`}</Typography>
             <Box sx={{ display: 'flex', gap: 1, flexWrap: 'wrap' }}>
               {item.bots.map((bot) => (
                 <Chip 
