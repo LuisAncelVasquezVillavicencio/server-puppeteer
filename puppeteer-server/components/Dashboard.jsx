@@ -56,6 +56,11 @@ export default function Dashboard() {
   const [botDistributionCategory, setBotDistributionCategory] = useState([]);
   const [botConnectionTypeDist, setBotConnectionTypeDist] = useState([]);
   const [botGeoDistribution, setBotGeoDistribution] = useState([]);
+  
+  const handleDateRangeChange = (newStartDate, newEndDate) => {
+    setStartDate(newStartDate);
+    setEndDate(newEndDate);
+  };
 
   // Función para obtener los datos
   const fetchTotalRequests = async () => {
@@ -142,6 +147,7 @@ export default function Dashboard() {
     fetchBotConnectionTypeDistribution();
     fetchBotGeoDistribution();
   }, [startDate, endDate]);
+  
 
   // Estados para los filtros y modales
   const [selectedDomain, setSelectedDomain] = useState('tudominio.com');
@@ -316,7 +322,7 @@ export default function Dashboard() {
                 Actividad de Bots
               </Typography>
               <Box>
-                  <BotActivityChart startDate={startDate} endDate={endDate} />
+                  <BotActivityChart startDate={startDate} endDate={endDate} onDateRangeChange={handleDateRangeChange} />
               </Box>
             </Paper>
             </Grid>
