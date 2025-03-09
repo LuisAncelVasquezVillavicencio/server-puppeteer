@@ -72,9 +72,9 @@ router.get('/bot-connection-type-distribution', async (req, res) => {
 
 // Endpoint para obtener la distribución geográfica de bots
 router.get('/bot-geo-distribution', async (req, res) => {
-  const { startDate, endDate } = req.query;
+  const { startDate, endDate , isBot} = req.query;
   try {
-    const result = await getBotGeoDistribution(startDate, endDate);
+    const result = await getBotGeoDistribution(startDate, endDate , isBot);
     res.json(result);
   } catch (error) {
     console.error('Error en /bot-geo-distribution:', error);
