@@ -307,14 +307,15 @@ export default function Dashboard() {
           </Grid>
           
           <DashboardFilters 
-              selectedDomain={selectedDomain}
-              onDomainChange={handleDomainChange}
-              onStartDateChange={setStartDate}
-              onEndDateChange={setEndDate}
-              onEditRoot={handleEditRoot}
-              onEditXML={handleEditXML}
-              onLogConnect={handleConnectLog}
-            />
+            selectedDomain={selectedDomain}
+            onDomainChange={handleDomainChange}
+            onStartDateChange={setStartDate}
+            onEndDateChange={setEndDate}
+            onEditRoot={handleEditRoot}
+            onEditXML={handleEditXML}
+            onLogConnect={handleConnectLog}
+     
+          />
             
             <Grid item xs={12}  >
             <Paper sx={{ p: 2 }} variant="cosmicCard" >
