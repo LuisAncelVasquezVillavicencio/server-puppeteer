@@ -37,7 +37,7 @@ const { getCountryName } = require('../services/countryCodes');
  *    - total: Número total de solicitudes registradas para ese país.
  *    - percentage: Porcentaje que representa ese país sobre el total de registros (dentro del rango de fechas).
  */
-async function getBotGeoDistribution(startDate, endDate) {
+async function getBotGeoDistribution(startDate, endDate, isBot = true) {
   const query = `
     WITH CountryStats AS (
       SELECT 
@@ -54,6 +54,7 @@ async function getBotGeoDistribution(startDate, endDate) {
       WHERE 
         timestamp BETWEEN $1 AND $2
         AND headers->>'cf-ipcountry' IS NOT NULL
+        AND isbot = $3::text
       GROUP BY headers->>'cf-ipcountry'
     )
     SELECT 
@@ -67,7 +68,11 @@ async function getBotGeoDistribution(startDate, endDate) {
   `;
 
   try {
-    const result = await pool.query(query, [startDate, endDate]);
+    const result = await pool.query(query, [
+      startDate, 
+      endDate, 
+      isBot ? 'true' : 'false'
+    ]);
     // Transform the country codes to names using the utility
     const transformedRows = result.rows.map(row => ({
       ...row,
