@@ -17,12 +17,21 @@ import {
 } from '@mui/material';
 import { getDailyBotActivity } from '../../services/apiService';
 
-const TIME_FORMATS = {
-  MINUTE: 'mm',
-  HOUR: 'HH:mm',
-  DAY: 'MM/DD',
-  MONTH: 'MM/YYYY',
-  YEAR: 'YYYY'
+const getDateFormat = (timeGranularity) => {
+  switch (timeGranularity) {
+    case 'MINUTE':
+      return { hour: '2-digit', minute: '2-digit' };
+    case 'HOUR':
+      return { hour: '2-digit' };
+    case 'DAY':
+      return { month: 'short', day: 'numeric' };
+    case 'MONTH':
+      return { year: 'numeric', month: 'short' };
+    case 'YEAR':
+      return { year: 'numeric' };
+    default:
+      return { month: 'short', day: 'numeric' };
+  }
 };
 
 const BotActivityChart = ({ startDate, endDate }) => {
@@ -38,26 +47,25 @@ const BotActivityChart = ({ startDate, endDate }) => {
   const formatData = (rawData) => {
     if (!rawData) return [];
     
-    // Group data based on selected granularity
     const groupedData = rawData.reduce((acc, item) => {
       const date = new Date(item.timestamp);
       let key;
       
       switch (timeGranularity) {
         case 'MINUTE':
-          key = date.toISOString().slice(0, 16); // YYYY-MM-DDTHH:mm
+          key = date.toISOString().slice(0, 16);
           break;
         case 'HOUR':
-          key = date.toISOString().slice(0, 13); // YYYY-MM-DDTHH
+          key = date.toISOString().slice(0, 13);
           break;
         case 'MONTH':
-          key = date.toISOString().slice(0, 7); // YYYY-MM
+          key = date.toISOString().slice(0, 7);
           break;
         case 'YEAR':
-          key = date.toISOString().slice(0, 4); // YYYY
+          key = date.toISOString().slice(0, 4);
           break;
-        default: // DAY
-          key = date.toISOString().slice(0, 10); // YYYY-MM-DD
+        default:
+          key = date.toISOString().slice(0, 10);
       }
 
       if (!acc[key]) {
@@ -99,7 +107,7 @@ const BotActivityChart = ({ startDate, endDate }) => {
   return (
     <Box sx={{ width: '100%', height: 300, position: 'relative' }}>
       <Box sx={{ position: 'absolute', right: 0, top: -45, zIndex: 1 }}>
-        <Paper sx={{ p: 1 }}>
+        <Paper sx={{ p: 1, background: 'linear-gradient(to bottom, #080e20, #0d1528)' }}>
           <ToggleButtonGroup
             value={timeGranularity}
             exclusive
@@ -121,13 +129,7 @@ const BotActivityChart = ({ startDate, endDate }) => {
             dataKey="fecha"
             tickFormatter={(value) => {
               const date = new Date(value);
-              return date.toLocaleString('es', {
-                minute: timeGranularity === 'MINUTE' ? 'numeric' : undefined,
-                hour: ['MINUTE', 'HOUR'].includes(timeGranularity) ? 'numeric' : undefined,
-                day: ['DAY'].includes(timeGranularity) ? 'numeric' : undefined,
-                month: ['DAY', 'MONTH'].includes(timeGranularity) ? 'short' : undefined,
-                year: timeGranularity === 'YEAR' ? 'numeric' : undefined
-              });
+              return date.toLocaleString('es', getDateFormat(timeGranularity));
             }}
           />
           <YAxis />
@@ -135,19 +137,24 @@ const BotActivityChart = ({ startDate, endDate }) => {
             labelFormatter={(value) => {
               const date = new Date(value);
               return date.toLocaleString('es', {
-                minute: timeGranularity === 'MINUTE' ? 'numeric' : undefined,
-                hour: ['MINUTE', 'HOUR'].includes(timeGranularity) ? 'numeric' : undefined,
-                day: ['DAY'].includes(timeGranularity) ? 'numeric' : undefined,
-                month: ['DAY', 'MONTH'].includes(timeGranularity) ? 'short' : undefined,
-                year: true
+                ...getDateFormat(timeGranularity),
+                year: 'numeric',
+                month: 'short',
+                day: 'numeric',
+                hour: ['MINUTE', 'HOUR'].includes(timeGranularity) ? '2-digit' : undefined,
+                minute: timeGranularity === 'MINUTE' ? '2-digit' : undefined,
               });
+            }}
+            contentStyle={{
+              backgroundColor: '#080f1d',
+              border: '1px solid #8000e9',
             }}
           />
           <Legend />
           <Line
             type="monotone"
             dataKey="bot_requests"
-            stroke="#8884d8"
+            stroke="#B834F3"
             strokeWidth={2}
             isAnimationActive={true}
             dot={{ r: 3 }}
@@ -157,7 +164,7 @@ const BotActivityChart = ({ startDate, endDate }) => {
           <Line
             type="monotone"
             dataKey="user_requests"
-            stroke="#82ca9d"
+            stroke="#0EF5E3"
             strokeWidth={2}
             isAnimationActive={true}
             dot={{ r: 3 }}
