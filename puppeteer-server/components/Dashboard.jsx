@@ -58,8 +58,12 @@ export default function Dashboard() {
   const [botGeoDistribution, setBotGeoDistribution] = useState([]);
   
   const handleDateRangeChange = (newStartDate, newEndDate) => {
-    setStartDate(newStartDate);
-    setEndDate(newEndDate);
+
+    const formattedStartDate = new Date(newStartDate).toISOString();
+    const formattedEndDate = new Date(newEndDate).toISOString();
+
+    setStartDate(formattedStartDate);
+    setEndDate(formattedEndDate);
   };
 
   // Función para obtener los datos
@@ -136,6 +140,7 @@ export default function Dashboard() {
 
   // 5. Llamar a todas las funciones cuando cambien las fechas
   useEffect(() => {
+    console.log('Dates updated:', { startDate, endDate });
     fetchTotalRequests();
     fetchUniqueURLs();
     fetchPercentageErrors();
@@ -309,12 +314,13 @@ export default function Dashboard() {
           <DashboardFilters 
             selectedDomain={selectedDomain}
             onDomainChange={handleDomainChange}
-            onStartDateChange={setStartDate}
-            onEndDateChange={setEndDate}
+            startDate={startDate}  // Add these props
+            endDate={endDate}      // Add these props
+            onStartDateChange={(date) => handleDateRangeChange(date, endDate)}
+            onEndDateChange={(date) => handleDateRangeChange(startDate, date)}
             onEditRoot={handleEditRoot}
             onEditXML={handleEditXML}
             onLogConnect={handleConnectLog}
-     
           />
             
             <Grid item xs={12}  >
