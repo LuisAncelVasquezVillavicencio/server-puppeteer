@@ -77,8 +77,28 @@ const BotActivityChart = ({ startDate, endDate, onDateRangeChange }) => {
       const selection = data.slice(start, end + 1);
       
       if (onDateRangeChange && selection.length > 0) {
-        const newStartDate = new Date(selection[0].fecha);
-        const newEndDate = new Date(selection[selection.length - 1].fecha);
+        let newStartDate = new Date(selection[0].fecha);
+        let newEndDate = new Date(selection[selection.length - 1].fecha);
+
+        // Ajustar las fechas según la granularidad
+        switch (timeGranularity) {
+          case 'HOUR':
+            newEndDate.setMinutes(59, 59, 999);
+            break;
+          case 'MINUTE':
+            newStartDate.setSeconds(0, 0);
+            newEndDate.setSeconds(59, 999);
+            break;
+          case 'SECOND':
+            newStartDate.setMilliseconds(0);
+            newEndDate.setMilliseconds(999);
+            break;
+          case 'DAY':
+            newStartDate.setHours(0, 0, 0, 0);
+            newEndDate.setHours(23, 59, 59, 999);
+            break;
+        }
+
         onDateRangeChange(newStartDate, newEndDate);
       }
 
@@ -87,7 +107,7 @@ const BotActivityChart = ({ startDate, endDate, onDateRangeChange }) => {
         stats: {
           totalBots: selection.reduce((sum, item) => sum + item.bot_requests, 0),
           totalUsers: selection.reduce((sum, item) => sum + item.user_requests, 0),
-          timeRange: `${selection[0].fecha} - ${selection[selection.length-1].fecha}`
+          timeRange: `${formatDate(selection[0].fecha, timeGranularity)} - ${formatDate(selection[selection.length-1].fecha, timeGranularity)}`
         }
       });
     }
