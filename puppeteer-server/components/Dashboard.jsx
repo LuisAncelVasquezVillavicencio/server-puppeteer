@@ -327,7 +327,7 @@ export default function Dashboard() {
             <Grid item xs={12}  >
             <Paper sx={{ p: 2 }} variant="cosmicCard" >
               <Typography variant="subtitle1" gutterBottom>
-                Actividad de Bots
+                Peticiones
               </Typography>
               <Box>
                   <BotActivityChart startDate={startDate} endDate={endDate} onDateRangeChange={handleDateRangeChange} />
@@ -336,7 +336,7 @@ export default function Dashboard() {
             </Grid>
             
             
-            <Grid item xs={12} md={6}>
+            <Grid item xs={12} md={4}>
                 <Card variant="cosmicCard" >
                   <CardContent>
                     <Typography variant="h6" gutterBottom>
@@ -346,14 +346,12 @@ export default function Dashboard() {
                   </CardContent>
                 </Card>
             </Grid>
-            <Grid item xs={12} md={6}>
-              
-            </Grid>
+    
             
-            <Grid item xs={12}  md={6}>
+            <Grid item xs={12}  md={4}>
               <MostVisitedURLsTable startDate={startDate} endDate={endDate}  />
             </Grid>
-            <Grid item xs={12}  md={6}>
+            <Grid item xs={12}  md={4}>
               <GeoDistributionTable startDate={startDate} endDate={endDate} />
             </Grid>
 
