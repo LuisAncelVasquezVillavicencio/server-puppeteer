@@ -13,7 +13,7 @@ async function getBotActivityStats(startDate, endDate) {
   if (startDate && endDate) {
     query += ` 
       WHERE timestamp >= $1
-        AND timestamp < $2
+        AND timestamp <= $2
     `;
     params.push(startDate, endDate);
   }
