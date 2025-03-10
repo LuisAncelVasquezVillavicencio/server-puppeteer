@@ -126,7 +126,6 @@ const BotActivityChart = ({ startDate, endDate, onDateRangeChange }) => {
           key = date.toISOString().slice(0, 16);
           break;
         case 'HOUR':
-          // Corregir el formato para hora
           key = date.toISOString().slice(0, 13) + ':00:00';
           break;
         case 'MONTH':
@@ -135,14 +134,31 @@ const BotActivityChart = ({ startDate, endDate, onDateRangeChange }) => {
         case 'YEAR':
           key = date.toISOString().slice(0, 4);
           break;
-        default:
+        default: // DAY
           key = date.toISOString().slice(0, 10);
       }
   
-      // ... resto del código ...
+      // Inicializar el acumulador si no existe
+      if (!acc[key]) {
+        acc[key] = {
+          fecha: key,
+          bot_requests: 0,
+          user_requests: 0
+        };
+      }
+  
+      // Incrementar contadores según el tipo
+      if (item.isbot === "true") {
+        acc[key].bot_requests += 1;
+      } else {
+        acc[key].user_requests += 1;
+      }
+  
+      return acc;
     }, {});
   
-    return Object.values(groupedData);
+    // Convertir el objeto a array y ordenar por fecha
+    return Object.values(groupedData).sort((a, b) => new Date(a.fecha) - new Date(b.fecha));
   };
   
   // Actualizar el formateador de fechas
