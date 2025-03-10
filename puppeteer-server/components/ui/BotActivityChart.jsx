@@ -51,52 +51,7 @@ const BotActivityChart = ({ startDate, endDate, onDateRangeChange }) => {
     }
   };
 
-  const formatData = (rawData) => {
-    if (!rawData) return [];
-    
-    const groupedData = rawData.reduce((acc, item) => {
-      const date = new Date(item.timestamp);
-      let key;
-      
-      switch (timeGranularity) {
-        case 'SECOND':
-          key = date.toISOString().slice(0, 19);
-          break;
-        case 'MINUTE':
-          key = date.toISOString().slice(0, 16);
-          break;
-        case 'HOUR':
-          key = date.toISOString().slice(0, 13);
-          break;
-        case 'MONTH':
-          key = date.toISOString().slice(0, 7);
-          break;
-        case 'YEAR':
-          key = date.toISOString().slice(0, 4);
-          break;
-        default:
-          key = date.toISOString().slice(0, 10);
-      }
-
-      if (!acc[key]) {
-        acc[key] = {
-          fecha: key,
-          bot_requests: 0,
-          user_requests: 0
-        };
-      }
-
-      if (item.isbot === 'true') {
-        acc[key].bot_requests++;
-      } else {
-        acc[key].user_requests++;
-      }
-
-      return acc;
-    }, {});
-
-    return Object.values(groupedData);
-  };
+ 
 
   const handleMouseDown = (e) => {
     if (e && e.activeLabel) {
@@ -156,21 +111,63 @@ const BotActivityChart = ({ startDate, endDate, onDateRangeChange }) => {
     }
   }, [startDate, endDate, timeGranularity]);
   
+  const formatData = (rawData) => {
+    if (!rawData) return [];
+    
+    const groupedData = rawData.reduce((acc, item) => {
+      const date = new Date(item.timestamp);
+      let key;
+      
+      switch (timeGranularity) {
+        case 'SECOND':
+          key = date.toISOString().slice(0, 19);
+          break;
+        case 'MINUTE':
+          key = date.toISOString().slice(0, 16);
+          break;
+        case 'HOUR':
+          // Corregir el formato para hora
+          key = date.toISOString().slice(0, 13) + ':00:00';
+          break;
+        case 'MONTH':
+          key = date.toISOString().slice(0, 7);
+          break;
+        case 'YEAR':
+          key = date.toISOString().slice(0, 4);
+          break;
+        default:
+          key = date.toISOString().slice(0, 10);
+      }
+  
+      // ... resto del código ...
+    }, {});
+  
+    return Object.values(groupedData);
+  };
+  
+  // Actualizar el formateador de fechas
   const formatDate = (dateString, timeGranularity) => {
     try {
       const date = new Date(dateString);
       if (isNaN(date.getTime())) {
+        console.warn('Invalid date:', dateString);
         return 'Fecha inválida';
       }
-      return date.toLocaleString('es', {
+      
+      const options = {
         ...getDateFormat(timeGranularity),
         year: 'numeric',
         month: 'short',
-        day: 'numeric',
-        hour: ['SECOND', 'MINUTE', 'HOUR'].includes(timeGranularity) ? '2-digit' : undefined,
-        minute: ['SECOND', 'MINUTE'].includes(timeGranularity) ? '2-digit' : undefined,
-        second: timeGranularity === 'SECOND' ? '2-digit' : undefined,
-      });
+        day: 'numeric'
+      };
+  
+      if (['SECOND', 'MINUTE', 'HOUR'].includes(timeGranularity)) {
+        options.hour = '2-digit';
+        options.minute = timeGranularity !== 'HOUR' ? '2-digit' : undefined;
+        options.second = timeGranularity === 'SECOND' ? '2-digit' : undefined;
+      }
+  
+      return date.toLocaleString('es', options);
     } catch (error) {
       console.error('Error formatting date:', error);
       return 'Fecha inválida';
