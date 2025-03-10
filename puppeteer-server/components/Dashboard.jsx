@@ -272,6 +272,17 @@ export default function Dashboard() {
                         <Sparkles size={24} color="#818cf8" strokeWidth={2} />
                         Monitoreo inteligente de actividad de bots con procesamiento analítico de Cloudflare
             </Typography>
+            <DashboardFilters 
+                selectedDomain={selectedDomain}
+                onDomainChange={handleDomainChange}
+                startDate={startDate}  // Add these props
+                endDate={endDate}      // Add these props
+                onStartDateChange={(date) => handleDateRangeChange(date, endDate)}
+                onEndDateChange={(date) => handleDateRangeChange(startDate, date)}
+                onEditRoot={handleEditRoot}
+                onEditXML={handleEditXML}
+                onLogConnect={handleConnectLog}
+            />
           </Grid>
 
           <Grid item xs={12} sm={12} md={7}>
@@ -311,17 +322,7 @@ export default function Dashboard() {
             </Grid>
           </Grid>
           
-          <DashboardFilters 
-            selectedDomain={selectedDomain}
-            onDomainChange={handleDomainChange}
-            startDate={startDate}  // Add these props
-            endDate={endDate}      // Add these props
-            onStartDateChange={(date) => handleDateRangeChange(date, endDate)}
-            onEndDateChange={(date) => handleDateRangeChange(startDate, date)}
-            onEditRoot={handleEditRoot}
-            onEditXML={handleEditXML}
-            onLogConnect={handleConnectLog}
-          />
+          
             
             <Grid item xs={12}  >
             <Paper sx={{ p: 2 }} variant="cosmicCard" >
