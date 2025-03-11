@@ -110,8 +110,18 @@ const DashboardFilters = ({
               }
             }}
           >
-            <Button onClick={onEditRoot}>Editar root.txt</Button>
-            <Button onClick={onEditXML}>Editar XML Sitemap</Button>
+              <Button 
+                  onClick={() => onEditRoot(selectedDomain)} 
+                  disabled={!selectedDomain}
+                >
+                  Editar root.txt
+                </Button>
+              <Button 
+                  onClick={() => onEditXML(selectedDomain)} 
+                  disabled={!selectedDomain}
+              >
+                  Editar XML Sitemap
+              </Button>
             <Button onClick={() => onLogConnect('startup')}>Log Inicio</Button>
             <Button onClick={() => onLogConnect('pm2')}>Log Streaming</Button>
           </ButtonGroup>
