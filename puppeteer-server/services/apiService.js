@@ -94,3 +94,21 @@ export async function getAvailableDomains() {
   }
 }
 
+// Make sure these functions are properly exported
+export const getFileContent = async (domain, fileType) => {
+  return handleRequest(api.get(`/files/${domain}/${fileType}`))
+    .then(data => data.content)
+    .catch(error => {
+      console.error(`Error fetching ${fileType} for ${domain}:`, error);
+      return '';
+    });
+};
+
+export const saveFileContent = async (domain, fileType, content) => {
+  return handleRequest(api.post(`/files/${domain}/${fileType}`, { content }))
+    .then(() => true)
+    .catch(error => {
+      console.error(`Error saving ${fileType} for ${domain}:`, error);
+      return false;
+    });
+};
