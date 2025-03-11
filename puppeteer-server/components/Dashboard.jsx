@@ -29,6 +29,7 @@ import GeoDistributionTable from './ui/GeoDistributionTable';
 import MostVisitedURLsTable from './ui/MostVisitedURLsTable';
 import RequestsTable from './ui/RequestsTable';
 
+
 // 1. Importa TODAS las funciones del servicio
 import {
   getTotalBotRequests,
@@ -38,7 +39,8 @@ import {
   getBotGeoDistribution,
   getUniqueURLs,
   getPercentageErrors,
-  getMostActiveBot
+  getMostActiveBot,
+  getFileContent, saveFileContent
 } from '../services/apiService';
 
 export default function Dashboard() {
@@ -56,7 +58,49 @@ export default function Dashboard() {
   const [botDistributionCategory, setBotDistributionCategory] = useState([]);
   const [botConnectionTypeDist, setBotConnectionTypeDist] = useState([]);
   const [botGeoDistribution, setBotGeoDistribution] = useState([]);
+  const [fileModalOpen, setFileModalOpen] = useState(false);
+  const [fileContent, setFileContent] = useState('');
+  const [fileType, setFileType] = useState('');
+  const [currentDomain, setCurrentDomain] = useState('');
+
+  const handleEditRoot = async (domain) => {
+    try {
+      const content = await getFileContent(domain, 'root');
+      setFileContent(content);
+      setFileType('root');
+      setCurrentDomain(domain);
+      setFileModalOpen(true);
+    } catch (error) {
+      console.error('Error loading root.txt:', error);
+    }
+  };
   
+  const handleEditXML = async (domain) => {
+    try {
+      const content = await getFileContent(domain, 'sitemap');
+      setFileContent(content);
+      setFileType('sitemap');
+      setCurrentDomain(domain);
+      setFileModalOpen(true);
+    } catch (error) {
+      console.error('Error loading sitemap.xml:', error);
+    }
+  };
+  
+  const handleSaveFile = async () => {
+    try {
+      const success = await saveFileContent(currentDomain, fileType, fileContent);
+      if (success) {
+        setFileModalOpen(false);
+      } else {
+        alert('Error al guardar el archivo. Por favor, inténtalo de nuevo.');
+      }
+    } catch (error) {
+      console.error('Error saving file:', error);
+      alert('Error al guardar el archivo. Por favor, inténtalo de nuevo.');
+    }
+  };
+
   const handleDateRangeChange = (newStartDate, newEndDate) => {
 
     const formattedStartDate = new Date(newStartDate).toISOString();
@@ -200,17 +244,12 @@ export default function Dashboard() {
   };
 
   // Funciones para abrir/cerrar modales de edición
-  const handleEditXML = () => {
-    setOpenXMLModal(true);
-  };
+
 
   const handleCloseXMLModal = () => {
     setOpenXMLModal(false);
   };
 
-  const handleEditRoot = () => {
-    setOpenRootModal(true);
-  };
 
   const handleCloseRootModal = () => {
     setOpenRootModal(false);
@@ -390,46 +429,35 @@ export default function Dashboard() {
       </Dialog>
 
       {/* Modal para editar XML Sitemap */}
-      <Dialog open={openXMLModal} onClose={handleCloseXMLModal} fullWidth maxWidth="sm">
-        <DialogTitle>Editar XML Sitemap</DialogTitle>
+      <Dialog
+        open={fileModalOpen}
+        onClose={() => setFileModalOpen(false)}
+        fullWidth
+        maxWidth="md"
+      >
+        <DialogTitle>
+          {fileType === 'root' ? 'Editar root.txt' : 'Editar sitemap.xml'} - {currentDomain}
+        </DialogTitle>
         <DialogContent>
           <TextField
             multiline
-            minRows={6}
             fullWidth
+            rows={20}
+            value={fileContent}
+            onChange={(e) => setFileContent(e.target.value)}
             variant="outlined"
-            value={xmlContent}
-            onChange={(e) => setXmlContent(e.target.value)}
+            margin="normal"
           />
         </DialogContent>
         <DialogActions>
-          <Button onClick={handleCloseXMLModal}>Cancelar</Button>
-          <Button variant="contained" onClick={() => { /* lógica para guardar */ handleCloseXMLModal(); }}>
+          <Button onClick={() => setFileModalOpen(false)}>Cancelar</Button>
+          <Button onClick={handleSaveFile} variant="contained" color="primary">
             Guardar
           </Button>
         </DialogActions>
       </Dialog>
 
-      {/* Modal para editar root.txt */}
-      <Dialog open={openRootModal} onClose={handleCloseRootModal} fullWidth maxWidth="sm">
-        <DialogTitle>Editar root.txt</DialogTitle>
-        <DialogContent>
-          <TextField
-            multiline
-            minRows={6}
-            fullWidth
-            variant="outlined"
-            value={rootContent}
-            onChange={(e) => setRootContent(e.target.value)}
-          />
-        </DialogContent>
-        <DialogActions>
-          <Button onClick={handleCloseRootModal}>Cancelar</Button>
-          <Button variant="contained" onClick={() => { /* lógica para guardar */ handleCloseRootModal(); }}>
-            Guardar
-          </Button>
-        </DialogActions>
-      </Dialog>
+      
     </Grid>
   );
 }

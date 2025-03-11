@@ -23,6 +23,8 @@ const {
 const { logRequestHandler } = require('./controllers/requestLogController');
 const { getLatestRequests } = require('./queries/requestQueries');
 const domainController = require('./controllers/domainController');
+const fileController = require('./controllers/fileController');
+
 
 // Endpoint para obtener el total de solicitudes de bots
 router.get('/total-bot-requests', async (req, res) => {
@@ -159,7 +161,8 @@ router.get('/latest-requests', async (req, res) => {
   }
 });
 
-
+router.get('/files/:domain/:fileType', fileController.getFile);
+router.post('/files/:domain/:fileType', fileController.saveFile);
 
 
 module.exports = router;
