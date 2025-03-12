@@ -32,26 +32,35 @@ const pool = require('../services/dbConfig');
  *    - url: La URL solicitada.
  *    - total: Número total de visitas registradas para esa URL.
  */
-async function getTopVisitedURLs(startDate, endDate) {
+async function getMostVisitedUrls(startDate, endDate) {
   const query = `
     SELECT 
       url,
-      COUNT(*) AS total
+      COUNT(*) as visits,
+      COUNT(DISTINCT CASE WHEN isbot = 'true' THEN ip END) as unique_bots,
+      MAX(timestamp) as last_visit
     FROM bot_requests
     WHERE timestamp BETWEEN $1 AND $2
     GROUP BY url
-    ORDER BY total DESC
+    ORDER BY visits DESC
     LIMIT 10;
   `;
+
   try {
     const result = await pool.query(query, [startDate, endDate]);
-    return result.rows;
+    return result.rows.map(row => ({
+      url: row.url,
+      visits: parseInt(row.visits),
+      uniqueBots: parseInt(row.unique_bots),
+      lastVisit: row.last_visit
+    }));
   } catch (error) {
-    console.error("❌ Error en getTopVisitedURLs:", error);
+    console.error("❌ Error in getMostVisitedUrls:", error);
     throw error;
   }
 }
 
 module.exports = {
-  getTopVisitedURLs,
+  // ... existing exports ...
+  getMostVisitedUrls
 };

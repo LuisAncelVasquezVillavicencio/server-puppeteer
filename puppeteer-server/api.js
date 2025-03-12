@@ -22,7 +22,7 @@ const {
 } = require('./queries/botRequestsService');
 const { logRequestHandler } = require('./controllers/requestLogController');
 const { getLatestRequests } = require('./queries/requestQueries');
-
+const { getMostVisitedUrls } = require('./queries/botUrlQueries');
 
 // Endpoint para obtener el total de solicitudes de bots
 router.get('/total-bot-requests', async (req, res) => {
@@ -159,7 +159,16 @@ router.get('/latest-requests', async (req, res) => {
   }
 });
 
-
+router.get('/api/most-visited-urls', async (req, res) => {
+  try {
+    const { startDate, endDate } = req.query;
+    const urls = await getMostVisitedUrls(startDate, endDate);
+    res.json(urls);
+  } catch (error) {
+    console.error('Error fetching most visited URLs:', error);
+    res.status(500).json({ error: 'Internal server error' });
+  }
+});
 
 
 module.exports = router;

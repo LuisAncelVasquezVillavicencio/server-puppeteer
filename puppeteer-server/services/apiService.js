@@ -80,3 +80,11 @@ export const getLatestRequests = async ({ page, limit, search }) => {
   );
 };
 
+
+export const getMostVisitedUrls = async (startDate, endDate) => {
+  return handleRequest(
+    api.get('/most-visited-urls', {
+      params: { startDate, endDate }
+    })
+  );
+};
