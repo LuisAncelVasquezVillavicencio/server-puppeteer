@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useState, useEffect } from 'react';
 import { 
   Grid, 
   Button, 
@@ -10,6 +10,8 @@ import {
   TextField,
   Box 
 } from '@mui/material';
+import { getAvailableDomains } from '../../services/apiService';
+
 
 const DashboardFilters = ({ 
   selectedDomain,
@@ -22,6 +24,25 @@ const DashboardFilters = ({
   startDate,  // Añadir estas props
   endDate 
 }) => {
+
+  const [domains, setDomains] = useState([]);
+
+  useEffect(() => {
+    const fetchDomains = async () => {
+      try {
+        const availableDomains = await getAvailableDomains();
+        setDomains(availableDomains);
+        // If no domain is selected and we have domains, select the first one
+        if (!selectedDomain && availableDomains.length > 0) {
+          onDomainChange({ target: { value: availableDomains[0] } });
+        }
+      } catch (error) {
+        console.error('Error fetching domains:', error);
+      }
+    };
+    fetchDomains();
+  }, []);
+
   return (
     <Box sx={{ width: '100%', my: 2 }}>
       <Grid 
@@ -42,8 +63,11 @@ const DashboardFilters = ({
               label="Dominio"
               onChange={onDomainChange}
             >
-              <MenuItem value="tudominio.com">tudominio.com</MenuItem>
-              <MenuItem value="otrodominio.com">otrodominio.com</MenuItem>
+              {domains.map(domain => (
+                <MenuItem key={domain} value={domain}>
+                  {domain}
+                </MenuItem>
+              ))}
             </Select>
           </FormControl>
         </Grid>
@@ -53,7 +77,7 @@ const DashboardFilters = ({
             label="Fecha de Inicio"
             type="datetime-local"
             value={startDate ? startDate.slice(0, 16) : ''}
-            
+            onChange={(e) => onStartDateChange(e.target.value)}
             InputLabelProps={{ shrink: true }}
             size="small"
             fullWidth
@@ -67,7 +91,7 @@ const DashboardFilters = ({
             type="datetime-local"
             value={endDate ? endDate.slice(0, 16) : ''}
             InputLabelProps={{ shrink: true }}
-            
+            onChange={(e) => onEndDateChange(e.target.value)}
             size="small"
             fullWidth
             sx={{ width: { xs: '100%', sm: 200 } }}
@@ -86,8 +110,18 @@ const DashboardFilters = ({
               }
             }}
           >
-            <Button onClick={onEditRoot}>Editar root.txt</Button>
-            <Button onClick={onEditXML}>Editar XML Sitemap</Button>
+              <Button 
+                  onClick={() => onEditRoot(selectedDomain)} 
+                  disabled={!selectedDomain}
+                >
+                  Editar root.txt
+                </Button>
+              <Button 
+                  onClick={() => onEditXML(selectedDomain)} 
+                  disabled={!selectedDomain}
+              >
+                  Editar XML Sitemap
+              </Button>
             <Button onClick={() => onLogConnect('startup')}>Log Inicio</Button>
             <Button onClick={() => onLogConnect('pm2')}>Log Streaming</Button>
           </ButtonGroup>

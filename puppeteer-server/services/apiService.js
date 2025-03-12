@@ -88,3 +88,35 @@ export const getMostVisitedUrls = async (startDate, endDate) => {
     })
   );
 };
+
+export async function getAvailableDomains() {
+  try {
+    const response = await fetch('/api/domains');
+    if (!response.ok) {
+      throw new Error('Network response was not ok');
+    }
+    return await response.json();
+  } catch (error) {
+    console.error('Error fetching domains:', error);
+    return [];
+  }
+}
+
+// Make sure these functions are properly exported
+export const getFileContent = async (domain, fileType) => {
+  return handleRequest(api.get(`/files/${domain}/${fileType}`))
+    .then(data => data.content)
+    .catch(error => {
+      console.error(`Error fetching ${fileType} for ${domain}:`, error);
+      return '';
+    });
+};
+
+export const saveFileContent = async (domain, fileType, content) => {
+  return handleRequest(api.post(`/files/${domain}/${fileType}`, { content }))
+    .then(() => true)
+    .catch(error => {
+      console.error(`Error saving ${fileType} for ${domain}:`, error);
+      return false;
+    });
+};
