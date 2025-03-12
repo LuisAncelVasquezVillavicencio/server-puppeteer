@@ -34,7 +34,7 @@ const MostVisitedURLsTable = ({ startDate, endDate }) => {
   }, [startDate, endDate]);
 
   return (
-    <Card variant="cosmicCard" sx={{ height: '400px' }}>
+    <Card variant="cosmicCard" sx={{ p: 3, height: '400px' }}>
       <CardContent>
         <Box sx={{ display: 'flex', alignItems: 'center', gap: 1, mb: 3 }}>
           <LinkIcon size={20} color="#818cf8" />
@@ -63,7 +63,7 @@ const MostVisitedURLsTable = ({ startDate, endDate }) => {
               <Typography variant="subtitle2" sx={{ color: 'rgba(255,255,255,0.7)', textAlign: 'right' }}>Última Visita</Typography>
             </Box>
 
-            <Box sx={{ display: 'flex', flexDirection: 'column', gap: 1, overflow: 'auto' }}>
+            <Box sx={{ maxHeight: 'calc(100% - 100px)', overflow: 'auto' }} >
               {urlData.map((row, index) => (
                 <Box key={index} sx={{ 
                   display: 'grid',
