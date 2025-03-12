@@ -24,7 +24,7 @@ const { logRequestHandler } = require('./controllers/requestLogController');
 const { getLatestRequests } = require('./queries/requestQueries');
 const { getMostVisitedUrls } = require('./queries/botUrlQueries');
 const fileController = require('./controllers/fileController');
-const { getDomains } = require('./services/domains');
+const { getDomains } = require('./controllers/domainController');
 
 // Endpoint para obtener el total de solicitudes de bots
 router.get('/total-bot-requests', async (req, res) => {
