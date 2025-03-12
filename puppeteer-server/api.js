@@ -160,7 +160,7 @@ router.get('/latest-requests', async (req, res) => {
   }
 });
 
-router.get('/api/most-visited-urls', async (req, res) => {
+router.get('/most-visited-urls', async (req, res) => {
   try {
     const { startDate, endDate } = req.query;
     const urls = await getMostVisitedUrls(startDate, endDate);
